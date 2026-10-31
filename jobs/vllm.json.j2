@@ -1,0 +1,27 @@
+{
+  "version": "0.1",
+  "type": "container",
+  "ops": [
+    {
+      "type": "container/run",
+      "id": "vllm-server",
+      "args": {
+        "image": "vllm/vllm-openai:latest",
+        "gpu": true,
+        "expose": 8000,
+        "cmd": [
+          "--model", "{{ hf_id }}",
+          "--served-model-name", "{{ model_name }}",
+          "--max-model-len", "{{ max_model_len }}",
+          "--port", "8000"
+          {%- if quant %},
+          "--quantization", "{{ quant }}"
+          {%- endif %}
+        ]
+        {%- if resources %},
+        "resources": {{ resources | tojson }}
+        {%- endif %}
+      }
+    }
+  ]
+}

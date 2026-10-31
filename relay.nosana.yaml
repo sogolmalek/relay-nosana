@@ -1,0 +1,58 @@
+repo: OWNER/REPO
+seed: 42
+label_map:
+  "type: bug": bug
+  "kind/bug": bug
+  "bug": bug
+  "enhancement": feature
+  "feature request": feature
+  "documentation": docs
+  "docs": docs
+  "question": question
+  "help wanted": other
+  "good first issue": other
+localize:
+  enabled: false      # PENDING for M0
+  retrieval: plain    # plain | rrf
+  exclude_globs:
+    - "**/test*/**"
+    - "**/*_test.*"
+    - "**/*_test/**"
+    - "docs/**"
+    - "*.md"
+  candidates_k: 30
+duplicate:
+  candidates_k: 5
+calibration:
+  n_per_task: 100
+  bootstrap: 1000
+routing:
+  threshold_ratio: 0.9
+  abs_floor: null
+compiler:
+  summary: extractive   # extractive | open_model
+nosana:
+  # Source: learn.nosana.com/api/intro.html — "The current production API base URL: https://api.nosana.com"
+  # Override here if the real balance call shows dashboard.k8s.prd.nos.ci/api works instead.
+  base_url: "https://api.nosana.com"
+  max_credits_per_run: 10   # USD — M0 cap
+  concurrency: 16
+  ready_timeout_min: 30
+  deployment_timeout_min: 120
+  models:
+    - name: llama-3.1-8b-instruct
+      hf_id: "meta-llama/Llama-3.1-8B-Instruct"
+      market: "<verify>"
+      max_model_len: 8192
+      quant: null
+      price_per_hour_usd: 0.0
+    - name: qwen2.5-14b-instruct-awq
+      hf_id: "Qwen/Qwen2.5-14B-Instruct-AWQ"
+      market: "<verify>"
+      max_model_len: 8192
+      quant: awq
+      price_per_hour_usd: 0.0
+frontier:
+  model: "claude-sonnet-4-6"
+  price_in_per_mtok: 3.0
+  price_out_per_mtok: 15.0

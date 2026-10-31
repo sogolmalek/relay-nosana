@@ -1,0 +1,71 @@
+{
+  "issues": [
+    {
+      "number": 1,
+      "title": "Application crashes on startup",
+      "body": "Getting a NullPointerException when launching the app.\nStack:\n  at Main.run(Main.java:42)",
+      "state": "CLOSED",
+      "createdAt": "2023-02-01T10:00:00Z",
+      "closedAt": "2023-02-05T12:00:00Z",
+      "repository": "test/repo",
+      "author": {"login": "alice"},
+      "labels": {"nodes": [{"name": "bug"}]},
+      "comments": {"nodes": [
+        {"body": "Confirmed on v2.1.0", "createdAt": "2023-02-02T08:00:00Z", "author": {"login": "bob"}}
+      ]},
+      "timelineItems": {"nodes": []}
+    },
+    {
+      "number": 2,
+      "title": "Add dark mode support",
+      "body": "It would be great to have a dark mode option in the settings.",
+      "state": "CLOSED",
+      "createdAt": "2023-02-10T10:00:00Z",
+      "closedAt": "2023-02-20T12:00:00Z",
+      "repository": "test/repo",
+      "author": {"login": "charlie"},
+      "labels": {"nodes": [{"name": "enhancement"}]},
+      "comments": {"nodes": []},
+      "timelineItems": {"nodes": []}
+    },
+    {
+      "number": 3,
+      "title": "Update installation docs",
+      "body": "The installation section is outdated and missing Docker instructions.",
+      "state": "CLOSED",
+      "createdAt": "2023-03-01T10:00:00Z",
+      "closedAt": "2023-03-05T12:00:00Z",
+      "repository": "test/repo",
+      "author": {"login": "dave"},
+      "labels": {"nodes": [{"name": "documentation"}]},
+      "comments": {"nodes": []},
+      "timelineItems": {"nodes": []}
+    },
+    {
+      "number": 4,
+      "title": "Login button broken on mobile",
+      "body": "The login button does not respond on iOS Safari.\nError: Cannot read property 'click' of undefined",
+      "state": "CLOSED",
+      "createdAt": "2023-03-10T10:00:00Z",
+      "closedAt": "2023-03-15T12:00:00Z",
+      "repository": "test/repo",
+      "author": {"login": "eve"},
+      "labels": {"nodes": [{"name": "bug"}]},
+      "comments": {"nodes": []},
+      "timelineItems": {"nodes": []}
+    },
+    {
+      "number": 5,
+      "title": "Open issue (not closed)",
+      "body": "This is open and should be skipped.",
+      "state": "OPEN",
+      "createdAt": "2023-04-01T10:00:00Z",
+      "closedAt": null,
+      "repository": "test/repo",
+      "author": {"login": "frank"},
+      "labels": {"nodes": [{"name": "bug"}]},
+      "comments": {"nodes": []},
+      "timelineItems": {"nodes": []}
+    }
+  ]
+}

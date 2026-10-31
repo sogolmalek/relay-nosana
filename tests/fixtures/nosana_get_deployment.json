@@ -1,0 +1,26 @@
+{
+  "id": "dep-a1b2c3d4e5f6",
+  "name": "relay-poc-llama-3.1-8b-instruct",
+  "status": "RUNNING",
+  "market": "market-gpu-h100",
+  "replicas": 1,
+  "strategy": "SIMPLE",
+  "timeout": 120,
+  "createdAt": "2024-01-15T10:00:00Z",
+  "startedAt": "2024-01-15T10:08:32Z",
+  "endpoints": [
+    {
+      "url": "https://dep-a1b2c3d4e5f6.k8s.prd.nos.ci",
+      "port": 8000,
+      "type": "http"
+    }
+  ],
+  "gpu": {
+    "type": "H100",
+    "count": 1
+  },
+  "resources": {
+    "cpu": 8,
+    "memory": "32Gi"
+  }
+}

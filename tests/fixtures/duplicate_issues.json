@@ -1,0 +1,87 @@
+{
+  "issues": [
+    {
+      "number": 1,
+      "title": "App crashes when user logs out",
+      "body": "Getting a NullPointerException in SessionManager when the user clicks logout.\nStack trace: at SessionManager.logout(SessionManager.java:88)",
+      "state": "CLOSED",
+      "createdAt": "2023-01-01T10:00:00Z",
+      "closedAt": "2023-01-10T12:00:00Z",
+      "repository": "test/repo",
+      "author": {"login": "alice"},
+      "labels": {"nodes": [{"name": "bug"}]},
+      "comments": {"nodes": []},
+      "timelineItems": {"nodes": []}
+    },
+    {
+      "number": 2,
+      "title": "Feature: add CSV export",
+      "body": "We need a CSV export button in the data table view.",
+      "state": "CLOSED",
+      "createdAt": "2023-01-15T10:00:00Z",
+      "closedAt": "2023-01-25T12:00:00Z",
+      "repository": "test/repo",
+      "author": {"login": "bob"},
+      "labels": {"nodes": [{"name": "enhancement"}]},
+      "comments": {"nodes": []},
+      "timelineItems": {"nodes": []}
+    },
+    {
+      "number": 3,
+      "title": "Crash on logout (duplicate)",
+      "body": "Same issue as before — app crashes when I click the logout button.",
+      "state": "CLOSED",
+      "createdAt": "2023-02-01T10:00:00Z",
+      "closedAt": "2023-02-03T12:00:00Z",
+      "repository": "test/repo",
+      "author": {"login": "charlie"},
+      "labels": {"nodes": [{"name": "duplicate"}]},
+      "comments": {"nodes": [
+        {
+          "body": "See issue #1",
+          "createdAt": "2023-02-02T08:00:00Z",
+          "author": {"login": "maintainer"}
+        }
+      ]},
+      "timelineItems": {"nodes": [
+        {
+          "__typename": "MarkedAsDuplicateEvent",
+          "createdAt": "2023-02-03T12:00:00Z",
+          "canonical": {"number": 1}
+        }
+      ]}
+    },
+    {
+      "number": 4,
+      "title": "TypeError in ProfilePage render",
+      "body": "TypeError: Cannot read property 'name' of undefined in ProfilePage.render at line 56.",
+      "state": "CLOSED",
+      "createdAt": "2023-02-10T10:00:00Z",
+      "closedAt": "2023-02-15T12:00:00Z",
+      "repository": "test/repo",
+      "author": {"login": "dave"},
+      "labels": {"nodes": [{"name": "bug"}]},
+      "comments": {"nodes": []},
+      "timelineItems": {"nodes": []}
+    },
+    {
+      "number": 5,
+      "title": "ProfilePage crash (another duplicate)",
+      "body": "Getting a TypeError in the profile page — cannot read property 'name' of undefined.",
+      "state": "CLOSED",
+      "createdAt": "2023-02-20T10:00:00Z",
+      "closedAt": "2023-02-22T12:00:00Z",
+      "repository": "test/repo",
+      "author": {"login": "eve"},
+      "labels": {"nodes": [{"name": "duplicate"}]},
+      "comments": {"nodes": []},
+      "timelineItems": {"nodes": [
+        {
+          "__typename": "MarkedAsDuplicateEvent",
+          "createdAt": "2023-02-22T12:00:00Z",
+          "canonical": {"number": 4}
+        }
+      ]}
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "issues": [
+    {
+      "number": 10,
+      "title": "Login fails with OAuth providers",
+      "body": "When authenticating via GitHub OAuth, the callback handler raises KeyError: 'access_token'.\nFile: src/auth/oauth.py line 134",
+      "state": "CLOSED",
+      "createdAt": "2023-03-01T10:00:00Z",
+      "closedAt": "2023-03-10T12:00:00Z",
+      "repository": "test/repo",
+      "author": {
+        "login": "alice"
+      },
+      "labels": {
+        "nodes": [
+          {
+            "name": "bug"
+          }
+        ]
+      },
+      "comments": {
+        "nodes": [
+          {
+            "body": "Happens in the oauth callback handler",
+            "createdAt": "2023-03-02T08:00:00Z",
+            "author": {
+              "login": "bob"
+            }
+          }
+        ]
+      },
+      "timelineItems": {
+        "nodes": [
+          {
+            "__typename": "ClosedEvent",
+            "createdAt": "2023-03-10T12:00:00Z",
+            "closer": {
+              "__typename": "PullRequest",
+              "number": 201,
+              "merged": true,
+              "mergedAt": "2023-03-10T12:00:00Z",
+              "baseRefOid": "deadbeef01234567",
+              "changedFiles": [
+                "src/auth/oauth.py",
+                "src/auth/callbacks.py"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "number": 11,
+      "title": "Database connection pool exhausted under load",
+      "body": "Under concurrent load, getting 'too many connections' from PostgreSQL.\nThe DatabasePool class does not release connections properly.",
+      "state": "CLOSED",
+      "createdAt": "2023-03-15T10:00:00Z",
+      "closedAt": "2023-03-25T12:00:00Z",
+      "repository": "test/repo",
+      "author": {
+        "login": "charlie"
+      },
+      "labels": {
+        "nodes": [
+          {
+            "name": "bug"
+          }
+        ]
+      },
+      "comments": {
+        "nodes": []
+      },
+      "timelineItems": {
+        "nodes": [
+          {
+            "__typename": "ClosedEvent",
+            "createdAt": "2023-03-25T12:00:00Z",
+            "closer": {
+              "__typename": "PullRequest",
+              "number": 205,
+              "merged": true,
+              "mergedAt": "2023-03-25T12:00:00Z",
+              "baseRefOid": "cafebabe01234567",
+              "changedFiles": [
+                "src/db/pool.py",
+                "src/db/connection.py"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "file_trees": {
+    "test/repo/deadbeef01234567": [
+      "src/auth/oauth.py",
+      "src/auth/callbacks.py",
+      "src/auth/middleware.py",
+      "src/db/pool.py",
+      "src/db/connection.py",
+      "src/db/models.py",
+      "src/api/routes.py",
+      "src/api/handlers.py",
+      "src/utils/logging.py",
+      "src/utils/config.py",
+      "tests/test_auth.py",
+      "tests/test_db.py",
+      "docs/api.md",
+      "README.md"
+    ],
+    "test/repo/cafebabe01234567": [
+      "src/auth/oauth.py",
+      "src/auth/callbacks.py",
+      "src/auth/middleware.py",
+      "src/db/pool.py",
+      "src/db/connection.py",
+      "src/db/models.py",
+      "src/api/routes.py",
+      "src/api/handlers.py",
+      "src/utils/logging.py",
+      "src/utils/config.py",
+      "tests/test_auth.py",
+      "tests/test_db.py",
+      "docs/api.md",
+      "README.md"
+    ]
+  }
+}
