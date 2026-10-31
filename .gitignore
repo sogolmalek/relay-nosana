@@ -1,5 +1,6 @@
 .venv/
-out/
+out/*
+!out/splits/
 build/
 *.egg-info/
 .pytest_cache/
