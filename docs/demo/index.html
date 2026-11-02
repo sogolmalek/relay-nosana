@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relay Verifiable Lane on Nosana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a demo player. One row of actors, a token travels between them, one artifact card per step. */
+:root{
+  --ink:#141c27; --paper:#f3f4f1; --panel:#ffffff; --rule:#d6dad3; --muted:#626d7a;
+  --accent:#1d5fd1; --accent-tint:#e5edfc;
+  --good:#1f7a4d; --good-tint:#e2f2e9; --bad:#b4372f; --bad-tint:#fbe8e6;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ink:#e7ebf1; --paper:#0f141b; --panel:#171e28; --rule:#2b3544; --muted:#99a5b5;
+  --accent:#7ba8ff; --accent-tint:#1a2740; --good:#5cc690; --good-tint:#12291e; --bad:#ff8a80; --bad-tint:#33191a; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --ink:#e7ebf1; --paper:#0f141b; --panel:#171e28; --rule:#2b3544; --muted:#99a5b5;
+  --accent:#7ba8ff; --accent-tint:#1a2740; --good:#5cc690; --good-tint:#12291e; --bad:#ff8a80; --bad-tint:#33191a; color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--body)}
+.app{max-width:1040px;margin:0 auto;padding:22px 18px 40px;display:grid;gap:22px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.top h1{font:600 20px/1.2 var(--body);margin:0}
+.tag{font:500 12px/1 var(--mono);color:var(--muted);border:1px dashed var(--rule);border-radius:999px;padding:6px 10px}
+
+/* stage */
+.stage{position:relative;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:28px 18px}
+.actors{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;position:relative;z-index:1}
+.actor{display:grid;justify-items:center;gap:8px;text-align:center;opacity:.45;transition:opacity .3s}
+.actor.on{opacity:1}
+.ico{width:58px;height:58px;border-radius:14px;border:1.5px solid var(--rule);background:var(--paper);display:grid;place-items:center;transition:border-color .3s,background .3s,box-shadow .3s}
+.actor.on .ico{border-color:var(--accent);background:var(--accent-tint)}
+.actor.focus .ico{box-shadow:0 0 0 6px var(--accent-tint)}
+.actor.nos.on .ico{border-color:var(--ink)}
+.ico svg{width:28px;height:28px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.actor .nm{font:600 13px/1.2 var(--body)}
+.actor .sb{font-size:11.5px;color:var(--muted)}
+.wire{position:absolute;left:0;right:0;top:57px;height:2px;background:var(--rule);z-index:0;margin:0 calc(100%/14 + 18px)}
+.token{position:absolute;top:50px;width:16px;height:16px;border-radius:50%;background:var(--accent);z-index:0;box-shadow:0 0 0 5px var(--accent-tint);transition:left .9s cubic-bezier(.6,.05,.3,1),opacity .3s;opacity:0}
+.token.bad{background:var(--bad);box-shadow:0 0 0 5px var(--bad-tint)}
+
+/* step panel */
+.panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;align-items:center;min-height:250px}
+.cap .n{font:500 12px/1 var(--mono);color:var(--accent)}
+.loop{display:flex;gap:4px;margin-top:10px;flex-wrap:wrap}
+.loop span{font:500 12px/1 var(--body);padding:6px 10px;border-radius:999px;border:1px solid var(--rule);color:var(--muted)}
+.loop span.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.cap h2{font:600 26px/1.15 var(--body);margin:8px 0 8px;text-wrap:balance}
+.cap p{margin:0;color:var(--muted);max-width:42ch}
+.art{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:16px;min-height:200px;display:grid;align-content:center;gap:10px;animation:rise .35s ease}
+@keyframes rise{from{opacity:.0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.chip{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--rule);border-radius:8px;padding:9px 12px;font-size:14px}
+.k{font:500 11.5px/1.2 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.v{font:500 13px/1.3 var(--mono);word-break:break-all}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline}
+.pill{font:500 12px/1 var(--body);border-radius:999px;padding:5px 9px;border:1px solid var(--rule);white-space:nowrap}
+.pill.good{color:var(--good);background:var(--good-tint);border-color:var(--good)}
+.pill.bad{color:var(--bad);background:var(--bad-tint);border-color:var(--bad)}
+.pill.acc{color:var(--accent);background:var(--accent-tint);border-color:var(--accent)}
+.prog{height:10px;border-radius:5px;background:var(--rule);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--accent);transition:width 2.2s linear}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.box{border:1px solid var(--rule);border-radius:8px;padding:10px 12px;display:grid;gap:6px}
+.box h3{margin:0;font:600 13px/1.2 var(--body)}
+.receipt{border:1.5px solid var(--accent);border-radius:10px;padding:14px;display:grid;gap:8px;background:var(--accent-tint)}
+.receipt .row{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.receipt .row span:last-child{font-family:var(--mono);font-size:13px}
+ul.checks{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+ul.checks li{display:flex;gap:10px;align-items:center;font-size:14px;opacity:.35;transition:opacity .25s}
+ul.checks li.done{opacity:1}
+ul.checks li b{font:600 15px/1 var(--mono);color:var(--good);width:16px}
+.big{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.big div{border:1px solid var(--rule);border-radius:10px;padding:12px}
+.big .num{font:600 26px/1.1 var(--body);font-variant-numeric:tabular-nums}
+.big .lab{font-size:12.5px;color:var(--muted)}
+.cmp{display:grid;gap:8px}
+.cmp .line{display:grid;grid-template-columns:120px 1fr 44px;gap:10px;align-items:center;font-size:13px}
+.cmp .bar{height:12px;border-radius:6px;background:var(--rule);position:relative}
+.cmp .bar i{position:absolute;inset:0 auto 0 0;border-radius:6px;background:var(--muted)}
+.cmp .bar.hi i{background:var(--accent)}
+.cmp .num{font:500 13px/1 var(--mono);text-align:right}
+
+/* controls */
+.ctrl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.dots{display:flex;gap:6px}
+.dots button{width:30px;height:30px;border-radius:50%;border:1px solid var(--rule);background:var(--panel);color:var(--muted);font:500 12px/1 var(--mono);cursor:pointer;padding:0}
+.dots button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.btns{display:flex;gap:8px}
+.btn{font:500 14px/1 var(--body);border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#fff;padding:10px 16px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:760px){
+  .actors{grid-template-columns:repeat(4,1fr);row-gap:18px}.wire,.token{display:none}
+  .panel{grid-template-columns:1fr}.cap h2{font-size:22px}.big{grid-template-columns:1fr}.two{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <h1>Relay · verifiable AI work on Nosana</h1>
+    <span class="tag">Mockup · simulated data</span>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="wire" aria-hidden="true"></div>
+    <div class="token" id="token" aria-hidden="true"></div>
+    <div class="actors" id="actors">
+      <div class="actor" data-i="0"><div class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><div class="nm">Backlog</div><div class="sb">150 open issues</div></div>
+      <div class="actor" data-i="1"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 12h5l2-5 2 10 2-5h5"/></svg></div><div class="nm">Relay</div><div class="sb">rules · measure · ledger</div></div>
+      <div class="actor nos" data-i="2"><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M7 7V4M12 7V4M17 7V4M7 20v-3M12 20v-3M17 20v-3"/></svg></div><div class="nm">Nosana GPU</div><div class="sb">open model runs</div></div>
+      <div class="actor" data-i="3"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 4-3.5 7-8 8-4.5-1-8-4-8-8V7z"/></svg></div><div class="nm">Public record</div><div class="sb">Solana · IPFS</div></div>
+      <div class="actor" data-i="4"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M8.5 11l2 2 3.5-4"/></svg></div><div class="nm">Verifier</div><div class="sb">anyone, open source</div></div>
+      <div class="actor" data-i="5"><div class="ico"><svg viewBox="0 0 24 24"><path d="M5 4v16M19 4v16M5 12h14"/><circle cx="12" cy="12" r="2.5"/></svg></div><div class="nm">Repo gate</div><div class="sb">applies only verified</div></div>
+      <div class="actor" data-i="6"><div class="ico"><svg viewBox="0 0 24 24"><rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 8V5M9 13h.01M15 13h.01M9.5 16h5"/></svg></div><div class="nm">Next agent</div><div class="sb">acts on the decision</div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="cap" aria-live="polite">
+      <div class="n" id="capN">Step 1 of 11</div>
+      <div class="loop" id="loop" aria-label="Loop stage"><span>Rule</span><span>Measure</span><span>Run</span><span>Receipt</span><span>Act</span></div>
+      <h2 id="capT"></h2>
+      <p id="capP"></p>
+    </div>
+    <div class="art" id="art"></div>
+  </div>
+
+  <div class="ctrl">
+    <div class="dots" id="dots" role="tablist" aria-label="Steps"></div>
+    <div class="btns">
+      <button class="btn ghost" id="back" type="button">Back</button>
+      <button class="btn ghost" id="play" type="button">Play</button>
+      <button class="btn" id="next" type="button">Next</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const steps = [
+    { t:"The team sets a rule", p:"Labels written to the repo need proof of which model produced them. The rule lives in Relay, not in an agent's prompt.",
+      on:[0,1], focus:1, move:null, loop:"Rule",
+      art:()=>`
+        <div class="k">Rule in Relay</div>
+        <div class="receipt">
+          <div class="row"><span>Work</span><span>label an issue</span></div>
+          <div class="row"><span>Writes to</span><span>huggingface/transformers</span></div>
+          <div class="row"><span>Requires</span><span>anchored receipt</span></div>
+          <div class="row"><span>Accuracy bar</span><span>≥ 90% of frontier</span></div>
+        </div>
+        <div class="k">150 open issues waiting</div>` },
+    { t:"Relay measures who can do it", p:"Before moving any work, open models are scored on 100 issues the maintainers already labelled. The test runs on Nosana, so the model behind each score is known.",
+      on:[1,2], focus:1, move:[1,2], loop:"Measure",
+      art:()=>`
+        <div class="k">Labelling · 100 scored issues</div>
+        <div class="cmp">
+          <div class="line"><span>Open model, raw</span><div class="bar"><i style="width:71%"></i></div><span class="num">71%</span></div>
+          <div class="line"><span>Open model + Relay</span><div class="bar hi"><i style="width:85%"></i></div><span class="num">85%</span></div>
+          <div class="line"><span>Frontier API</span><div class="bar"><i style="width:88%"></i></div><span class="num">88%</span></div>
+        </div>
+        <div class="chip"><span>Clears the bar with Relay's prepared tasks</span><span class="pill good">route to Nosana</span></div>` },
+    { t:"The batch runs on Nosana", p:"One job. Container, model and inputs are pinned before it starts, and the whole batch runs inside it.",
+      on:[1,2], focus:2, move:[1,2], loop:"Run",
+      art:()=>`
+        <div class="kv">
+          <span class="k">Model</span><span class="v">Qwen2.5-7B-Instruct @ a09a3545</span>
+          <span class="k">Image</span><span class="v">vllm-openai @ sha256:3f9a…</span>
+          <span class="k">Inputs</span><span class="v">150 tasks · ipfs://bafy…in82</span>
+          <span class="k">Node</span><span class="v">8nTq…L2vc · RTX 4090</span>
+        </div>
+        <div class="prog"><i id="prog"></i></div>
+        <div class="k">Startup 4 m 05 s · 150 tasks in 3 m 31 s</div>` },
+    { t:"The run leaves a public record", p:"Solana records the job, node and time. IPFS holds the definition and the outputs. A model API leaves nothing like this.",
+      on:[2,3], focus:3, move:[2,3], loop:"Run",
+      art:()=>`
+        <div class="two">
+          <div class="box"><h3>Solana</h3><span class="k">Job</span><span class="v">Fk3w…9QxR</span><span class="k">Node</span><span class="v">8nTq…L2vc</span><span class="k">Finished</span><span class="v">14:09:47 UTC</span></div>
+          <div class="box"><h3>IPFS</h3><span class="k">Definition</span><span class="v">bafy…q7m4</span><span class="k">Inputs</span><span class="v">bafy…in82</span><span class="k">Outputs</span><span class="v">bafy…r2k8</span></div>
+        </div>` },
+    { t:"Every answer gets a receipt", p:"Relay ties each answer to that job and writes it to the ledger. Work done on a model API only gets a declared receipt.",
+      on:[1,3], focus:1, move:[3,1], loop:"Receipt",
+      art:()=>`
+        <div class="receipt">
+          <div class="row"><span>Issue</span><span>Trainer example uses old argument</span></div>
+          <div class="row"><span>Answer</span><span>docs</span></div>
+          <div class="row"><span>Model</span><span>Qwen2.5-7B @ a09a3545</span></div>
+          <div class="row"><span>Nosana job</span><span>Fk3w…9QxR</span></div>
+          <div class="row"><span>Rule</span><span>anchored receipt · passed</span></div>
+        </div>
+        <div class="two">
+          <div class="box"><span class="k">Nosana</span><span class="pill acc" style="justify-self:start">anchored</span></div>
+          <div class="box"><span class="k">Model API</span><span class="pill" style="justify-self:start">declared</span></div>
+        </div>` },
+    { t:"Anyone can check it", p:"The verifier reads only Solana and IPFS. No need to trust Relay or the node.",
+      on:[3,4], focus:4, move:[3,4], loop:"Receipt",
+      art:()=>`
+        <div class="k">$ relay-verify receipt.json</div>
+        <ul class="checks" id="checks">
+          <li><b>✓</b>Job exists on Solana</li>
+          <li><b>✓</b>Definition matches its hash</li>
+          <li><b>✓</b>Model and image match</li>
+          <li><b>✓</b>Input is in the batch</li>
+          <li><b>✓</b>Answer is in the outputs</li>
+          <li><b>✓</b>Node and time match</li>
+        </ul>` },
+    { t:"Why it matters 1: edited answers don't get in", p:"The repo applies a label only with a valid receipt. Someone changed one answer after the run.",
+      on:[4,5], focus:5, move:[4,5], bad:true, loop:"Receipt",
+      art:()=>`
+        <div class="chip"><span>Tokenizer ignores padding_side → <b>bug</b></span><span class="pill good">applied</span></div>
+        <div class="chip"><span>Trainer example uses old argument → <b>docs</b></span><span class="pill good">applied</span></div>
+        <div class="chip" style="border-color:var(--bad)"><span>Config not saved by push_to_hub → <b>feature</b></span><span class="pill bad">rejected</span></div>
+        <div class="k" style="color:var(--bad)">Answer is not in the job's outputs</div>` },
+    { t:"Why it matters 2: every decision has an answer", p:"Weeks later a maintainer asks why an issue was labelled docs. The ledger answers, and the answer can be checked.",
+      on:[1,5], focus:1, move:[5,1], loop:"Receipt",
+      art:()=>`
+        <div class="chip"><span><b>Why is #ex-03 labelled “docs”?</b></span></div>
+        <div class="kv">
+          <span class="k">Who</span><span class="v">Qwen2.5-7B @ a09a3545, on Nosana</span>
+          <span class="k">When</span><span class="v">3 Nov, 14:09 UTC · job Fk3w…9QxR</span>
+          <span class="k">Why allowed</span><span class="v">rule: anchored receipt · task type at 85% vs 88% bar</span>
+          <span class="k">Checked</span><span class="v">receipt verified · re-run on 2nd node agreed</span>
+        </div>` },
+    { t:"The next agent acts on the decision", p:"Relay hands the next step to a coding agent, prepared for it. The agent starts only because the label carries a verified receipt.",
+      on:[1,6], focus:6, move:[1,6], loop:"Act",
+      art:()=>`
+        <div class="k">Handoff from Relay</div>
+        <div class="receipt">
+          <div class="row"><span>Task</span><span>draft a fix for #ex-01</span></div>
+          <div class="row"><span>Because</span><span>label “bug” · receipt verified</span></div>
+          <div class="row"><span>Context</span><span>3 likely files, error trace</span></div>
+          <div class="row"><span>Agent</span><span>coding agent</span></div>
+        </div>
+        <div class="chip"><span>Precondition: decision has a valid receipt</span><span class="pill good">started</span></div>` },
+    { t:"If the decision changes, dependent work stops", p:"A maintainer relabels #ex-01 as a question. Relay marks the old receipt superseded and holds the work built on it.",
+      on:[1,5,6], focus:6, move:[1,6], bad:true, loop:"Act",
+      art:()=>`
+        <div class="chip"><span>#ex-01 · bug → <b>question</b> (maintainer)</span><span class="pill">14:31</span></div>
+        <div class="chip"><span>Receipt Fk3w…/ex-01</span><span class="pill bad">superseded</span></div>
+        <div class="chip" style="border-color:var(--bad)"><span>Coding agent · draft fix for #ex-01</span><span class="pill bad">held</span></div>
+        <div style="font-size:13px;color:var(--muted)">The agent is told why, and nothing lands on a decision that no longer stands.</div>` },
+    { t:"The loop, measured", p:"Work moved to Nosana because it was measured, ran there because it needed proof, and the next agent acted only on decisions that could be checked.",
+      on:[0,1,2,3,4,5,6], focus:null, move:null, loop:"All",
+      art:()=>`
+        <div class="big">
+          <div><div class="num">150/150</div><div class="lab">receipts verified</div></div>
+          <div><div class="num">14/15</div><div class="lab">same answer on a 2nd node</div></div>
+          <div><div class="num">$0.42</div><div class="lab">per 1,000 tasks vs $6.10 frontier</div></div>
+        </div>
+        <div class="chip"><span>Rule → Measure → Run on Nosana → Receipt → Next action</span><span class="pill acc">closed loop</span></div>` }
+  ];
+
+  const actors = [...document.querySelectorAll(".actor")];
+  const token = document.getElementById("token");
+  const stage = document.getElementById("stage");
+  const dots = document.getElementById("dots");
+  let cur = 0, timer = null;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  steps.forEach((s,i)=>{
+    const b=document.createElement("button"); b.type="button"; b.textContent=i+1; b.setAttribute("aria-label","Step "+(i+1)+": "+s.t);
+    b.addEventListener("click",()=>{stop();go(i);}); dots.appendChild(b);
+  });
+
+  function centerX(i){
+    const a = actors[i].querySelector(".ico").getBoundingClientRect(), st = stage.getBoundingClientRect();
+    return a.left + a.width/2 - st.left - 8;
+  }
+  function go(i){
+    cur = i; const s = steps[i];
+    document.getElementById("capN").textContent = `Step ${i+1} of ${steps.length}`;
+    [...document.querySelectorAll('#loop span')].forEach(x=>x.classList.toggle('on', s.loop==='All' || x.textContent===s.loop));
+    document.getElementById("capT").textContent = s.t;
+    document.getElementById("capP").textContent = s.p;
+    const art = document.getElementById("art"); art.innerHTML = s.art(); art.style.animation="none"; void art.offsetWidth; art.style.animation="";
+    actors.forEach((a,k)=>{ a.classList.toggle("on", s.on.includes(k)); a.classList.toggle("focus", s.focus===k); });
+    [...dots.children].forEach((d,k)=>d.classList.toggle("on",k===i));
+    document.getElementById("back").disabled = i===0;
+    document.getElementById("next").textContent = i===steps.length-1 ? "Start over" : "Next";
+    // token
+    token.classList.toggle("bad", !!s.bad);
+    if (s.move){
+      token.style.transition="none"; token.style.left = centerX(s.move[0])+"px"; token.style.opacity="1"; void token.offsetWidth;
+      token.style.transition=""; requestAnimationFrame(()=>{ token.style.left = centerX(s.move[1])+"px"; });
+    } else { token.style.opacity="0"; }
+    // step extras
+    if (i===2){ /* run */ }
+    if (s.t.startsWith('The batch')){ requestAnimationFrame(()=>{ const p=document.getElementById("prog"); if(p) p.style.width="100%"; }); }
+    if (s.t.startsWith('Anyone')){ const lis=[...document.querySelectorAll("#checks li")]; lis.forEach((li,k)=>setTimeout(()=>li.classList.add("done"), reduce?0:250+k*260)); }
+  }
+  function stop(){ if(timer){clearInterval(timer);timer=null;document.getElementById("play").textContent="Play";} }
+  document.getElementById("next").addEventListener("click",()=>{ stop(); go(cur===steps.length-1?0:cur+1); });
+  document.getElementById("back").addEventListener("click",()=>{ stop(); if(cur>0) go(cur-1); });
+  document.getElementById("play").addEventListener("click",(e)=>{
+    if(timer){ stop(); return; }
+    e.target.textContent="Pause"; if(cur===steps.length-1) go(0);
+    timer=setInterval(()=>{ if(cur===steps.length-1){ stop(); return; } go(cur+1); }, 3200);
+  });
+  document.addEventListener("keydown",e=>{ if(e.key==="ArrowRight"){stop();go(Math.min(cur+1,steps.length-1));} if(e.key==="ArrowLeft"){stop();go(Math.max(cur-1,0));} });
+  window.addEventListener("resize",()=>{ const s=steps[cur]; if(s.move){ token.style.transition="none"; token.style.left=centerX(s.move[1])+"px"; } });
+  go(0);
+})();
+</script>
+</body>
+</html>
