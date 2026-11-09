@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "relay": {
+      "check": "vllm-startup",
+      "phase": "0"
+    },
+    "trigger": "api"
+  },
+  "ops": [
+    {
+      "args": {
+        "cmd": [
+          "\nimport json, os, sys, time, hashlib\nt0 = time.time()\nprint(\"RELAY_T_CONTAINER_START=%.3f\" % t0, flush=True)\nfrom vllm import LLM, SamplingParams\nimport vllm\nt1 = time.time()\nprint(\"RELAY_T_IMPORT_S=%.1f\" % (t1 - t0), flush=True)\nllm = LLM(model=os.environ[\"MODEL\"], revision=os.environ.get(\"REVISION\") or None,\n          max_model_len=4096, seed=0, enforce_eager=True)\nt2 = time.time()\nprint(\"RELAY_T_LOAD_S=%.1f\" % (t2 - t1), flush=True)\nsp = SamplingParams(temperature=0, max_tokens=32, seed=0)\nout = llm.chat([[{\"role\": \"user\", \"content\": \"Reply with the single word: ready\"}]], sp)\nt3 = time.time()\ntxt = out[0].outputs[0].text.strip()\nprint(\"RELAY_T_GEN_S=%.1f\" % (t3 - t2), flush=True)\nprint(\"RELAY_VLLM_VERSION=%s\" % vllm.__version__, flush=True)\nprint(\"RELAY_OUTPUT_SHA256=%s\" % hashlib.sha256(txt.encode()).hexdigest(), flush=True)\nprint(\"RELAY_OUTPUT=%s\" % json.dumps(txt), flush=True)\n"
+        ],
+        "entrypoint": [
+          "python3",
+          "-c"
+        ],
+        "env": {
+          "HF_HUB_DISABLE_PROGRESS_BARS": "1",
+          "HF_HUB_ENABLE_HF_TRANSFER": "0",
+          "MODEL": "Qwen/Qwen2.5-7B-Instruct",
+          "REVISION": "a09a35458c702b33eeacc393d103063234e8bc28",
+          "TQDM_DISABLE": "1",
+          "VLLM_LOGGING_LEVEL": "WARNING"
+        },
+        "gpu": true,
+        "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+        "required_vram": 20
+      },
+      "id": "relay-vllm-startup",
+      "results": {
+        "gen_s": "RELAY_T_GEN_S=([0-9.]+)",
+        "import_s": "RELAY_T_IMPORT_S=([0-9.]+)",
+        "load_s": "RELAY_T_LOAD_S=([0-9.]+)",
+        "output_sha256": "RELAY_OUTPUT_SHA256=([0-9a-f]{64})",
+        "vllm_version": "RELAY_VLLM_VERSION=(\\S+)"
+      },
+      "type": "container/run"
+    }
+  ],
+  "version": "0.1"
+}

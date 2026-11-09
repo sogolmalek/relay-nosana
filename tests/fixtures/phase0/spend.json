@@ -1,0 +1,70 @@
+{
+  "entries": [
+    {
+      "at": 1794247285,
+      "job": "5UrTDacWqSGaN1op8Str9ZoFLceFJ1nPZ3Q97NiEYrv9",
+      "label": "hello",
+      "reserved_usd": 0.044,
+      "usd": 0.044
+    },
+    {
+      "at": 1794249451,
+      "job": "Ejfzwf3gUGGzDctFJSVRjnzV1gp7e3FZZuThe2FFwA2p",
+      "label": "hello_attempt2_unpicked",
+      "note": "never picked up; delisted after 1200s. Recorded at reservation (conservative); settledCredits moved 0.020 for attempts 1+2 together",
+      "reserved_usd": 0.044,
+      "usd": 0.044
+    },
+    {
+      "at": 1794249608,
+      "job": "3ASjE9YF3SqKnaUAsGKGCRGJ1oUvhto1tEmvpS47pFMg",
+      "label": "hello",
+      "reserved_usd": 0.175,
+      "usd": 0.175
+    },
+    {
+      "at": 1794249709,
+      "job": "GaWjy48VRM4VdTeQk5H8gzFhr49qbN9HBmLFkK8GCQ42",
+      "label": "hello",
+      "reserved_usd": 0.175,
+      "usd": 0.01
+    },
+    {
+      "at": 1794249816,
+      "job": "959C21mqevVAaiGYJrktfhV1jhL3q3FgG32BoqUsvonN",
+      "label": "rerun",
+      "reserved_usd": 0.175,
+      "usd": 0.175
+    },
+    {
+      "at": 1794250085,
+      "job": "5tRB9eAwPVjkTmVbF5Btsox1mJUYuHc73r4rxYooHG28",
+      "label": "vllm",
+      "reserved_usd": 0.175,
+      "usd": 0.01
+    },
+    {
+      "at": 1794252025,
+      "job": "3B4LtaAEUCEDrKWs4RgSPMXcBGvuk645DSxmyNN6795K",
+      "label": "vllm_attempt2_stopped",
+      "note": "was running on node 4nao4jx...; script misread QUEUED as not picked up and stopped it after 1800s. Recorded at reservation",
+      "reserved_usd": 0.175,
+      "usd": 0.175
+    },
+    {
+      "at": 1794252289,
+      "job": "EXekZDTvqmg5ipFWynixKR6sB88BGVmSZDCdBATHeEJQ",
+      "label": "vllm",
+      "reserved_usd": 0.175,
+      "usd": 0.175
+    },
+    {
+      "at": 1794253677,
+      "job": "Hs7FRTa6EgiKxNdqaG7rnhpkSu8QpyYaceRrRsbGyN1z",
+      "label": "vllm",
+      "reserved_usd": 0.175,
+      "usd": 0.01
+    }
+  ],
+  "total_usd": 0.818
+}

@@ -1,0 +1,6 @@
+{
+  "body": {
+    "message": "Unauthorized"
+  },
+  "http_status": 401
+}

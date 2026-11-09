@@ -1,0 +1,42 @@
+{
+  "body": {
+    "address": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "client": false,
+    "max_usd_uptime_reward_per_day": 0,
+    "metadata": [
+      {
+        "key": "vram",
+        "value": "24GB"
+      }
+    ],
+    "name": "NVIDIA 3090",
+    "network_fee_percentage": 10,
+    "nodes": [],
+    "nos_job_price_per_second": 0.00012100000000000001,
+    "nos_reward_per_second": 0.00011,
+    "premium_community_relation": "985pQEVPn7SL5os3Z2iNwBoX4f9Bva334dENweXWyt9t",
+    "required_images": [
+      "docker.io/tensorflow/tensorflow:2.17.0-gpu-jupyter",
+      "docker.io/nosana/anti-spoof:1.0.0",
+      "docker.io/vllm/vllm-openai:v0.9.2",
+      "docker.io/ollama/ollama:0.32.6",
+      "docker.io/hoomanhq/oneclickllm:ollama01",
+      "registry.hub.docker.com/ollama/ollama:0.15.4",
+      "docker.io/vllm/vllm-openai:v0.10.2"
+    ],
+    "required_remote_resources": [
+      {
+        "type": "S3",
+        "url": "https://models.nosana.io/foldingAtHome"
+      }
+    ],
+    "sft": "2JzciMonVeQ4thsEgWiLNJ8EX6jW7uZjaJJQo5zVwB6o",
+    "slug": "nvidia-3090",
+    "spare_max_timeout_seconds": null,
+    "spare_utilization_percent": null,
+    "type": "PREMIUM",
+    "usd_reward_per_hour": 0.1745,
+    "utilization_target": 0.6
+  },
+  "http_status": 200
+}

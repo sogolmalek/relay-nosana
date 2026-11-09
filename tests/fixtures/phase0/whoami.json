@@ -1,0 +1,56 @@
+{
+  "https://api.nosana.com": {
+    "balance": {
+      "assignedCredits": 10,
+      "reservedCredits": 0,
+      "settledCredits": 2.804
+    },
+    "balance_http_status": 200,
+    "has_user": true,
+    "http_status": 200,
+    "message": null,
+    "scopes": [
+      "credits:read",
+      "inference:use",
+      "jobs:read",
+      "jobs:write",
+      "deployments:read",
+      "deployments:write",
+      "wallet:sign",
+      "api-keys:manage",
+      "oauth-apps:manage"
+    ],
+    "valid": true
+  },
+  "https://client-manager.k8s.prd.nosana.com": {
+    "balance": {
+      "assignedCredits": 10,
+      "reservedCredits": 0,
+      "settledCredits": 2.804
+    },
+    "balance_http_status": 200,
+    "has_user": true,
+    "http_status": 200,
+    "message": null,
+    "scopes": [
+      "credits:read",
+      "inference:use",
+      "jobs:read",
+      "jobs:write",
+      "deployments:read",
+      "deployments:write",
+      "wallet:sign",
+      "api-keys:manage",
+      "oauth-apps:manage"
+    ],
+    "valid": true
+  },
+  "key_shape": {
+    "has_quotes": false,
+    "has_whitespace": false,
+    "length": 47,
+    "looks_like_placeholder": false,
+    "prefix": "nos_",
+    "starts_with_nos_": true
+  }
+}

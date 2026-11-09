@@ -1,0 +1,60 @@
+{
+  "account": {
+    "address": "959C21mqevVAaiGYJrktfhV1jhL3q3FgG32BoqUsvonN",
+    "ipfs_job": "QmNdyDQtZLewTM8NcLrsQyW1NEPKscMamktDr3bYLKQsii",
+    "ipfs_result": "Qme4poQVQUQnJUmPbqC8M3WZQRhXPdiMcEMKATBGxoY5Xz",
+    "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "node": "3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV",
+    "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+    "price": 110,
+    "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+    "state": 2,
+    "state_name": "COMPLETED",
+    "time_end": 1794249780,
+    "time_start": 1794249749,
+    "timeout": 3600
+  },
+  "check_ipfsJob_equals_pinned": true,
+  "check_node_targeting": true,
+  "credits_reserved_usd": 0.175,
+  "credits_spent_usd": 0.175,
+  "job": "959C21mqevVAaiGYJrktfhV1jhL3q3FgG32BoqUsvonN",
+  "job_definition_cid": "QmNdyDQtZLewTM8NcLrsQyW1NEPKscMamktDr3bYLKQsii",
+  "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+  "requested_node": "3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV",
+  "result_bytes": 1408,
+  "result_check": {
+    "exit_codes": [
+      0
+    ],
+    "ok": true,
+    "reasons": [],
+    "status": "success"
+  },
+  "result_cid": "Qme4poQVQUQnJUmPbqC8M3WZQRhXPdiMcEMKATBGxoY5Xz",
+  "result_exit_codes": [
+    0
+  ],
+  "result_gateway": "https://nosana.mypinata.cloud/ipfs/",
+  "result_logs_contain_hello": true,
+  "result_op_results": [
+    {
+      "hello": [
+        "RELAY_PHASE0_HELLO_7f3a",
+        "RELAY_PHASE0_HELLO_7f3a"
+      ],
+      "input_lines": [
+        "RELAY_INPUT_LINES=3",
+        "3"
+      ],
+      "inputs_sha256": [
+        "RELAY_INPUTS_SHA256=75bb0a9a2e6747d400de4ffd494deb5100a1d2f13c8690a5ba55e770d2090742",
+        "75bb0a9a2e6747d400de4ffd494deb5100a1d2f13c8690a5ba55e770d2090742"
+      ]
+    }
+  ],
+  "run": "J11A8WaFVmDtyMDQhwiRnvwHBjX3ECFMD5ou3WFWq7Nr",
+  "tx": "2aferSZzDe4RLZ2H3UT65PM9r8NLP6vtchi7EuCBJerbTY7FvdxxXZMZPenrQfjwaQD6Pe1z7ipkg2ubG2aFcEaA",
+  "wall_post_to_done_s": 34.7,
+  "wall_post_to_running_s": null
+}

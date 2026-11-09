@@ -1,0 +1,18 @@
+{
+  "https://api.nosana.com": {
+    "body": {
+      "assignedCredits": 10,
+      "reservedCredits": 0,
+      "settledCredits": 2.804
+    },
+    "http_status": 200
+  },
+  "https://client-manager.k8s.prd.nosana.com": {
+    "body": {
+      "assignedCredits": 10,
+      "reservedCredits": 0,
+      "settledCredits": 2.804
+    },
+    "http_status": 200
+  }
+}

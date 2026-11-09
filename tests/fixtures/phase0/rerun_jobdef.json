@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "relay": {
+      "check": "hello",
+      "inputs_sha256": "75bb0a9a2e6747d400de4ffd494deb5100a1d2f13c8690a5ba55e770d2090742",
+      "phase": "0"
+    },
+    "trigger": "api"
+  },
+  "ops": [
+    {
+      "args": {
+        "cmd": [
+          "/bin/sh",
+          "-c",
+          "echo RELAY_PHASE0_HELLO_7f3a; echo \"RELAY_INPUTS_SHA256=$(echo \"$RELAY_INPUTS_B64\" | base64 -d | sha256sum | cut -d\" \" -f1)\"; echo \"RELAY_INPUT_LINES=$(echo \"$RELAY_INPUTS_B64\" | base64 -d | wc -l)\"; echo \"RELAY_DATE=$(date -u +%s)\""
+        ],
+        "env": {
+          "RELAY_INPUTS_B64": "eyJhbW91bnRfdXNkIjoxMDAsIml0ZW1faWQiOiJQLTAwMDAiLCJ0YXNrIjoicGF5b3V0X2NoZWNrIn0KeyJhbW91bnRfdXNkIjoxMDEsIml0ZW1faWQiOiJQLTAwMDEiLCJ0YXNrIjoicGF5b3V0X2NoZWNrIn0KeyJhbW91bnRfdXNkIjoxMDIsIml0ZW1faWQiOiJQLTAwMDIiLCJ0YXNrIjoicGF5b3V0X2NoZWNrIn0K"
+        },
+        "gpu": false,
+        "image": "docker.io/library/alpine:3.20"
+      },
+      "id": "relay-hello",
+      "results": {
+        "hello": "(RELAY_PHASE0_HELLO_7f3a)",
+        "input_lines": "RELAY_INPUT_LINES=\\s*([0-9]+)",
+        "inputs_sha256": "RELAY_INPUTS_SHA256=([0-9a-f]{64})"
+      },
+      "type": "container/run"
+    }
+  ],
+  "version": "0.1"
+}

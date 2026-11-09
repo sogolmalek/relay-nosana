@@ -1,0 +1,2644 @@
+{
+  "body": [
+    {
+      "category": "Official|API|LLM|Ollama|New|Featured",
+      "cuda_requirement": null,
+      "icon": "https://avatars.githubusercontent.com/u/314135?s=200&v=4",
+      "id": "clef",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "Clef",
+      "parent_template_id": null,
+      "readme": "# Clef\n\nClef is a family of multimodal decision models from Cloudflare. Instead of generating text, a decision model takes a `state` and a schema of typed questions and returns decisions with probabilities, scoring every option of every question in a single non-autoregressive forward pass. Served through Ollama, this template deploys `clef:27b` or the smaller, faster `clef-flash:9b`.\n\n## Included Models\n\n### Clef 27B\n- **Model Tag**: `clef:27b`\n- **Model Size**: 18 GB\n- **Base Model**: Fine-tuned from Qwen3.8-27B\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~23 GB (about 22 GB in use once loaded)\n- **Use Case**: Highest-accuracy routing, policy checks, and document decisions\n\n### Clef Flash 9B\n- **Model Tag**: `clef-flash:9b`\n- **Model Size**: 11 GB\n- **Base Model**: Fine-tuned from Qwen3.5-9B\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~16 GB (about 13 GB in use once loaded)\n- **Use Case**: Latency-critical decisions such as gating agent steps and model routing\n\n## Highlights\n\n- **Typed decisions**: `choice`, `noul` (true/false), and `score` questions, each returned with probabilities\n- **One forward pass**: Up to 64 named questions per request, scored jointly\n- **Multimodal**: Decide over text, JSON, or images such as screenshots, receipts, forms, and photos\n- **Fast**: Cloudflare reports a median latency of 209.3 ms for Clef and 38.8 ms for Clef Flash\n- **Apache 2.0 license**\n- **Automatic Model Download**: The model is pulled automatically on startup\n\n## Usage\n\nThe model is served on port 11434. Decision models do not generate text, so `/v1/chat/completions` returns `400 does not support chat`; use Ollama's System One endpoint instead:\n\n- **Decisions**: `POST /v1/systemone`\n- **Model Info**: `GET /api/tags`\n\nClef requires Ollama 0.35.1 or later, which is the version this template runs.\n\n### Request Fields\n\n| Field | Description |\n|-------|-------------|\n| `model` | `clef:27b` or `clef-flash:9b`, matching the deployed variant. The full tag is required |\n| `state` | The text to judge. A string, or a JSON object or array for structured input |\n| `images` | Optional. Base64-encoded PNG, JPEG, or WebP images shared by all questions. URLs and data URLs are not supported |\n| `questions` | 1 to 64 named questions. Answers come back in the same order |\n| `keep_alive` | Optional. How long the model stays loaded after the request |\n\n### Question Types\n\n| Type | `criteria` | Answer fields |\n|------|------------|---------------|\n| `choice` | An object mapping each option to a description (`null` lets the option name describe itself). 2 to 26 options | `choice`, `probabilities`, `confidence` |\n| `noul` | Optional. `{\"true\": \"...\", \"false\": \"...\"}` to describe each side | `noul`, the probability that the answer is true |\n| `score` | An array of level descriptions, lowest first. 2 to 26 levels | `score`, `legend`, `probabilities`, `confidence` |\n\n`confidence` runs from 0 to 1 and shows how concentrated the probabilities are; it is not the chance that the answer is right.\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/v1/systemone \\\n  -d '{\n    \"model\": \"clef:27b\",\n    \"state\": \"I was charged twice. Please refund the extra payment.\",\n    \"questions\": {\n      \"team\": {\n        \"type\": \"choice\",\n        \"instructions\": \"Which team should handle this ticket?\",\n        \"criteria\": {\n          \"billing\": \"Payments and refunds\",\n          \"technical\": \"Bugs and integrations\",\n          \"other\": \"None of the above\"\n        }\n      },\n      \"refund\": {\n        \"type\": \"noul\",\n        \"instructions\": \"Does the customer explicitly ask for a refund?\"\n      },\n      \"urgency\": {\n        \"type\": \"score\",\n        \"instructions\": \"How urgent is this ticket?\",\n        \"criteria\": [\"Routine\", \"Soon\", \"Urgent\"]\n      }\n    }\n  }'\n```\n\n### Example Response\n\n```json\n{\n  \"model\": \"clef:27b\",\n  \"answers\": {\n    \"team\": {\n      \"type\": \"choice\",\n      \"choice\": \"billing\",\n      \"probabilities\": {\"billing\": 0.981, \"technical\": 0.013, \"other\": 0.006},\n      \"confidence\": 0.924\n    },\n    \"refund\": {\"type\": \"noul\", \"noul\": 0.996},\n    \"urgency\": {\n      \"type\": \"score\",\n      \"score\": 0.704,\n      \"legend\": {\"0\": \"Routine\", \"1\": \"Soon\", \"2\": \"Urgent\"},\n      \"probabilities\": {\"0\": 0.451, \"1\": 0.353, \"2\": 0.196},\n      \"confidence\": 0.071\n    }\n  },\n  \"usage\": {\"input_tokens\": 328, \"output_tokens\": 0}\n}\n```\n\nFor the Clef Flash variant, set `\"model\": \"clef-flash:9b\"`. The untagged names `clef` and `clef-flash` are not pulled by this template and return `404 model not found`.\n\nSee the Ollama library pages for [Clef](https://ollama.com/library/clef) and [Clef Flash](https://ollama.com/library/clef-flash) for more examples and benchmarks.\n",
+      "variants": [
+        {
+          "description": "Clef 27B decision model (18 GB, 256K context, Text + Image)",
+          "id": "27b",
+          "job_definition": "job-definition-27b.json",
+          "name": "Clef 27B"
+        },
+        {
+          "description": "Clef Flash 9B low-latency decision model (11 GB, 256K context, Text + Image)",
+          "id": "flash-9b",
+          "job_definition": "job-definition-flash-9b.json",
+          "name": "Clef Flash 9B"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|LLM|Ollama|New|Featured",
+      "cuda_requirement": null,
+      "icon": "https://avatars.githubusercontent.com/u/314135?s=200&v=4",
+      "id": "clef-27b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "clef:27b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 23552
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Clef - Clef 27B",
+      "parent_template_id": "clef",
+      "readme": "# Clef\n\nClef is a family of multimodal decision models from Cloudflare. Instead of generating text, a decision model takes a `state` and a schema of typed questions and returns decisions with probabilities, scoring every option of every question in a single non-autoregressive forward pass. Served through Ollama, this template deploys `clef:27b` or the smaller, faster `clef-flash:9b`.\n\n## Included Models\n\n### Clef 27B\n- **Model Tag**: `clef:27b`\n- **Model Size**: 18 GB\n- **Base Model**: Fine-tuned from Qwen3.8-27B\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~23 GB (about 22 GB in use once loaded)\n- **Use Case**: Highest-accuracy routing, policy checks, and document decisions\n\n### Clef Flash 9B\n- **Model Tag**: `clef-flash:9b`\n- **Model Size**: 11 GB\n- **Base Model**: Fine-tuned from Qwen3.5-9B\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~16 GB (about 13 GB in use once loaded)\n- **Use Case**: Latency-critical decisions such as gating agent steps and model routing\n\n## Highlights\n\n- **Typed decisions**: `choice`, `noul` (true/false), and `score` questions, each returned with probabilities\n- **One forward pass**: Up to 64 named questions per request, scored jointly\n- **Multimodal**: Decide over text, JSON, or images such as screenshots, receipts, forms, and photos\n- **Fast**: Cloudflare reports a median latency of 209.3 ms for Clef and 38.8 ms for Clef Flash\n- **Apache 2.0 license**\n- **Automatic Model Download**: The model is pulled automatically on startup\n\n## Usage\n\nThe model is served on port 11434. Decision models do not generate text, so `/v1/chat/completions` returns `400 does not support chat`; use Ollama's System One endpoint instead:\n\n- **Decisions**: `POST /v1/systemone`\n- **Model Info**: `GET /api/tags`\n\nClef requires Ollama 0.35.1 or later, which is the version this template runs.\n\n### Request Fields\n\n| Field | Description |\n|-------|-------------|\n| `model` | `clef:27b` or `clef-flash:9b`, matching the deployed variant. The full tag is required |\n| `state` | The text to judge. A string, or a JSON object or array for structured input |\n| `images` | Optional. Base64-encoded PNG, JPEG, or WebP images shared by all questions. URLs and data URLs are not supported |\n| `questions` | 1 to 64 named questions. Answers come back in the same order |\n| `keep_alive` | Optional. How long the model stays loaded after the request |\n\n### Question Types\n\n| Type | `criteria` | Answer fields |\n|------|------------|---------------|\n| `choice` | An object mapping each option to a description (`null` lets the option name describe itself). 2 to 26 options | `choice`, `probabilities`, `confidence` |\n| `noul` | Optional. `{\"true\": \"...\", \"false\": \"...\"}` to describe each side | `noul`, the probability that the answer is true |\n| `score` | An array of level descriptions, lowest first. 2 to 26 levels | `score`, `legend`, `probabilities`, `confidence` |\n\n`confidence` runs from 0 to 1 and shows how concentrated the probabilities are; it is not the chance that the answer is right.\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/v1/systemone \\\n  -d '{\n    \"model\": \"clef:27b\",\n    \"state\": \"I was charged twice. Please refund the extra payment.\",\n    \"questions\": {\n      \"team\": {\n        \"type\": \"choice\",\n        \"instructions\": \"Which team should handle this ticket?\",\n        \"criteria\": {\n          \"billing\": \"Payments and refunds\",\n          \"technical\": \"Bugs and integrations\",\n          \"other\": \"None of the above\"\n        }\n      },\n      \"refund\": {\n        \"type\": \"noul\",\n        \"instructions\": \"Does the customer explicitly ask for a refund?\"\n      },\n      \"urgency\": {\n        \"type\": \"score\",\n        \"instructions\": \"How urgent is this ticket?\",\n        \"criteria\": [\"Routine\", \"Soon\", \"Urgent\"]\n      }\n    }\n  }'\n```\n\n### Example Response\n\n```json\n{\n  \"model\": \"clef:27b\",\n  \"answers\": {\n    \"team\": {\n      \"type\": \"choice\",\n      \"choice\": \"billing\",\n      \"probabilities\": {\"billing\": 0.981, \"technical\": 0.013, \"other\": 0.006},\n      \"confidence\": 0.924\n    },\n    \"refund\": {\"type\": \"noul\", \"noul\": 0.996},\n    \"urgency\": {\n      \"type\": \"score\",\n      \"score\": 0.704,\n      \"legend\": {\"0\": \"Routine\", \"1\": \"Soon\", \"2\": \"Urgent\"},\n      \"probabilities\": {\"0\": 0.451, \"1\": 0.353, \"2\": 0.196},\n      \"confidence\": 0.071\n    }\n  },\n  \"usage\": {\"input_tokens\": 328, \"output_tokens\": 0}\n}\n```\n\nFor the Clef Flash variant, set `\"model\": \"clef-flash:9b\"`. The untagged names `clef` and `clef-flash` are not pulled by this template and return `404 model not found`.\n\nSee the Ollama library pages for [Clef](https://ollama.com/library/clef) and [Clef Flash](https://ollama.com/library/clef-flash) for more examples and benchmarks.\n",
+      "variants": null,
+      "vram_requirement": 23552
+    },
+    {
+      "category": "Official|API|LLM|Ollama|New|Featured",
+      "cuda_requirement": null,
+      "icon": "https://avatars.githubusercontent.com/u/314135?s=200&v=4",
+      "id": "clef-flash-9b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "clef-flash:9b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 16384
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Clef - Clef Flash 9B",
+      "parent_template_id": "clef",
+      "readme": "# Clef\n\nClef is a family of multimodal decision models from Cloudflare. Instead of generating text, a decision model takes a `state` and a schema of typed questions and returns decisions with probabilities, scoring every option of every question in a single non-autoregressive forward pass. Served through Ollama, this template deploys `clef:27b` or the smaller, faster `clef-flash:9b`.\n\n## Included Models\n\n### Clef 27B\n- **Model Tag**: `clef:27b`\n- **Model Size**: 18 GB\n- **Base Model**: Fine-tuned from Qwen3.8-27B\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~23 GB (about 22 GB in use once loaded)\n- **Use Case**: Highest-accuracy routing, policy checks, and document decisions\n\n### Clef Flash 9B\n- **Model Tag**: `clef-flash:9b`\n- **Model Size**: 11 GB\n- **Base Model**: Fine-tuned from Qwen3.5-9B\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~16 GB (about 13 GB in use once loaded)\n- **Use Case**: Latency-critical decisions such as gating agent steps and model routing\n\n## Highlights\n\n- **Typed decisions**: `choice`, `noul` (true/false), and `score` questions, each returned with probabilities\n- **One forward pass**: Up to 64 named questions per request, scored jointly\n- **Multimodal**: Decide over text, JSON, or images such as screenshots, receipts, forms, and photos\n- **Fast**: Cloudflare reports a median latency of 209.3 ms for Clef and 38.8 ms for Clef Flash\n- **Apache 2.0 license**\n- **Automatic Model Download**: The model is pulled automatically on startup\n\n## Usage\n\nThe model is served on port 11434. Decision models do not generate text, so `/v1/chat/completions` returns `400 does not support chat`; use Ollama's System One endpoint instead:\n\n- **Decisions**: `POST /v1/systemone`\n- **Model Info**: `GET /api/tags`\n\nClef requires Ollama 0.35.1 or later, which is the version this template runs.\n\n### Request Fields\n\n| Field | Description |\n|-------|-------------|\n| `model` | `clef:27b` or `clef-flash:9b`, matching the deployed variant. The full tag is required |\n| `state` | The text to judge. A string, or a JSON object or array for structured input |\n| `images` | Optional. Base64-encoded PNG, JPEG, or WebP images shared by all questions. URLs and data URLs are not supported |\n| `questions` | 1 to 64 named questions. Answers come back in the same order |\n| `keep_alive` | Optional. How long the model stays loaded after the request |\n\n### Question Types\n\n| Type | `criteria` | Answer fields |\n|------|------------|---------------|\n| `choice` | An object mapping each option to a description (`null` lets the option name describe itself). 2 to 26 options | `choice`, `probabilities`, `confidence` |\n| `noul` | Optional. `{\"true\": \"...\", \"false\": \"...\"}` to describe each side | `noul`, the probability that the answer is true |\n| `score` | An array of level descriptions, lowest first. 2 to 26 levels | `score`, `legend`, `probabilities`, `confidence` |\n\n`confidence` runs from 0 to 1 and shows how concentrated the probabilities are; it is not the chance that the answer is right.\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/v1/systemone \\\n  -d '{\n    \"model\": \"clef:27b\",\n    \"state\": \"I was charged twice. Please refund the extra payment.\",\n    \"questions\": {\n      \"team\": {\n        \"type\": \"choice\",\n        \"instructions\": \"Which team should handle this ticket?\",\n        \"criteria\": {\n          \"billing\": \"Payments and refunds\",\n          \"technical\": \"Bugs and integrations\",\n          \"other\": \"None of the above\"\n        }\n      },\n      \"refund\": {\n        \"type\": \"noul\",\n        \"instructions\": \"Does the customer explicitly ask for a refund?\"\n      },\n      \"urgency\": {\n        \"type\": \"score\",\n        \"instructions\": \"How urgent is this ticket?\",\n        \"criteria\": [\"Routine\", \"Soon\", \"Urgent\"]\n      }\n    }\n  }'\n```\n\n### Example Response\n\n```json\n{\n  \"model\": \"clef:27b\",\n  \"answers\": {\n    \"team\": {\n      \"type\": \"choice\",\n      \"choice\": \"billing\",\n      \"probabilities\": {\"billing\": 0.981, \"technical\": 0.013, \"other\": 0.006},\n      \"confidence\": 0.924\n    },\n    \"refund\": {\"type\": \"noul\", \"noul\": 0.996},\n    \"urgency\": {\n      \"type\": \"score\",\n      \"score\": 0.704,\n      \"legend\": {\"0\": \"Routine\", \"1\": \"Soon\", \"2\": \"Urgent\"},\n      \"probabilities\": {\"0\": 0.451, \"1\": 0.353, \"2\": 0.196},\n      \"confidence\": 0.071\n    }\n  },\n  \"usage\": {\"input_tokens\": 328, \"output_tokens\": 0}\n}\n```\n\nFor the Clef Flash variant, set `\"model\": \"clef-flash:9b\"`. The untagged names `clef` and `clef-flash` are not pulled by this template and return `404 model not found`.\n\nSee the Ollama library pages for [Clef](https://ollama.com/library/clef) and [Clef Flash](https://ollama.com/library/clef-flash) for more examples and benchmarks.\n",
+      "variants": null,
+      "vram_requirement": 16384
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://avatars.githubusercontent.com/u/69631?s=200&v=4",
+      "id": "muse-glimmer-30b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "muse-glimmer:30b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 23552
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Muse Glimmer - 30B Model",
+      "parent_template_id": "muse-glimmer",
+      "readme": "# Muse Glimmer\n\nMuse Glimmer is a 30-billion-parameter causal language model with a dedicated perception encoder, distilled from Muse Spark and built for autonomous agentic tasks on consumer hardware. It combines multi-step reasoning, tool use, multimodal understanding and failure recovery in a single model. Served through Ollama, this template deploys `muse-glimmer:30b` with an OpenAI-compatible API.\n\n## Included Model\n\n### 30B\n- **Model Tag**: `muse-glimmer:30b` (27.9B parameters, Q4_K_M)\n- **Model Size**: 18.2 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~18 GB at 32K context (24 GB-class GPUs and up)\n- **Use Case**: Agentic workflows, tool calling, coding assistants, screenshot and document understanding\n\nNVIDIA support for this architecture landed in Ollama 0.32.8, so the template needs at least that version. The `30b-mlx` tag is an Apple Silicon build and is not applicable to Nosana GPU nodes.\n\n## Highlights\n\n- **End-to-end agentic task completion**: strong results on DeepSearch QA, MCP-Atlas, \ud835\uded53-Bench and SWE-Bench\n- **Reliable tool use**: precise function-call schemas across extended workflows\n- **Multi-step reasoning**: coherent plans over long horizons\n- **Failure recovery**: diagnoses failed or unexpected tool results and retries instead of halting\n- **Multimodal input**: interleaved text and images through a dedicated perception encoder\n- **Scaffold compatibility**: works with OpenClaw, Hermes Agent and similar orchestration patterns\n- **Controllable effort**: selectable reasoning strengths to trade quality against speed\n- **Multilingual**: trained on data from more than 100 languages\n- **Automatic model download**: the model is pulled automatically on startup\n\n## Benchmarks\n\nReported by Meta, compared with Gemma4-31B and Qwen3.6-27B (thinking mode):\n\n| Category | Benchmark | Muse Glimmer-30B | Gemma4-31B | Qwen3.6-27B |\n| --- | --- | --- | --- | --- |\n| General Agentic | MCP Atlas (Public) | 75.5 | 54.2 | 62.5 |\n| | DeepSearch QA | 74.6 | 61.7 | 71.1 |\n| | \ud835\uded53-Banking | 23.5 | 15.1 | 16.7 |\n| | WildClawBench | 47.6 | 37.6 | 43.2 |\n| | GDPVal-AA v2 | 953 | 811 | 1141 |\n| | Gaia2 | 43.3 | 36.4 | 40.0 |\n| | SkillsBench (with skills) | 44.3 | 32.4 | 46.6 |\n| | OSWorld-Verified | 65.9 | 58.5 | 75.6 |\n| Agentic Coding | SWE-Bench Pro | 51.2 | 36.9 | 50.2 |\n| | SWE-Bench Verified | 76.0 | 66.6 | 77.2 |\n| | TerminalBench 2.1 (with terminus2) | 51.7 | 43.4 | 60.7 |\n| | SciCode | 43.6 | 43.4 | 39.8 |\n| Multimodal | Charxiv Reasoning | 78.8 | 77.7 | 78.4 |\n| | ScreenSpot Pro | 75.4 | 75.9 | 76.1 |\n| | OmniDocBench v1.5 | 75.8 | 72.5 | 77.8 |\n| | MMMU Pro | 74 | 73 | 75 |\n| General Reasoning | IFBench | 77.0 | 76.0 | 70.8 |\n| | AIME 2026 | 94.7 | 89.2 | 94.1 |\n| | GPQA Diamond (AA) | 83.5 | 85.7 | 84.2 |\n| | HLE Text (AA) | 22.0 | 23.6 | 23.1 |\n| | AA-LCR | 80.0 | 68.3 | 73.3 |\n| | Beam128K | 65.1 | 58.2 | 63.0 |\n\n## Usage\n\nThe model is served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Generate**: `POST /api/generate`\n- **Model Info**: `GET /api/tags`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"muse-glimmer:30b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Plan and run a three-step research task.\"}]\n  }'\n```\n",
+      "variants": null,
+      "vram_requirement": 23552
+    },
+    {
+      "category": "Official|Web UI|API",
+      "cuda_requirement": null,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhyOAyEZ7rQuXiP6Kxx0B9y_aJ59fRniUVRw&s",
+      "id": "pytorch-jupyter",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 4096
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "jupyter",
+                "lab",
+                "--ip=0.0.0.0",
+                "--port=8888",
+                "--no-browser",
+                "--allow-root",
+                "--ServerApp.token=''",
+                "--ServerApp.password=''"
+              ],
+              "expose": 8888,
+              "gpu": true,
+              "image": "docker.io/nosana/pytorch-jupyter:2.0.0"
+            },
+            "id": "Pytorch",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Pytorch Jupyter Notebook",
+      "parent_template_id": null,
+      "readme": "A Jupyter Notebook environment with PyTorch pre-installed for deep learning development.\n\nUnleash the power of PyTorch with Nosana! Effortlessly run your Jupyter environment on high-performance GPU-backed nodes, ensuring optimal performance for your deep learning projects.\n\n## Key Features\n- Interactive Python environment\n- Pre-installed PyTorch\n- CUDA support\n- Notebook sharing\n- GPU acceleration support\n\n## Configuration\n- Port: 8888\n- GPU: Required\n- No authentication required\n",
+      "variants": null,
+      "vram_requirement": 4096
+    },
+    {
+      "category": "Official|API|LLM|Ollama|vLLM",
+      "cuda_requirement": null,
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Qwen_logo.svg/3840px-Qwen_logo.svg.png",
+      "id": "qwen",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "Qwen Models",
+      "parent_template_id": null,
+      "readme": "# Qwen Models\n\nAlibaba's open-weight Qwen models, one variant per GPU size: the newest Qwen that fits each.\n\n## Variants\n\n### Qwen 3.5 9B\n- **Engine**: Ollama, `qwen3.5:9b` (6.6 GB)\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~9 GB, for 10 GB GPUs and up\n\n### Qwen 3.8 27B\nQwen3.8-27B is a 27-billion-parameter dense model, released in August 2026 under Apache 2.0, with strong coding and agentic results for its size.\n\n- **Engine**: Ollama, `qwen3.8:27b` (4-bit, 18 GB)\n- **Context**: Ollama sizes it to the free GPU memory\n- **Modalities**: Text, Image\n- **VRAM Required**: ~23 GB, fits a 24 GB GPU such as the RTX 4090 or 3090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 32K context\n- **Engine**: vLLM, AWQ 4-bit weights ([cyankiwi/Qwen3.8-27B-AWQ-INT4](https://huggingface.co/cyankiwi/Qwen3.8-27B-AWQ-INT4)), about 19 GB loaded\n- **Context**: 32K tokens, 4 concurrent requests\n- **VRAM Required**: ~28 GB, for 32 GB GPUs such as the RTX 5090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 128K context\n- **Engine**: vLLM, the same AWQ 4-bit weights\n- **Context**: 128K tokens, 8 concurrent requests\n- **VRAM Required**: ~45 GB, for 48 GB GPUs and up\n\nThe vLLM variants are the setup that serves Qwen 3.8 on the Nosana LLM gateway: FP8 KV cache, tool calling (`qwen3_xml`) and reasoning output (`qwen3`), served as `qwen3.8-27b` on port 8000. Their context length and concurrency are global variables (`MAX_MODEL_LEN`, `MAX_NUM_SEQS`, `GPU_MEM_UTIL`) at the top of the job definition. In vLLM the AWQ weights alone take about 19 GB, too much of a 24 GB card to leave room for the cache, so 24 GB cards use the Ollama variant.\n\n## Usage\n\nThe Ollama variants serve on port 11434 and the vLLM variants on port 8000, both with an OpenAI-compatible `POST /v1/chat/completions`.\n\n```bash\ncurl https://your-deployment-url/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"qwen3.8:27b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Write a function that reverses a linked list.\"}],\n    \"max_tokens\": 1024\n  }'\n```\n\nFor the vLLM variants, use `\"model\": \"qwen3.8-27b\"`.\n",
+      "variants": [
+        {
+          "description": "Qwen 3.5 9B via Ollama (6.6 GB, 256K context, Text + Image). For 10 GB GPUs and up.",
+          "id": "9b",
+          "job_definition": "job-definition-9b.json",
+          "name": "Qwen 3.5 9B"
+        },
+        {
+          "description": "Qwen 3.8 27B dense via Ollama, 4-bit (18 GB), Text + Image. Fits a 24 GB GPU; Ollama sizes the context to the free memory.",
+          "id": "27b",
+          "job_definition": "job-definition-27b.json",
+          "name": "Qwen 3.8 27B"
+        },
+        {
+          "description": "Qwen 3.8 27B dense via vLLM, AWQ 4-bit, 32K context, Text + Image. For 32 GB GPUs and up.",
+          "id": "27b-32k",
+          "job_definition": "job-definition-27b-32k.json",
+          "name": "Qwen 3.8 27B \u00b7 vLLM \u00b7 32K context"
+        },
+        {
+          "description": "Qwen 3.8 27B dense via vLLM, AWQ 4-bit, 128K context, Text + Image. For 48 GB GPUs and up.",
+          "id": "27b-128k",
+          "job_definition": "job-definition-27b-128k.json",
+          "name": "Qwen 3.8 27B \u00b7 vLLM \u00b7 128K context"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|Web UI|API|Image Generation",
+      "cuda_requirement": null,
+      "icon": "https://framerusercontent.com/images/3cNQMWKzIhIrQ5KErBm7dSmbd2w.png",
+      "id": "comfyui",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "ComfyUI Image Generation",
+      "parent_template_id": null,
+      "readme": "# ComfyUI Image Generation\n\nPowerful node-based interface for AI image generation with multiple model options.\n\n## Available Models\n\n### Stable Diffusion 1.5\n- **VRAM Required**: 4 GB\n- **Use Case**: Fast, reliable image generation\n- **Models**: Classic SD 1.5 checkpoint included\n\n### Stable Diffusion XL\n- **VRAM Required**: 8 GB\n- **Use Case**: Higher resolution and quality images\n- **Models**: SDXL checkpoint included\n\n### Flux Schnell FP8\n- **VRAM Required**: 12 GB\n- **Use Case**: Latest generation model with fastest inference\n- **Models**: Flux Schnell FP8 optimized checkpoint\n\n## Features\n\n- **Node-Based Interface**: Visual workflow editor\n- **Web UI**: Access via port 8188\n- **Pre-loaded Models**: Models automatically downloaded\n- **Custom Workflows**: Build complex generation pipelines\n- **API Support**: RESTful API for automation\n\n## Usage\n\n1. Access the web interface at port 8188\n2. Create or load workflows using the node editor\n3. Configure generation parameters\n4. Queue and execute image generation tasks\n\n## Workflow Creation\n\nComfyUI uses a node-based approach where you can:\n- Connect different processing nodes\n- Customize generation parameters\n- Save and share workflows\n- Experiment with different model combinations",
+      "variants": [
+        {
+          "description": "Classic SD 1.5 model - fast and reliable",
+          "id": "sd15",
+          "job_definition": "job-definition-sd15.json",
+          "name": "Stable Diffusion 1.5"
+        },
+        {
+          "description": "High-resolution SDXL model - better quality",
+          "id": "sdxl",
+          "job_definition": "job-definition-sdxl.json",
+          "name": "Stable Diffusion XL"
+        },
+        {
+          "description": "Latest Flux model - fastest generation",
+          "id": "flux",
+          "job_definition": "job-definition-flux.json",
+          "name": "Flux Schnell FP8"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|Web UI|API|Image Generation",
+      "cuda_requirement": null,
+      "icon": "https://framerusercontent.com/images/3cNQMWKzIhIrQ5KErBm7dSmbd2w.png",
+      "id": "comfyui-sd15",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 4096
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [],
+              "expose": 8188,
+              "gpu": true,
+              "image": "docker.io/nosana/comfyui:2.0.11",
+              "resources": [
+                {
+                  "target": "/comfyui/models/checkpoints",
+                  "type": "S3",
+                  "url": "https://models.nosana.io/stable-diffusion/1.5"
+                }
+              ]
+            },
+            "id": "SD15-comfy",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "ComfyUI Image Generation - Stable Diffusion 1.5",
+      "parent_template_id": "comfyui",
+      "readme": "# ComfyUI Image Generation\n\nPowerful node-based interface for AI image generation with multiple model options.\n\n## Available Models\n\n### Stable Diffusion 1.5\n- **VRAM Required**: 4 GB\n- **Use Case**: Fast, reliable image generation\n- **Models**: Classic SD 1.5 checkpoint included\n\n### Stable Diffusion XL\n- **VRAM Required**: 8 GB\n- **Use Case**: Higher resolution and quality images\n- **Models**: SDXL checkpoint included\n\n### Flux Schnell FP8\n- **VRAM Required**: 12 GB\n- **Use Case**: Latest generation model with fastest inference\n- **Models**: Flux Schnell FP8 optimized checkpoint\n\n## Features\n\n- **Node-Based Interface**: Visual workflow editor\n- **Web UI**: Access via port 8188\n- **Pre-loaded Models**: Models automatically downloaded\n- **Custom Workflows**: Build complex generation pipelines\n- **API Support**: RESTful API for automation\n\n## Usage\n\n1. Access the web interface at port 8188\n2. Create or load workflows using the node editor\n3. Configure generation parameters\n4. Queue and execute image generation tasks\n\n## Workflow Creation\n\nComfyUI uses a node-based approach where you can:\n- Connect different processing nodes\n- Customize generation parameters\n- Save and share workflows\n- Experiment with different model combinations",
+      "variants": null,
+      "vram_requirement": 4096
+    },
+    {
+      "category": "Official|Web UI|API|Image Generation",
+      "cuda_requirement": null,
+      "icon": "https://framerusercontent.com/images/3cNQMWKzIhIrQ5KErBm7dSmbd2w.png",
+      "id": "comfyui-sdxl",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 8192
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [],
+              "expose": 8188,
+              "gpu": true,
+              "image": "docker.io/nosana/comfyui:2.0.11",
+              "resources": [
+                {
+                  "target": "/comfyui/models/checkpoints",
+                  "type": "S3",
+                  "url": "https://models.nosana.io/stable-diffusion/sd-xl"
+                }
+              ]
+            },
+            "id": "SDXL-comfy",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "ComfyUI Image Generation - Stable Diffusion XL",
+      "parent_template_id": "comfyui",
+      "readme": "# ComfyUI Image Generation\n\nPowerful node-based interface for AI image generation with multiple model options.\n\n## Available Models\n\n### Stable Diffusion 1.5\n- **VRAM Required**: 4 GB\n- **Use Case**: Fast, reliable image generation\n- **Models**: Classic SD 1.5 checkpoint included\n\n### Stable Diffusion XL\n- **VRAM Required**: 8 GB\n- **Use Case**: Higher resolution and quality images\n- **Models**: SDXL checkpoint included\n\n### Flux Schnell FP8\n- **VRAM Required**: 12 GB\n- **Use Case**: Latest generation model with fastest inference\n- **Models**: Flux Schnell FP8 optimized checkpoint\n\n## Features\n\n- **Node-Based Interface**: Visual workflow editor\n- **Web UI**: Access via port 8188\n- **Pre-loaded Models**: Models automatically downloaded\n- **Custom Workflows**: Build complex generation pipelines\n- **API Support**: RESTful API for automation\n\n## Usage\n\n1. Access the web interface at port 8188\n2. Create or load workflows using the node editor\n3. Configure generation parameters\n4. Queue and execute image generation tasks\n\n## Workflow Creation\n\nComfyUI uses a node-based approach where you can:\n- Connect different processing nodes\n- Customize generation parameters\n- Save and share workflows\n- Experiment with different model combinations",
+      "variants": null,
+      "vram_requirement": 8192
+    },
+    {
+      "category": "Official|Web UI|API|Image Generation",
+      "cuda_requirement": null,
+      "icon": "https://framerusercontent.com/images/3cNQMWKzIhIrQ5KErBm7dSmbd2w.png",
+      "id": "comfyui-flux",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 12288
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [],
+              "expose": 8188,
+              "gpu": true,
+              "image": "docker.io/nosana/comfyui:2.0.11",
+              "resources": [
+                {
+                  "target": "/comfyui/models/checkpoints",
+                  "type": "S3",
+                  "url": "https://models.nosana.io/flux/schnell"
+                }
+              ]
+            },
+            "id": "Flux-comfy",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "ComfyUI Image Generation - Flux Schnell FP8",
+      "parent_template_id": "comfyui",
+      "readme": "# ComfyUI Image Generation\n\nPowerful node-based interface for AI image generation with multiple model options.\n\n## Available Models\n\n### Stable Diffusion 1.5\n- **VRAM Required**: 4 GB\n- **Use Case**: Fast, reliable image generation\n- **Models**: Classic SD 1.5 checkpoint included\n\n### Stable Diffusion XL\n- **VRAM Required**: 8 GB\n- **Use Case**: Higher resolution and quality images\n- **Models**: SDXL checkpoint included\n\n### Flux Schnell FP8\n- **VRAM Required**: 12 GB\n- **Use Case**: Latest generation model with fastest inference\n- **Models**: Flux Schnell FP8 optimized checkpoint\n\n## Features\n\n- **Node-Based Interface**: Visual workflow editor\n- **Web UI**: Access via port 8188\n- **Pre-loaded Models**: Models automatically downloaded\n- **Custom Workflows**: Build complex generation pipelines\n- **API Support**: RESTful API for automation\n\n## Usage\n\n1. Access the web interface at port 8188\n2. Create or load workflows using the node editor\n3. Configure generation parameters\n4. Queue and execute image generation tasks\n\n## Workflow Creation\n\nComfyUI uses a node-based approach where you can:\n- Connect different processing nodes\n- Customize generation parameters\n- Save and share workflows\n- Experiment with different model combinations",
+      "variants": null,
+      "vram_requirement": 12288
+    },
+    {
+      "category": "Official|API|Image Generation|Video Generation|vLLM",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Cosmos3-Nano/nvidia.png",
+      "id": "cosmos3-nano",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "required_vram": 96
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "vllm",
+                "serve",
+                "nvidia/Cosmos3-Nano",
+                "--omni",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000",
+                "--init-timeout",
+                "1800"
+              ],
+              "env": {
+                "HF_TOKEN": "<your-hf-token>",
+                "VLLM_OMNI_STORAGE_MAX_CONCURRENCY": "1",
+                "VLLM_OMNI_STORAGE_PATH": "/tmp/vllm-omni-videos"
+              },
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": true,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/v1/models",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 8000
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/vllm/vllm-omni:cosmos3"
+            },
+            "id": "cosmos3-nano-vllm-omni",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Cosmos 3 Nano",
+      "parent_template_id": null,
+      "readme": "# Cosmos 3 Nano\n\nNVIDIA Cosmos 3 Nano is a 16B-parameter omnimodal world model for Physical AI and robotics. It can process and generate text, images, video, audio, and action trajectories. This template serves the model with the vLLM-Omni extension, exposing an OpenAI-compatible API.\n\n## Included Model\n\n### Cosmos3-Nano\n- **Model**: `nvidia/Cosmos3-Nano`\n- **Parameters**: 16B\n- **Modalities**: Text, Image, Video, Audio, Action\n- **VRAM Required**: ~96 GB\n- **Use Case**: Multimodal generation, synthetic data, robotics / embodied action control\n\n## Highlights\n\n- **Omnimodal**: Combine text, image, video, audio, and action inputs and outputs\n- **Physical AI**: Ingests camera observations and instructions to output control actions\n- **OpenAI-compatible API**: Standard `/v1` endpoints served by vLLM-Omni\n- **Synthetic Data**: Image-to-video generation for RL and simulation datasets\n\n## Hugging Face Token\n\nThe model weights and the Cosmos guardrail repository are gated, so the job needs a Hugging Face token with read access to gated repos.\n\n### Create the token\n\nUse this pre-filled link, which sets the correct scope automatically:\n\n[Create a fine-grained HF token with gated-repo read access](https://huggingface.co/settings/tokens/new?canReadGatedRepos=true&tokenType=fineGrained)\n\nFor this job you only need **read access to download gated model files**:\n\n- **Repositories \u2192 Read access to contents of all public gated repos you can access** \u2705\n\nYou do **not** need: write access, inference permissions, webhooks, collections, billing, jobs, discussions, or notifications.\n\nSteps:\n\n1. Open the link above (the gated-repo read scope is already checked).\n2. Name it something like `nosana-cosmos3`.\n3. Create the token.\n4. Accept the terms on **both** gated repos with that account:\n   - <https://huggingface.co/nvidia/Cosmos3-Nano>\n   - <https://huggingface.co/nvidia/Cosmos-1.0-Guardrail>\n5. Put the token into the job definition as the `HF_TOKEN` env value.\n\n> Do not share the token in chat, screenshots, or commits. If it leaks, revoke it on Hugging Face and create a new one.\n\nTo skip the guardrail dependency entirely, append `--no-guardrails` to the `cmd` array. You are then responsible for license and compliance behavior.\n\n## Configuration\n\n```json\n\"env\": {\n  \"HF_TOKEN\": \"hf_...\",\n  \"VLLM_OMNI_STORAGE_PATH\": \"/tmp/vllm-omni-videos\",\n  \"VLLM_OMNI_STORAGE_MAX_CONCURRENCY\": \"1\"\n}\n```\n\n- `HF_TOKEN` \u2014 your gated-repo read token (see above).\n- `VLLM_OMNI_STORAGE_PATH` \u2014 where generated videos are persisted.\n- `VLLM_OMNI_STORAGE_MAX_CONCURRENCY` \u2014 keep at `1` for video stability; send one generation request at a time.\n\n> Cosmos 3 can take extra time to compile CUDA graphs and initialize multimodal weights, so the server is launched with `--init-timeout 1800`. The health check may take several minutes to pass on first boot.\n\n## Usage\n\nThe model is served on port 8000, exposed at your deployment URL with OpenAI-compatible endpoints:\n\n- **Model Info**: `GET /v1/models`\n- **Image Generation**: `POST /v1/images/generations`\n- **Video Generation (sync)**: `POST /v1/videos/sync`\n\n### Check the server\n\n```bash\ncurl -sS https://your-deployment-url/v1/models\n```\n\nExpected: JSON, not HTML.\n\n### Generate an image\n\n```bash\ncurl -sS -X POST https://your-deployment-url/v1/images/generations \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"nvidia/Cosmos3-Nano\",\n    \"prompt\": \"A cinematic photo of a small autonomous robot in a futuristic warehouse, dramatic lighting, high detail\",\n    \"negative_prompt\": \"blurry, distorted, low quality\",\n    \"size\": \"1024x1024\",\n    \"n\": 1,\n    \"response_format\": \"b64_json\",\n    \"num_inference_steps\": 30,\n    \"guidance_scale\": 7.0,\n    \"seed\": 42\n  }' \\\n  | jq -r '.data[0].b64_json' | base64 -d > cosmos-output.png\n```\n\n### Generate a video\n\nStart small to keep the diffusion worker stable. The `-fL` flags make curl fail on an HTTP error instead of saving an error page as your `.mp4`:\n\n```bash\nBASE=\"https://your-deployment-url\"\n\ncurl -fL -X POST \"$BASE/v1/videos/sync\" \\\n  -H \"Accept: video/mp4\" \\\n  -F \"model=nvidia/Cosmos3-Nano\" \\\n  -F \"prompt=A small autonomous robot driving through a futuristic warehouse, cinematic, realistic\" \\\n  -F \"negative_prompt=blurry, distorted, low quality, jittery motion\" \\\n  -F \"width=480\" \\\n  -F \"height=272\" \\\n  -F \"num_frames=33\" \\\n  -F \"fps=8\" \\\n  -F \"num_inference_steps=12\" \\\n  -F \"guidance_scale=7.0\" \\\n  -F \"seed=42\" \\\n  -o cosmos-video.mp4\n\nfile cosmos-video.mp4\nhead -c 64 cosmos-video.mp4 | xxd\n```\n\nA valid MP4 shows `ftyp` near the beginning and should not be reported as an HTML document.\n",
+      "variants": null,
+      "vram_requirement": null
+    },
+    {
+      "category": "Official",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/FoldingAtHome/foldingathome.png",
+      "id": "folding-at-home",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "ops": [
+          {
+            "args": {
+              "entrypoint": [
+                "/bin/sh",
+                "./config/entrypoint.sh"
+              ],
+              "gpu": true,
+              "image": "lscr.io/linuxserver/foldingathome:latest",
+              "resources": [
+                {
+                  "allowWrite": true,
+                  "target": "/config/",
+                  "type": "S3",
+                  "url": "https://models.nosana.io/foldingAtHome"
+                }
+              ]
+            },
+            "id": "foldingathome",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Folding@Home",
+      "parent_template_id": null,
+      "readme": "## Folding@home (Nosana template)\r\n\r\nFolding@home is a distributed computing project that uses volunteers' CPUs and GPUs to run molecular dynamics simulations. These simulations help researchers study how proteins move and fold, which is critical for understanding and developing treatments for diseases such as cancer, Alzheimer's, and viral infections.\r\n\r\n### How Folding@home works\r\n- A lightweight client securely downloads small simulation tasks (\"work units\") from Folding@home servers.\r\n- Your machine computes the simulation on CPU and/or GPU and periodically checkpoints progress.\r\n- Results are uploaded back to the Folding@home network and aggregated with thousands of other contributions to power real scientific studies.\r\n",
+      "variants": null,
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://www.datocms-assets.com/96965/1685731715-open-ai-stars-2x.png",
+      "id": "glm-4-7-flash",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "GLM-4.7-Flash",
+      "parent_template_id": null,
+      "readme": "# GLM-4.7-Flash\n\nHigh-performance inference API for GLM-4.7-Flash language models via Ollama with multiple size options.\n\n## Available Models\n\n### 30B Model\n- **Parameters**: 30 billion MoE\n- **VRAM Required**: 19 GB\n- **Use Case**: Balanced performance for most applications with efficient resource usage, strongest in the 30B class.\n\n### 120B Model  \n- **Parameters**: 120 billion\n- **VRAM Required**: 65 GB\n- **Use Case**: Maximum performance and capabilities for demanding applications\n\n## Features\n\n- OpenAI-compatible API endpoints via Ollama\n- Automatic model downloading and serving\n- Health checks for reliability\n- Support for streaming and non-streaming responses\n- Built on proven Ollama infrastructure\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Model Info**: `GET /api/tags`\n- **Generate**: `POST /api/generate`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"glm-4.7-flash\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]\n  }'\n```\n\n## Model Details\n\nGLM-4.7-Flash is a 30B-A3B MoE model, optimized for general-purpose text generation and conversation. These models provide excellent performance across a variety of tasks including:\n\n- Conversational AI\n- Text generation\n- Code assistance\n- Question answering\n- Creative writing\n\nBoth variants are automatically downloaded and served via Ollama, providing a robust and scalable inference platform.\n\n## Benchmarks\n\n| Benchmark            | GLM-4.7-Flash | Qwen3-30B-A3B-Thinking-2507 | GPT-OSS-20B |\n|----------------------|---------------|-----------------------------|-------------|\n| AIME 25              | 91.6          | 85.0                        | 91.7        |\n| GPQA                 | 75.2          | 73.4                        | 71.5        |\n| LCB v6               | 64.0          | 66.0                        | 61.0        |\n| HLE                  | 14.4          | 9.8                         | 10.9        |\n| SWE-bench Verified   | 59.2          | 22.0                        | 34.0        |\n| \u03c4\u00b2-Bench             | 79.5          | 49.0                        | 47.7        |\n| BrowseComp           | 42.8          | 2.29                        | 28.3        |\n",
+      "variants": [
+        {
+          "description": "GLM-4.7-Flash Q4_K_M parameter model",
+          "id": "glm-47-flash-q4",
+          "job_definition": "job-definition-GLM-q4.json",
+          "name": "Q4_K_M"
+        },
+        {
+          "description": "GLM-4.7-Flash BF16 parameter model",
+          "id": "glm-47-flash-bf16",
+          "job_definition": "job-definition-GLM-16fp.json",
+          "name": "FP16"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://www.datocms-assets.com/96965/1685731715-open-ai-stars-2x.png",
+      "id": "glm-4-7-flash-glm-47-flash-q4",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "glm-4.7-flash:q4_K_M"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 21504
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "GLM-4.7-Flash - Q4_K_M",
+      "parent_template_id": "glm-4-7-flash",
+      "readme": "# GLM-4.7-Flash\n\nHigh-performance inference API for GLM-4.7-Flash language models via Ollama with multiple size options.\n\n## Available Models\n\n### 30B Model\n- **Parameters**: 30 billion MoE\n- **VRAM Required**: 19 GB\n- **Use Case**: Balanced performance for most applications with efficient resource usage, strongest in the 30B class.\n\n### 120B Model  \n- **Parameters**: 120 billion\n- **VRAM Required**: 65 GB\n- **Use Case**: Maximum performance and capabilities for demanding applications\n\n## Features\n\n- OpenAI-compatible API endpoints via Ollama\n- Automatic model downloading and serving\n- Health checks for reliability\n- Support for streaming and non-streaming responses\n- Built on proven Ollama infrastructure\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Model Info**: `GET /api/tags`\n- **Generate**: `POST /api/generate`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"glm-4.7-flash\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]\n  }'\n```\n\n## Model Details\n\nGLM-4.7-Flash is a 30B-A3B MoE model, optimized for general-purpose text generation and conversation. These models provide excellent performance across a variety of tasks including:\n\n- Conversational AI\n- Text generation\n- Code assistance\n- Question answering\n- Creative writing\n\nBoth variants are automatically downloaded and served via Ollama, providing a robust and scalable inference platform.\n\n## Benchmarks\n\n| Benchmark            | GLM-4.7-Flash | Qwen3-30B-A3B-Thinking-2507 | GPT-OSS-20B |\n|----------------------|---------------|-----------------------------|-------------|\n| AIME 25              | 91.6          | 85.0                        | 91.7        |\n| GPQA                 | 75.2          | 73.4                        | 71.5        |\n| LCB v6               | 64.0          | 66.0                        | 61.0        |\n| HLE                  | 14.4          | 9.8                         | 10.9        |\n| SWE-bench Verified   | 59.2          | 22.0                        | 34.0        |\n| \u03c4\u00b2-Bench             | 79.5          | 49.0                        | 47.7        |\n| BrowseComp           | 42.8          | 2.29                        | 28.3        |\n",
+      "variants": null,
+      "vram_requirement": 21504
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://www.datocms-assets.com/96965/1685731715-open-ai-stars-2x.png",
+      "id": "glm-4-7-flash-glm-47-flash-bf16",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "glm-4.7-flash:bf16"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 63488
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "GLM-4.7-Flash - FP16",
+      "parent_template_id": "glm-4-7-flash",
+      "readme": "# GLM-4.7-Flash\n\nHigh-performance inference API for GLM-4.7-Flash language models via Ollama with multiple size options.\n\n## Available Models\n\n### 30B Model\n- **Parameters**: 30 billion MoE\n- **VRAM Required**: 19 GB\n- **Use Case**: Balanced performance for most applications with efficient resource usage, strongest in the 30B class.\n\n### 120B Model  \n- **Parameters**: 120 billion\n- **VRAM Required**: 65 GB\n- **Use Case**: Maximum performance and capabilities for demanding applications\n\n## Features\n\n- OpenAI-compatible API endpoints via Ollama\n- Automatic model downloading and serving\n- Health checks for reliability\n- Support for streaming and non-streaming responses\n- Built on proven Ollama infrastructure\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Model Info**: `GET /api/tags`\n- **Generate**: `POST /api/generate`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"glm-4.7-flash\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]\n  }'\n```\n\n## Model Details\n\nGLM-4.7-Flash is a 30B-A3B MoE model, optimized for general-purpose text generation and conversation. These models provide excellent performance across a variety of tasks including:\n\n- Conversational AI\n- Text generation\n- Code assistance\n- Question answering\n- Creative writing\n\nBoth variants are automatically downloaded and served via Ollama, providing a robust and scalable inference platform.\n\n## Benchmarks\n\n| Benchmark            | GLM-4.7-Flash | Qwen3-30B-A3B-Thinking-2507 | GPT-OSS-20B |\n|----------------------|---------------|-----------------------------|-------------|\n| AIME 25              | 91.6          | 85.0                        | 91.7        |\n| GPQA                 | 75.2          | 73.4                        | 71.5        |\n| LCB v6               | 64.0          | 66.0                        | 61.0        |\n| HLE                  | 14.4          | 9.8                         | 10.9        |\n| SWE-bench Verified   | 59.2          | 22.0                        | 34.0        |\n| \u03c4\u00b2-Bench             | 79.5          | 49.0                        | 47.7        |\n| BrowseComp           | 42.8          | 2.29                        | 28.3        |\n",
+      "variants": null,
+      "vram_requirement": 63488
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://www.datocms-assets.com/96965/1685731715-open-ai-stars-2x.png",
+      "id": "gpt-oss",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "GPT-OSS Models",
+      "parent_template_id": null,
+      "readme": "# GPT-OSS Models\n\nHigh-performance inference API for GPT-OSS language models via Ollama with multiple size options.\n\n## Available Models\n\n### 20B Model\n- **Parameters**: 20 billion\n- **VRAM Required**: 13 GB\n- **Use Case**: Balanced performance for most applications with efficient resource usage\n\n### 120B Model  \n- **Parameters**: 120 billion\n- **VRAM Required**: 65 GB\n- **Use Case**: Maximum performance and capabilities for demanding applications\n\n## Features\n\n- OpenAI-compatible API endpoints via Ollama\n- Automatic model downloading and serving\n- Health checks for reliability\n- Support for streaming and non-streaming responses\n- Built on proven Ollama infrastructure\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Model Info**: `GET /api/tags`\n- **Generate**: `POST /api/generate`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"gpt-oss:20b\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": \"Hello, how are you?\"\n      }\n    ],\n    \"stream\": false\n  }'\n```\n\n## Model Details\n\nGPT-OSS models are open-source language models optimized for general-purpose text generation and conversation. These models provide excellent performance across a variety of tasks including:\n\n- Conversational AI\n- Text generation\n- Code assistance\n- Question answering\n- Creative writing\n\nBoth variants are automatically downloaded and served via Ollama, providing a robust and scalable inference platform.",
+      "variants": [
+        {
+          "description": "GPT-OSS 20B parameter model - balanced performance and efficiency",
+          "id": "20b",
+          "job_definition": "job-definition-20b.json",
+          "name": "20B Model"
+        },
+        {
+          "description": "GPT-OSS 120B parameter model - maximum performance and capabilities",
+          "id": "120b",
+          "job_definition": "job-definition-120b.json",
+          "name": "120B Model"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://www.datocms-assets.com/96965/1685731715-open-ai-stars-2x.png",
+      "id": "gpt-oss-20b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "gpt-oss:20b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 16384
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "gpt-oss:20b",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "GPT-OSS Models - 20B Model",
+      "parent_template_id": "gpt-oss",
+      "readme": "# GPT-OSS Models\n\nHigh-performance inference API for GPT-OSS language models via Ollama with multiple size options.\n\n## Available Models\n\n### 20B Model\n- **Parameters**: 20 billion\n- **VRAM Required**: 13 GB\n- **Use Case**: Balanced performance for most applications with efficient resource usage\n\n### 120B Model  \n- **Parameters**: 120 billion\n- **VRAM Required**: 65 GB\n- **Use Case**: Maximum performance and capabilities for demanding applications\n\n## Features\n\n- OpenAI-compatible API endpoints via Ollama\n- Automatic model downloading and serving\n- Health checks for reliability\n- Support for streaming and non-streaming responses\n- Built on proven Ollama infrastructure\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Model Info**: `GET /api/tags`\n- **Generate**: `POST /api/generate`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"gpt-oss:20b\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": \"Hello, how are you?\"\n      }\n    ],\n    \"stream\": false\n  }'\n```\n\n## Model Details\n\nGPT-OSS models are open-source language models optimized for general-purpose text generation and conversation. These models provide excellent performance across a variety of tasks including:\n\n- Conversational AI\n- Text generation\n- Code assistance\n- Question answering\n- Creative writing\n\nBoth variants are automatically downloaded and served via Ollama, providing a robust and scalable inference platform.",
+      "variants": null,
+      "vram_requirement": 16384
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://www.datocms-assets.com/96965/1685731715-open-ai-stars-2x.png",
+      "id": "gpt-oss-120b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "gpt-oss:120b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 68608
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "gpt-oss:120b",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "GPT-OSS Models - 120B Model",
+      "parent_template_id": "gpt-oss",
+      "readme": "# GPT-OSS Models\n\nHigh-performance inference API for GPT-OSS language models via Ollama with multiple size options.\n\n## Available Models\n\n### 20B Model\n- **Parameters**: 20 billion\n- **VRAM Required**: 13 GB\n- **Use Case**: Balanced performance for most applications with efficient resource usage\n\n### 120B Model  \n- **Parameters**: 120 billion\n- **VRAM Required**: 65 GB\n- **Use Case**: Maximum performance and capabilities for demanding applications\n\n## Features\n\n- OpenAI-compatible API endpoints via Ollama\n- Automatic model downloading and serving\n- Health checks for reliability\n- Support for streaming and non-streaming responses\n- Built on proven Ollama infrastructure\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Model Info**: `GET /api/tags`\n- **Generate**: `POST /api/generate`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"gpt-oss:20b\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": \"Hello, how are you?\"\n      }\n    ],\n    \"stream\": false\n  }'\n```\n\n## Model Details\n\nGPT-OSS models are open-source language models optimized for general-purpose text generation and conversation. These models provide excellent performance across a variety of tasks including:\n\n- Conversational AI\n- Text generation\n- Code assistance\n- Question answering\n- Creative writing\n\nBoth variants are automatically downloaded and served via Ollama, providing a robust and scalable inference platform.",
+      "variants": null,
+      "vram_requirement": 68608
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Gemma4/google.png",
+      "id": "gemma4",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "Gemma 4 Models",
+      "parent_template_id": null,
+      "readme": "# Gemma 4 Models\n\nGoogle's Gemma 4 multimodal models via Ollama \u2014 handling text and image input with text output. Gemma 4 features configurable thinking modes, variable image resolution, and native function-calling support.\n\n## Available Models\n\n### E2B (Edge 2B)\n- **Parameters**: 2.3B effective (5.1B with embeddings)\n- **Model Size**: 7.2 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~10 GB\n- **Use Case**: Efficient on-device inference for lightweight applications\n\n### E4B (Edge 4B)\n- **Parameters**: 4.5B effective (8B with embeddings)\n- **Model Size**: 9.6 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: Balanced edge deployment with strong reasoning capabilities\n\n### 12B (Dense)\n- **Parameters**: 12B\n- **Model Size**: 8 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: The strongest Gemma 4 for 12 and 16 GB GPUs\n\n### 26B (Mixture of Experts)\n- **Parameters**: 25.2B total (3.8B active, 8 active / 128 total experts + 1 shared)\n- **Model Size**: 18 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~21 GB\n- **Use Case**: Frontier intelligence with efficient MoE architecture\n\n### 31B (Dense)\n- **Parameters**: 30.7B\n- **Model Size**: 20 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~24 GB\n- **Use Case**: Maximum performance for demanding workloads\n\n## Features\n\n- **Multimodal**: Processes text and images with variable aspect ratio and resolution support\n- **Configurable Thinking**: Enable/disable reasoning mode via `<|think|>` token\n- **Native Function Calling**: Built-in support for autonomous agent workflows\n- **OpenAI-compatible API**: Served via Ollama with standard endpoints\n- **Automatic Model Download**: Models pulled automatically on startup\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Generate**: `POST /api/generate`\n- **Model Info**: `GET /api/tags`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"gemma4:e4b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]\n  }'\n```\n\n## Benchmarks\n\n| Benchmark | 31B Dense | 26B A4B MoE | E4B | E2B |\n|-----------|-----------|-------------|-----|-----|\n| MMLU Pro | 85.2% | 82.6% | 69.4% | 60.0% |\n| AIME 2026 | 89.2% | 88.3% | 42.5% | 37.5% |\n| LiveCodeBench v6 | 80.0% | 77.1% | 52.0% | 44.0% |\n| GPQA Diamond | 84.3% | 82.3% | 58.6% | 43.4% |\n| MMMU Pro (Vision) | 76.9% | 73.8% | 52.6% | 44.2% |\n| MATH-Vision | 85.6% | 82.4% | 59.5% | 52.4% |\n",
+      "variants": [
+        {
+          "description": "Gemma 4 E2B edge model (2.3B effective parameters, 128K context, Text + Image)",
+          "id": "e2b",
+          "job_definition": "job-definition-e2b.json",
+          "name": "E2B Model"
+        },
+        {
+          "description": "Gemma 4 E4B edge model (4.5B effective parameters, 128K context, Text + Image)",
+          "id": "e4b",
+          "job_definition": "job-definition-e4b.json",
+          "name": "E4B Model"
+        },
+        {
+          "description": "Gemma 4 12B dense model (12B parameters, 256K context, Text + Image)",
+          "id": "12b",
+          "job_definition": "job-definition-12b.json",
+          "name": "12B Model"
+        },
+        {
+          "description": "Gemma 4 26B Mixture-of-Experts model (4B active parameters, 256K context, Text + Image)",
+          "id": "26b",
+          "job_definition": "job-definition-26b.json",
+          "name": "26B MoE Model"
+        },
+        {
+          "description": "Gemma 4 31B Dense model (30.7B parameters, 256K context, Text + Image)",
+          "id": "31b",
+          "job_definition": "job-definition-31b.json",
+          "name": "31B Dense Model"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Gemma4/google.png",
+      "id": "gemma4-e2b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "gemma4:e2b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 8192
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Gemma 4 Models - E2B Model",
+      "parent_template_id": "gemma4",
+      "readme": "# Gemma 4 Models\n\nGoogle's Gemma 4 multimodal models via Ollama \u2014 handling text and image input with text output. Gemma 4 features configurable thinking modes, variable image resolution, and native function-calling support.\n\n## Available Models\n\n### E2B (Edge 2B)\n- **Parameters**: 2.3B effective (5.1B with embeddings)\n- **Model Size**: 7.2 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~10 GB\n- **Use Case**: Efficient on-device inference for lightweight applications\n\n### E4B (Edge 4B)\n- **Parameters**: 4.5B effective (8B with embeddings)\n- **Model Size**: 9.6 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: Balanced edge deployment with strong reasoning capabilities\n\n### 12B (Dense)\n- **Parameters**: 12B\n- **Model Size**: 8 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: The strongest Gemma 4 for 12 and 16 GB GPUs\n\n### 26B (Mixture of Experts)\n- **Parameters**: 25.2B total (3.8B active, 8 active / 128 total experts + 1 shared)\n- **Model Size**: 18 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~21 GB\n- **Use Case**: Frontier intelligence with efficient MoE architecture\n\n### 31B (Dense)\n- **Parameters**: 30.7B\n- **Model Size**: 20 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~24 GB\n- **Use Case**: Maximum performance for demanding workloads\n\n## Features\n\n- **Multimodal**: Processes text and images with variable aspect ratio and resolution support\n- **Configurable Thinking**: Enable/disable reasoning mode via `<|think|>` token\n- **Native Function Calling**: Built-in support for autonomous agent workflows\n- **OpenAI-compatible API**: Served via Ollama with standard endpoints\n- **Automatic Model Download**: Models pulled automatically on startup\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Generate**: `POST /api/generate`\n- **Model Info**: `GET /api/tags`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"gemma4:e4b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]\n  }'\n```\n\n## Benchmarks\n\n| Benchmark | 31B Dense | 26B A4B MoE | E4B | E2B |\n|-----------|-----------|-------------|-----|-----|\n| MMLU Pro | 85.2% | 82.6% | 69.4% | 60.0% |\n| AIME 2026 | 89.2% | 88.3% | 42.5% | 37.5% |\n| LiveCodeBench v6 | 80.0% | 77.1% | 52.0% | 44.0% |\n| GPQA Diamond | 84.3% | 82.3% | 58.6% | 43.4% |\n| MMMU Pro (Vision) | 76.9% | 73.8% | 52.6% | 44.2% |\n| MATH-Vision | 85.6% | 82.4% | 59.5% | 52.4% |\n",
+      "variants": null,
+      "vram_requirement": 8192
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Gemma4/google.png",
+      "id": "gemma4-e4b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "gemma4:e4b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 12288
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Gemma 4 Models - E4B Model",
+      "parent_template_id": "gemma4",
+      "readme": "# Gemma 4 Models\n\nGoogle's Gemma 4 multimodal models via Ollama \u2014 handling text and image input with text output. Gemma 4 features configurable thinking modes, variable image resolution, and native function-calling support.\n\n## Available Models\n\n### E2B (Edge 2B)\n- **Parameters**: 2.3B effective (5.1B with embeddings)\n- **Model Size**: 7.2 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~10 GB\n- **Use Case**: Efficient on-device inference for lightweight applications\n\n### E4B (Edge 4B)\n- **Parameters**: 4.5B effective (8B with embeddings)\n- **Model Size**: 9.6 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: Balanced edge deployment with strong reasoning capabilities\n\n### 12B (Dense)\n- **Parameters**: 12B\n- **Model Size**: 8 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: The strongest Gemma 4 for 12 and 16 GB GPUs\n\n### 26B (Mixture of Experts)\n- **Parameters**: 25.2B total (3.8B active, 8 active / 128 total experts + 1 shared)\n- **Model Size**: 18 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~21 GB\n- **Use Case**: Frontier intelligence with efficient MoE architecture\n\n### 31B (Dense)\n- **Parameters**: 30.7B\n- **Model Size**: 20 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~24 GB\n- **Use Case**: Maximum performance for demanding workloads\n\n## Features\n\n- **Multimodal**: Processes text and images with variable aspect ratio and resolution support\n- **Configurable Thinking**: Enable/disable reasoning mode via `<|think|>` token\n- **Native Function Calling**: Built-in support for autonomous agent workflows\n- **OpenAI-compatible API**: Served via Ollama with standard endpoints\n- **Automatic Model Download**: Models pulled automatically on startup\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Generate**: `POST /api/generate`\n- **Model Info**: `GET /api/tags`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"gemma4:e4b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]\n  }'\n```\n\n## Benchmarks\n\n| Benchmark | 31B Dense | 26B A4B MoE | E4B | E2B |\n|-----------|-----------|-------------|-----|-----|\n| MMLU Pro | 85.2% | 82.6% | 69.4% | 60.0% |\n| AIME 2026 | 89.2% | 88.3% | 42.5% | 37.5% |\n| LiveCodeBench v6 | 80.0% | 77.1% | 52.0% | 44.0% |\n| GPQA Diamond | 84.3% | 82.3% | 58.6% | 43.4% |\n| MMMU Pro (Vision) | 76.9% | 73.8% | 52.6% | 44.2% |\n| MATH-Vision | 85.6% | 82.4% | 59.5% | 52.4% |\n",
+      "variants": null,
+      "vram_requirement": 12288
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Gemma4/google.png",
+      "id": "gemma4-12b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "gemma4:12b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 12288
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Gemma 4 Models - 12B Model",
+      "parent_template_id": "gemma4",
+      "readme": "# Gemma 4 Models\n\nGoogle's Gemma 4 multimodal models via Ollama \u2014 handling text and image input with text output. Gemma 4 features configurable thinking modes, variable image resolution, and native function-calling support.\n\n## Available Models\n\n### E2B (Edge 2B)\n- **Parameters**: 2.3B effective (5.1B with embeddings)\n- **Model Size**: 7.2 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~10 GB\n- **Use Case**: Efficient on-device inference for lightweight applications\n\n### E4B (Edge 4B)\n- **Parameters**: 4.5B effective (8B with embeddings)\n- **Model Size**: 9.6 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: Balanced edge deployment with strong reasoning capabilities\n\n### 12B (Dense)\n- **Parameters**: 12B\n- **Model Size**: 8 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: The strongest Gemma 4 for 12 and 16 GB GPUs\n\n### 26B (Mixture of Experts)\n- **Parameters**: 25.2B total (3.8B active, 8 active / 128 total experts + 1 shared)\n- **Model Size**: 18 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~21 GB\n- **Use Case**: Frontier intelligence with efficient MoE architecture\n\n### 31B (Dense)\n- **Parameters**: 30.7B\n- **Model Size**: 20 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~24 GB\n- **Use Case**: Maximum performance for demanding workloads\n\n## Features\n\n- **Multimodal**: Processes text and images with variable aspect ratio and resolution support\n- **Configurable Thinking**: Enable/disable reasoning mode via `<|think|>` token\n- **Native Function Calling**: Built-in support for autonomous agent workflows\n- **OpenAI-compatible API**: Served via Ollama with standard endpoints\n- **Automatic Model Download**: Models pulled automatically on startup\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Generate**: `POST /api/generate`\n- **Model Info**: `GET /api/tags`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"gemma4:e4b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]\n  }'\n```\n\n## Benchmarks\n\n| Benchmark | 31B Dense | 26B A4B MoE | E4B | E2B |\n|-----------|-----------|-------------|-----|-----|\n| MMLU Pro | 85.2% | 82.6% | 69.4% | 60.0% |\n| AIME 2026 | 89.2% | 88.3% | 42.5% | 37.5% |\n| LiveCodeBench v6 | 80.0% | 77.1% | 52.0% | 44.0% |\n| GPQA Diamond | 84.3% | 82.3% | 58.6% | 43.4% |\n| MMMU Pro (Vision) | 76.9% | 73.8% | 52.6% | 44.2% |\n| MATH-Vision | 85.6% | 82.4% | 59.5% | 52.4% |\n",
+      "variants": null,
+      "vram_requirement": 12288
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Gemma4/google.png",
+      "id": "gemma4-26b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "gemma4:26b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 21504
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Gemma 4 Models - 26B MoE Model",
+      "parent_template_id": "gemma4",
+      "readme": "# Gemma 4 Models\n\nGoogle's Gemma 4 multimodal models via Ollama \u2014 handling text and image input with text output. Gemma 4 features configurable thinking modes, variable image resolution, and native function-calling support.\n\n## Available Models\n\n### E2B (Edge 2B)\n- **Parameters**: 2.3B effective (5.1B with embeddings)\n- **Model Size**: 7.2 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~10 GB\n- **Use Case**: Efficient on-device inference for lightweight applications\n\n### E4B (Edge 4B)\n- **Parameters**: 4.5B effective (8B with embeddings)\n- **Model Size**: 9.6 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: Balanced edge deployment with strong reasoning capabilities\n\n### 12B (Dense)\n- **Parameters**: 12B\n- **Model Size**: 8 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: The strongest Gemma 4 for 12 and 16 GB GPUs\n\n### 26B (Mixture of Experts)\n- **Parameters**: 25.2B total (3.8B active, 8 active / 128 total experts + 1 shared)\n- **Model Size**: 18 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~21 GB\n- **Use Case**: Frontier intelligence with efficient MoE architecture\n\n### 31B (Dense)\n- **Parameters**: 30.7B\n- **Model Size**: 20 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~24 GB\n- **Use Case**: Maximum performance for demanding workloads\n\n## Features\n\n- **Multimodal**: Processes text and images with variable aspect ratio and resolution support\n- **Configurable Thinking**: Enable/disable reasoning mode via `<|think|>` token\n- **Native Function Calling**: Built-in support for autonomous agent workflows\n- **OpenAI-compatible API**: Served via Ollama with standard endpoints\n- **Automatic Model Download**: Models pulled automatically on startup\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Generate**: `POST /api/generate`\n- **Model Info**: `GET /api/tags`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"gemma4:e4b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]\n  }'\n```\n\n## Benchmarks\n\n| Benchmark | 31B Dense | 26B A4B MoE | E4B | E2B |\n|-----------|-----------|-------------|-----|-----|\n| MMLU Pro | 85.2% | 82.6% | 69.4% | 60.0% |\n| AIME 2026 | 89.2% | 88.3% | 42.5% | 37.5% |\n| LiveCodeBench v6 | 80.0% | 77.1% | 52.0% | 44.0% |\n| GPQA Diamond | 84.3% | 82.3% | 58.6% | 43.4% |\n| MMMU Pro (Vision) | 76.9% | 73.8% | 52.6% | 44.2% |\n| MATH-Vision | 85.6% | 82.4% | 59.5% | 52.4% |\n",
+      "variants": null,
+      "vram_requirement": 21504
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Gemma4/google.png",
+      "id": "gemma4-31b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "gemma4:31b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 25600
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Gemma 4 Models - 31B Dense Model",
+      "parent_template_id": "gemma4",
+      "readme": "# Gemma 4 Models\n\nGoogle's Gemma 4 multimodal models via Ollama \u2014 handling text and image input with text output. Gemma 4 features configurable thinking modes, variable image resolution, and native function-calling support.\n\n## Available Models\n\n### E2B (Edge 2B)\n- **Parameters**: 2.3B effective (5.1B with embeddings)\n- **Model Size**: 7.2 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~10 GB\n- **Use Case**: Efficient on-device inference for lightweight applications\n\n### E4B (Edge 4B)\n- **Parameters**: 4.5B effective (8B with embeddings)\n- **Model Size**: 9.6 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: Balanced edge deployment with strong reasoning capabilities\n\n### 12B (Dense)\n- **Parameters**: 12B\n- **Model Size**: 8 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~12 GB\n- **Use Case**: The strongest Gemma 4 for 12 and 16 GB GPUs\n\n### 26B (Mixture of Experts)\n- **Parameters**: 25.2B total (3.8B active, 8 active / 128 total experts + 1 shared)\n- **Model Size**: 18 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~21 GB\n- **Use Case**: Frontier intelligence with efficient MoE architecture\n\n### 31B (Dense)\n- **Parameters**: 30.7B\n- **Model Size**: 20 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~24 GB\n- **Use Case**: Maximum performance for demanding workloads\n\n## Features\n\n- **Multimodal**: Processes text and images with variable aspect ratio and resolution support\n- **Configurable Thinking**: Enable/disable reasoning mode via `<|think|>` token\n- **Native Function Calling**: Built-in support for autonomous agent workflows\n- **OpenAI-compatible API**: Served via Ollama with standard endpoints\n- **Automatic Model Download**: Models pulled automatically on startup\n\n## Usage\n\nThe models are served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Generate**: `POST /api/generate`\n- **Model Info**: `GET /api/tags`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"gemma4:e4b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Hello!\"}]\n  }'\n```\n\n## Benchmarks\n\n| Benchmark | 31B Dense | 26B A4B MoE | E4B | E2B |\n|-----------|-----------|-------------|-----|-----|\n| MMLU Pro | 85.2% | 82.6% | 69.4% | 60.0% |\n| AIME 2026 | 89.2% | 88.3% | 42.5% | 37.5% |\n| LiveCodeBench v6 | 80.0% | 77.1% | 52.0% | 44.0% |\n| GPQA Diamond | 84.3% | 82.3% | 58.6% | 43.4% |\n| MMMU Pro (Vision) | 76.9% | 73.8% | 52.6% | 44.2% |\n| MATH-Vision | 85.6% | 82.4% | 59.5% | 52.4% |\n",
+      "variants": null,
+      "vram_requirement": 25600
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Laguna-s-2.1/icon.webp",
+      "id": "laguna-s",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "Laguna S 2.1",
+      "parent_template_id": null,
+      "readme": "# Laguna S 2.1\n\nLaguna S 2.1 is a large model for agentic coding and long-horizon work. Served through Ollama, this template deploys the `laguna-s-2.1:q4_k_m` weights \u2014 the highest-VRAM tier in the benchmark set.\n\n## Included Model\n\n### S 2.1 q4_k_m\n- **Model Tag**: `laguna-s-2.1:q4_k_m`\n- **Model Size**: 96 GB (q4_k_m quantization)\n- **Context Length**: 32K tokens served (the model supports 256K)\n- **Modalities**: Text\n- **VRAM Required**: ~94 GB (96 GB GPUs such as the RTX PRO 6000, and up)\n- **Use Case**: High-VRAM performance ceiling; agentic coding and long-horizon reasoning\n\n## Highlights\n\n- **q4_k_m quantization**: strong quality at a fraction of full-precision VRAM\n- **Long context**: trained for 256K tokens; see Context length below\n- **Tool + thinking ready**: designed for agentic coding assistants\n\n## Context length\n\nThe template sets `OLLAMA_CONTEXT_LENGTH` through the `CONTEXT_LENGTH` global variable, default 32768. Without it, Ollama picks a 256K context on any GPU with 47 GiB or more, whose 12 GiB KV cache does not fit beside the 89 GiB of weights on a 96 GB card; llama.cpp then leaves part of the expert weights in system memory and generation runs on the CPU.\n\nAt 32K the KV cache takes 1.5 GiB and the whole model stays on the GPU. Raise the value only on cards with room to spare: each extra 1K tokens costs about 48 MiB.\n",
+      "variants": [
+        {
+          "description": "Laguna S 2.1, q4_k_m quantization (96 GB, 32K context, Text). For 96 GB GPUs and up.",
+          "id": "q4_k_m",
+          "job_definition": "job-definition-q4_k_m.json",
+          "name": "S 2.1 q4_k_m"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Laguna-s-2.1/icon.webp",
+      "id": "laguna-s-q4_k_m",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "CONTEXT_LENGTH": "32768",
+            "MODEL": "laguna-s-2.1:q4_k_m"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 96000
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "env": {
+                "OLLAMA_CONTEXT_LENGTH": "%%global.variables.CONTEXT_LENGTH%%"
+              },
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Laguna S 2.1 - S 2.1 q4_k_m",
+      "parent_template_id": "laguna-s",
+      "readme": "# Laguna S 2.1\n\nLaguna S 2.1 is a large model for agentic coding and long-horizon work. Served through Ollama, this template deploys the `laguna-s-2.1:q4_k_m` weights \u2014 the highest-VRAM tier in the benchmark set.\n\n## Included Model\n\n### S 2.1 q4_k_m\n- **Model Tag**: `laguna-s-2.1:q4_k_m`\n- **Model Size**: 96 GB (q4_k_m quantization)\n- **Context Length**: 32K tokens served (the model supports 256K)\n- **Modalities**: Text\n- **VRAM Required**: ~94 GB (96 GB GPUs such as the RTX PRO 6000, and up)\n- **Use Case**: High-VRAM performance ceiling; agentic coding and long-horizon reasoning\n\n## Highlights\n\n- **q4_k_m quantization**: strong quality at a fraction of full-precision VRAM\n- **Long context**: trained for 256K tokens; see Context length below\n- **Tool + thinking ready**: designed for agentic coding assistants\n\n## Context length\n\nThe template sets `OLLAMA_CONTEXT_LENGTH` through the `CONTEXT_LENGTH` global variable, default 32768. Without it, Ollama picks a 256K context on any GPU with 47 GiB or more, whose 12 GiB KV cache does not fit beside the 89 GiB of weights on a 96 GB card; llama.cpp then leaves part of the expert weights in system memory and generation runs on the CPU.\n\nAt 32K the KV cache takes 1.5 GiB and the whole model stays on the GPU. Raise the value only on cards with room to spare: each extra 1K tokens costs about 48 MiB.\n",
+      "variants": null,
+      "vram_requirement": 96000
+    },
+    {
+      "category": "Official|Web UI|API|Video Generation",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/MiniMax-H3/minimax.png",
+      "id": "minimax-h3",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "MiniMax H3 Video",
+      "parent_template_id": null,
+      "readme": "# MiniMax H3 Video\n\nOpen-weight video generation in ComfyUI. MiniMax H3 generates video and its\nsoundtrack in one sampling pass, so the audio belongs to the motion instead of\nbeing dubbed onto it. Output is 1344\u00d7768, 124 frames at 24 fps (~5 s) by\ndefault, with 32 kHz stereo audio. Frame count snaps to the model's 17k+5 grid;\nthe trained range is ~124\u2013362 frames.\n\n## Variants\n\n| Variant | Task | Text encoder | Requires |\n|---|---|---|---|\n| Image to Video (32 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 32 GB, Blackwell |\n| Image to Video (80 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 80 GB, Blackwell |\n| Reference to Video (32 GB) | reference images drive identity | Official ComfyUI R2V weights | 32 GB, Blackwell |\n| Reference to Video (80 GB) | reference images drive identity | Official ComfyUI R2V weights | 80 GB, Blackwell |\n\n**Image to Video** pins your image as a real frame of the output \u2014 first frame,\noptionally last frame, with the model filling in the motion between.\n**Reference to Video** shows your images to the text encoder as `<Picture 1>`,\n`<Video 1>`, `<Audio 1>` tags that you cite in the prompt; they carry identity\nand style without fixing any frame. With neither, both are text-to-video.\n\nThe nvfp4 encoder needs Blackwell hardware (RTX 5090, RTX Pro 6000). The image\nis built on CUDA 13 and needs an **r580+ driver** on the node.\n\n## Usage\n\nOpen ComfyUI on port 8188 and build the graph \u2014 ComfyUI's bundled\n`api_minimax_h3_*` templates call MiniMax's cloud API, not these local weights:\n\n```\nUNETLoader \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25ba ModelSamplingMiniMaxH3 \u2500\u2500\u2510\nCLIPLoader (type minimax) \u2500\u2510                       \u251c\u2500\u25ba KSampler \u2500\u252c\u2500\u25ba VAEDecode (video VAE) \u2500\u2500\u2510\nVAELoader (video VAE) \u2500\u2500\u2500\u2500\u2500\u253c\u2500\u25ba MiniMax H3          \u2502             \u2502                           \u251c\u2500\u25ba CreateVideo (24 fps) \u2500\u25ba SaveVideo\nVAELoader (audio VAE) \u2500\u2500\u2500\u2500\u2500\u2518   Image to Video \u2500\u2500\u2500\u2500\u2500\u2524             \u2514\u2500\u25ba VAEDecodeAudio (audio VAE) \u2518\n                                 \u2502  positive \u2500\u2500\u2500\u2500\u2500\u2500\u2524\n                                 \u2514\u25ba ConditioningZeroOut \u2500\u25ba negative\n                                    LATENT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\nBoth decoders read the same sampled latent \u2014 `VAEDecode` takes the video half,\n`VAEDecodeAudio` the audio half. Feed both into `CreateVideo` for a file with\nsound.\n\nAll variants ship the task-specific turbo LoRA \u2014 chain\n`UNETLoader \u2192 LoraLoaderModelOnly \u2192 ModelSamplingMiniMaxH3`:\n\n| Setup | steps | cfg |\n|---|---|---|\n| Image-to-video variants with turbo LoRA | 8 | 1.0 |\n| Reference-to-video variants with turbo LoRA | 4 | 1.0 |\n\ncfg above 1.0 evaluates the model twice per step, so steps and cfg together\ndrive the run time.\n\n## Notes\n\n- Keep `UNETLoader` on `weight_dtype: default`; forcing `fp8_e4m3fn` makes the\n  quantized kernels reject the weights.\n- `ModelSamplingMiniMaxH3` sets the video and audio flow shifts together\n  (12.0 / 3.0) \u2014 the DiT derives the audio schedule from the video one.\n- `ref_image_size: max` gives the best identity fidelity but runs reference\n  tokens through every sampling step, so it is much slower than `match`.\n- Over the API, reference inputs nest under their group:\n  `\"ref_images\": {\"ref_image_1\": [\"14\", 0]}`.\n- Expect a long first start: 44\u201355 GB of weights must reach the node before\n  ComfyUI comes up.\n\n## Weights\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n| File | Location | Size |\n|---|---|---|\n| `minimax_h3_fl2va_pruned_int8_convrot.safetensors` (i2v) | `models/diffusion_models/` | 21 GB |\n| `minimax_h3_ref2va_pruned_int8_convrot.safetensors` (ref2v) | `models/diffusion_models/` | 21 GB |\n| `qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | `models/text_encoders/` | 16 GB |\n| `minimax_h3_video_vae_fp16.safetensors` | `models/vae/` | 5.2 GB |\n| `minimax_h3_audio_vae_fp32.safetensors` | `models/vae/` | 0.6 GB |\n| 8-step I2V / 4-step R2V turbo LoRA | `models/loras/` | 2.0 GB |\n",
+      "variants": [
+        {
+          "description": "Official ComfyUI keyframe or text-to-video workflow with audio and 8-step turbo LoRA (Blackwell)",
+          "id": "i2v-32gb",
+          "job_definition": "job-definition-i2v-32gb.json",
+          "name": "Image to Video (32 GB)"
+        },
+        {
+          "description": "Official ComfyUI keyframe or text-to-video workflow with audio and 8-step turbo LoRA (Blackwell)",
+          "id": "i2v-80gb",
+          "job_definition": "job-definition-i2v-80gb.json",
+          "name": "Image to Video (80 GB)"
+        },
+        {
+          "description": "Official ComfyUI reference-to-video workflow with audio and 4-step turbo LoRA (Blackwell)",
+          "id": "ref2v-32gb",
+          "job_definition": "job-definition-ref2v-32gb.json",
+          "name": "Reference to Video (32 GB)"
+        },
+        {
+          "description": "Official ComfyUI reference-to-video workflow with audio and 4-step turbo LoRA (Blackwell)",
+          "id": "ref2v-80gb",
+          "job_definition": "job-definition-ref2v-80gb.json",
+          "name": "Reference to Video (80 GB)"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|Web UI|API|Video Generation",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/MiniMax-H3/minimax.png",
+      "id": "minimax-h3-i2v-32gb",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 30720
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": 8188,
+              "gpu": true,
+              "image": "docker.io/nosana/comfyui:2.0.11",
+              "resources": [
+                {
+                  "files": [
+                    "diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/diffusion_models/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/text_encoders/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "vae/minimax_h3_video_vae_fp16.safetensors",
+                    "vae/minimax_h3_audio_vae_fp32.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/vae/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors"
+                  ],
+                  "repo": "lightx2v/Minimax-h3-Turbo",
+                  "target": "/comfyui/models/loras/",
+                  "type": "HF"
+                }
+              ]
+            },
+            "id": "MiniMaxH3-i2v-comfy",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "MiniMax H3 Video - Image to Video (32 GB)",
+      "parent_template_id": "minimax-h3",
+      "readme": "# MiniMax H3 Video\n\nOpen-weight video generation in ComfyUI. MiniMax H3 generates video and its\nsoundtrack in one sampling pass, so the audio belongs to the motion instead of\nbeing dubbed onto it. Output is 1344\u00d7768, 124 frames at 24 fps (~5 s) by\ndefault, with 32 kHz stereo audio. Frame count snaps to the model's 17k+5 grid;\nthe trained range is ~124\u2013362 frames.\n\n## Variants\n\n| Variant | Task | Text encoder | Requires |\n|---|---|---|---|\n| Image to Video (32 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 32 GB, Blackwell |\n| Image to Video (80 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 80 GB, Blackwell |\n| Reference to Video (32 GB) | reference images drive identity | Official ComfyUI R2V weights | 32 GB, Blackwell |\n| Reference to Video (80 GB) | reference images drive identity | Official ComfyUI R2V weights | 80 GB, Blackwell |\n\n**Image to Video** pins your image as a real frame of the output \u2014 first frame,\noptionally last frame, with the model filling in the motion between.\n**Reference to Video** shows your images to the text encoder as `<Picture 1>`,\n`<Video 1>`, `<Audio 1>` tags that you cite in the prompt; they carry identity\nand style without fixing any frame. With neither, both are text-to-video.\n\nThe nvfp4 encoder needs Blackwell hardware (RTX 5090, RTX Pro 6000). The image\nis built on CUDA 13 and needs an **r580+ driver** on the node.\n\n## Usage\n\nOpen ComfyUI on port 8188 and build the graph \u2014 ComfyUI's bundled\n`api_minimax_h3_*` templates call MiniMax's cloud API, not these local weights:\n\n```\nUNETLoader \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25ba ModelSamplingMiniMaxH3 \u2500\u2500\u2510\nCLIPLoader (type minimax) \u2500\u2510                       \u251c\u2500\u25ba KSampler \u2500\u252c\u2500\u25ba VAEDecode (video VAE) \u2500\u2500\u2510\nVAELoader (video VAE) \u2500\u2500\u2500\u2500\u2500\u253c\u2500\u25ba MiniMax H3          \u2502             \u2502                           \u251c\u2500\u25ba CreateVideo (24 fps) \u2500\u25ba SaveVideo\nVAELoader (audio VAE) \u2500\u2500\u2500\u2500\u2500\u2518   Image to Video \u2500\u2500\u2500\u2500\u2500\u2524             \u2514\u2500\u25ba VAEDecodeAudio (audio VAE) \u2518\n                                 \u2502  positive \u2500\u2500\u2500\u2500\u2500\u2500\u2524\n                                 \u2514\u25ba ConditioningZeroOut \u2500\u25ba negative\n                                    LATENT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\nBoth decoders read the same sampled latent \u2014 `VAEDecode` takes the video half,\n`VAEDecodeAudio` the audio half. Feed both into `CreateVideo` for a file with\nsound.\n\nAll variants ship the task-specific turbo LoRA \u2014 chain\n`UNETLoader \u2192 LoraLoaderModelOnly \u2192 ModelSamplingMiniMaxH3`:\n\n| Setup | steps | cfg |\n|---|---|---|\n| Image-to-video variants with turbo LoRA | 8 | 1.0 |\n| Reference-to-video variants with turbo LoRA | 4 | 1.0 |\n\ncfg above 1.0 evaluates the model twice per step, so steps and cfg together\ndrive the run time.\n\n## Notes\n\n- Keep `UNETLoader` on `weight_dtype: default`; forcing `fp8_e4m3fn` makes the\n  quantized kernels reject the weights.\n- `ModelSamplingMiniMaxH3` sets the video and audio flow shifts together\n  (12.0 / 3.0) \u2014 the DiT derives the audio schedule from the video one.\n- `ref_image_size: max` gives the best identity fidelity but runs reference\n  tokens through every sampling step, so it is much slower than `match`.\n- Over the API, reference inputs nest under their group:\n  `\"ref_images\": {\"ref_image_1\": [\"14\", 0]}`.\n- Expect a long first start: 44\u201355 GB of weights must reach the node before\n  ComfyUI comes up.\n\n## Weights\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n| File | Location | Size |\n|---|---|---|\n| `minimax_h3_fl2va_pruned_int8_convrot.safetensors` (i2v) | `models/diffusion_models/` | 21 GB |\n| `minimax_h3_ref2va_pruned_int8_convrot.safetensors` (ref2v) | `models/diffusion_models/` | 21 GB |\n| `qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | `models/text_encoders/` | 16 GB |\n| `minimax_h3_video_vae_fp16.safetensors` | `models/vae/` | 5.2 GB |\n| `minimax_h3_audio_vae_fp32.safetensors` | `models/vae/` | 0.6 GB |\n| 8-step I2V / 4-step R2V turbo LoRA | `models/loras/` | 2.0 GB |\n",
+      "variants": null,
+      "vram_requirement": 30720
+    },
+    {
+      "category": "Official|Web UI|API|Video Generation",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/MiniMax-H3/minimax.png",
+      "id": "minimax-h3-i2v-80gb",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 73728
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": 8188,
+              "gpu": true,
+              "image": "docker.io/nosana/comfyui:2.0.11",
+              "resources": [
+                {
+                  "files": [
+                    "diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/diffusion_models/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/text_encoders/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "vae/minimax_h3_video_vae_fp16.safetensors",
+                    "vae/minimax_h3_audio_vae_fp32.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/vae/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors"
+                  ],
+                  "repo": "lightx2v/Minimax-h3-Turbo",
+                  "target": "/comfyui/models/loras/",
+                  "type": "HF"
+                }
+              ]
+            },
+            "id": "MiniMaxH3-i2v-comfy",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "MiniMax H3 Video - Image to Video (80 GB)",
+      "parent_template_id": "minimax-h3",
+      "readme": "# MiniMax H3 Video\n\nOpen-weight video generation in ComfyUI. MiniMax H3 generates video and its\nsoundtrack in one sampling pass, so the audio belongs to the motion instead of\nbeing dubbed onto it. Output is 1344\u00d7768, 124 frames at 24 fps (~5 s) by\ndefault, with 32 kHz stereo audio. Frame count snaps to the model's 17k+5 grid;\nthe trained range is ~124\u2013362 frames.\n\n## Variants\n\n| Variant | Task | Text encoder | Requires |\n|---|---|---|---|\n| Image to Video (32 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 32 GB, Blackwell |\n| Image to Video (80 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 80 GB, Blackwell |\n| Reference to Video (32 GB) | reference images drive identity | Official ComfyUI R2V weights | 32 GB, Blackwell |\n| Reference to Video (80 GB) | reference images drive identity | Official ComfyUI R2V weights | 80 GB, Blackwell |\n\n**Image to Video** pins your image as a real frame of the output \u2014 first frame,\noptionally last frame, with the model filling in the motion between.\n**Reference to Video** shows your images to the text encoder as `<Picture 1>`,\n`<Video 1>`, `<Audio 1>` tags that you cite in the prompt; they carry identity\nand style without fixing any frame. With neither, both are text-to-video.\n\nThe nvfp4 encoder needs Blackwell hardware (RTX 5090, RTX Pro 6000). The image\nis built on CUDA 13 and needs an **r580+ driver** on the node.\n\n## Usage\n\nOpen ComfyUI on port 8188 and build the graph \u2014 ComfyUI's bundled\n`api_minimax_h3_*` templates call MiniMax's cloud API, not these local weights:\n\n```\nUNETLoader \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25ba ModelSamplingMiniMaxH3 \u2500\u2500\u2510\nCLIPLoader (type minimax) \u2500\u2510                       \u251c\u2500\u25ba KSampler \u2500\u252c\u2500\u25ba VAEDecode (video VAE) \u2500\u2500\u2510\nVAELoader (video VAE) \u2500\u2500\u2500\u2500\u2500\u253c\u2500\u25ba MiniMax H3          \u2502             \u2502                           \u251c\u2500\u25ba CreateVideo (24 fps) \u2500\u25ba SaveVideo\nVAELoader (audio VAE) \u2500\u2500\u2500\u2500\u2500\u2518   Image to Video \u2500\u2500\u2500\u2500\u2500\u2524             \u2514\u2500\u25ba VAEDecodeAudio (audio VAE) \u2518\n                                 \u2502  positive \u2500\u2500\u2500\u2500\u2500\u2500\u2524\n                                 \u2514\u25ba ConditioningZeroOut \u2500\u25ba negative\n                                    LATENT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\nBoth decoders read the same sampled latent \u2014 `VAEDecode` takes the video half,\n`VAEDecodeAudio` the audio half. Feed both into `CreateVideo` for a file with\nsound.\n\nAll variants ship the task-specific turbo LoRA \u2014 chain\n`UNETLoader \u2192 LoraLoaderModelOnly \u2192 ModelSamplingMiniMaxH3`:\n\n| Setup | steps | cfg |\n|---|---|---|\n| Image-to-video variants with turbo LoRA | 8 | 1.0 |\n| Reference-to-video variants with turbo LoRA | 4 | 1.0 |\n\ncfg above 1.0 evaluates the model twice per step, so steps and cfg together\ndrive the run time.\n\n## Notes\n\n- Keep `UNETLoader` on `weight_dtype: default`; forcing `fp8_e4m3fn` makes the\n  quantized kernels reject the weights.\n- `ModelSamplingMiniMaxH3` sets the video and audio flow shifts together\n  (12.0 / 3.0) \u2014 the DiT derives the audio schedule from the video one.\n- `ref_image_size: max` gives the best identity fidelity but runs reference\n  tokens through every sampling step, so it is much slower than `match`.\n- Over the API, reference inputs nest under their group:\n  `\"ref_images\": {\"ref_image_1\": [\"14\", 0]}`.\n- Expect a long first start: 44\u201355 GB of weights must reach the node before\n  ComfyUI comes up.\n\n## Weights\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n| File | Location | Size |\n|---|---|---|\n| `minimax_h3_fl2va_pruned_int8_convrot.safetensors` (i2v) | `models/diffusion_models/` | 21 GB |\n| `minimax_h3_ref2va_pruned_int8_convrot.safetensors` (ref2v) | `models/diffusion_models/` | 21 GB |\n| `qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | `models/text_encoders/` | 16 GB |\n| `minimax_h3_video_vae_fp16.safetensors` | `models/vae/` | 5.2 GB |\n| `minimax_h3_audio_vae_fp32.safetensors` | `models/vae/` | 0.6 GB |\n| 8-step I2V / 4-step R2V turbo LoRA | `models/loras/` | 2.0 GB |\n",
+      "variants": null,
+      "vram_requirement": 73728
+    },
+    {
+      "category": "Official|Web UI|API|Video Generation",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/MiniMax-H3/minimax.png",
+      "id": "minimax-h3-ref2v-32gb",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 30720
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": 8188,
+              "gpu": true,
+              "image": "docker.io/nosana/comfyui:2.0.11",
+              "resources": [
+                {
+                  "files": [
+                    "diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/diffusion_models/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/text_encoders/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "vae/minimax_h3_video_vae_fp16.safetensors",
+                    "vae/minimax_h3_audio_vae_fp32.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/vae/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/loras/",
+                  "type": "HF"
+                }
+              ]
+            },
+            "id": "MiniMaxH3-ref2v-comfy",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "MiniMax H3 Video - Reference to Video (32 GB)",
+      "parent_template_id": "minimax-h3",
+      "readme": "# MiniMax H3 Video\n\nOpen-weight video generation in ComfyUI. MiniMax H3 generates video and its\nsoundtrack in one sampling pass, so the audio belongs to the motion instead of\nbeing dubbed onto it. Output is 1344\u00d7768, 124 frames at 24 fps (~5 s) by\ndefault, with 32 kHz stereo audio. Frame count snaps to the model's 17k+5 grid;\nthe trained range is ~124\u2013362 frames.\n\n## Variants\n\n| Variant | Task | Text encoder | Requires |\n|---|---|---|---|\n| Image to Video (32 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 32 GB, Blackwell |\n| Image to Video (80 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 80 GB, Blackwell |\n| Reference to Video (32 GB) | reference images drive identity | Official ComfyUI R2V weights | 32 GB, Blackwell |\n| Reference to Video (80 GB) | reference images drive identity | Official ComfyUI R2V weights | 80 GB, Blackwell |\n\n**Image to Video** pins your image as a real frame of the output \u2014 first frame,\noptionally last frame, with the model filling in the motion between.\n**Reference to Video** shows your images to the text encoder as `<Picture 1>`,\n`<Video 1>`, `<Audio 1>` tags that you cite in the prompt; they carry identity\nand style without fixing any frame. With neither, both are text-to-video.\n\nThe nvfp4 encoder needs Blackwell hardware (RTX 5090, RTX Pro 6000). The image\nis built on CUDA 13 and needs an **r580+ driver** on the node.\n\n## Usage\n\nOpen ComfyUI on port 8188 and build the graph \u2014 ComfyUI's bundled\n`api_minimax_h3_*` templates call MiniMax's cloud API, not these local weights:\n\n```\nUNETLoader \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25ba ModelSamplingMiniMaxH3 \u2500\u2500\u2510\nCLIPLoader (type minimax) \u2500\u2510                       \u251c\u2500\u25ba KSampler \u2500\u252c\u2500\u25ba VAEDecode (video VAE) \u2500\u2500\u2510\nVAELoader (video VAE) \u2500\u2500\u2500\u2500\u2500\u253c\u2500\u25ba MiniMax H3          \u2502             \u2502                           \u251c\u2500\u25ba CreateVideo (24 fps) \u2500\u25ba SaveVideo\nVAELoader (audio VAE) \u2500\u2500\u2500\u2500\u2500\u2518   Image to Video \u2500\u2500\u2500\u2500\u2500\u2524             \u2514\u2500\u25ba VAEDecodeAudio (audio VAE) \u2518\n                                 \u2502  positive \u2500\u2500\u2500\u2500\u2500\u2500\u2524\n                                 \u2514\u25ba ConditioningZeroOut \u2500\u25ba negative\n                                    LATENT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\nBoth decoders read the same sampled latent \u2014 `VAEDecode` takes the video half,\n`VAEDecodeAudio` the audio half. Feed both into `CreateVideo` for a file with\nsound.\n\nAll variants ship the task-specific turbo LoRA \u2014 chain\n`UNETLoader \u2192 LoraLoaderModelOnly \u2192 ModelSamplingMiniMaxH3`:\n\n| Setup | steps | cfg |\n|---|---|---|\n| Image-to-video variants with turbo LoRA | 8 | 1.0 |\n| Reference-to-video variants with turbo LoRA | 4 | 1.0 |\n\ncfg above 1.0 evaluates the model twice per step, so steps and cfg together\ndrive the run time.\n\n## Notes\n\n- Keep `UNETLoader` on `weight_dtype: default`; forcing `fp8_e4m3fn` makes the\n  quantized kernels reject the weights.\n- `ModelSamplingMiniMaxH3` sets the video and audio flow shifts together\n  (12.0 / 3.0) \u2014 the DiT derives the audio schedule from the video one.\n- `ref_image_size: max` gives the best identity fidelity but runs reference\n  tokens through every sampling step, so it is much slower than `match`.\n- Over the API, reference inputs nest under their group:\n  `\"ref_images\": {\"ref_image_1\": [\"14\", 0]}`.\n- Expect a long first start: 44\u201355 GB of weights must reach the node before\n  ComfyUI comes up.\n\n## Weights\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n| File | Location | Size |\n|---|---|---|\n| `minimax_h3_fl2va_pruned_int8_convrot.safetensors` (i2v) | `models/diffusion_models/` | 21 GB |\n| `minimax_h3_ref2va_pruned_int8_convrot.safetensors` (ref2v) | `models/diffusion_models/` | 21 GB |\n| `qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | `models/text_encoders/` | 16 GB |\n| `minimax_h3_video_vae_fp16.safetensors` | `models/vae/` | 5.2 GB |\n| `minimax_h3_audio_vae_fp32.safetensors` | `models/vae/` | 0.6 GB |\n| 8-step I2V / 4-step R2V turbo LoRA | `models/loras/` | 2.0 GB |\n",
+      "variants": null,
+      "vram_requirement": 30720
+    },
+    {
+      "category": "Official|Web UI|API|Video Generation",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/MiniMax-H3/minimax.png",
+      "id": "minimax-h3-ref2v-80gb",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 73728
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": 8188,
+              "gpu": true,
+              "image": "docker.io/nosana/comfyui:2.0.11",
+              "resources": [
+                {
+                  "files": [
+                    "diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/diffusion_models/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/text_encoders/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "vae/minimax_h3_video_vae_fp16.safetensors",
+                    "vae/minimax_h3_audio_vae_fp32.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/vae/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-H3",
+                  "target": "/comfyui/models/loras/",
+                  "type": "HF"
+                }
+              ]
+            },
+            "id": "MiniMaxH3-ref2v-comfy",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "MiniMax H3 Video - Reference to Video (80 GB)",
+      "parent_template_id": "minimax-h3",
+      "readme": "# MiniMax H3 Video\n\nOpen-weight video generation in ComfyUI. MiniMax H3 generates video and its\nsoundtrack in one sampling pass, so the audio belongs to the motion instead of\nbeing dubbed onto it. Output is 1344\u00d7768, 124 frames at 24 fps (~5 s) by\ndefault, with 32 kHz stereo audio. Frame count snaps to the model's 17k+5 grid;\nthe trained range is ~124\u2013362 frames.\n\n## Variants\n\n| Variant | Task | Text encoder | Requires |\n|---|---|---|---|\n| Image to Video (32 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 32 GB, Blackwell |\n| Image to Video (80 GB) | prompt + optional first/last keyframe | Official ComfyUI I2V weights | 80 GB, Blackwell |\n| Reference to Video (32 GB) | reference images drive identity | Official ComfyUI R2V weights | 32 GB, Blackwell |\n| Reference to Video (80 GB) | reference images drive identity | Official ComfyUI R2V weights | 80 GB, Blackwell |\n\n**Image to Video** pins your image as a real frame of the output \u2014 first frame,\noptionally last frame, with the model filling in the motion between.\n**Reference to Video** shows your images to the text encoder as `<Picture 1>`,\n`<Video 1>`, `<Audio 1>` tags that you cite in the prompt; they carry identity\nand style without fixing any frame. With neither, both are text-to-video.\n\nThe nvfp4 encoder needs Blackwell hardware (RTX 5090, RTX Pro 6000). The image\nis built on CUDA 13 and needs an **r580+ driver** on the node.\n\n## Usage\n\nOpen ComfyUI on port 8188 and build the graph \u2014 ComfyUI's bundled\n`api_minimax_h3_*` templates call MiniMax's cloud API, not these local weights:\n\n```\nUNETLoader \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u25ba ModelSamplingMiniMaxH3 \u2500\u2500\u2510\nCLIPLoader (type minimax) \u2500\u2510                       \u251c\u2500\u25ba KSampler \u2500\u252c\u2500\u25ba VAEDecode (video VAE) \u2500\u2500\u2510\nVAELoader (video VAE) \u2500\u2500\u2500\u2500\u2500\u253c\u2500\u25ba MiniMax H3          \u2502             \u2502                           \u251c\u2500\u25ba CreateVideo (24 fps) \u2500\u25ba SaveVideo\nVAELoader (audio VAE) \u2500\u2500\u2500\u2500\u2500\u2518   Image to Video \u2500\u2500\u2500\u2500\u2500\u2524             \u2514\u2500\u25ba VAEDecodeAudio (audio VAE) \u2518\n                                 \u2502  positive \u2500\u2500\u2500\u2500\u2500\u2500\u2524\n                                 \u2514\u25ba ConditioningZeroOut \u2500\u25ba negative\n                                    LATENT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\nBoth decoders read the same sampled latent \u2014 `VAEDecode` takes the video half,\n`VAEDecodeAudio` the audio half. Feed both into `CreateVideo` for a file with\nsound.\n\nAll variants ship the task-specific turbo LoRA \u2014 chain\n`UNETLoader \u2192 LoraLoaderModelOnly \u2192 ModelSamplingMiniMaxH3`:\n\n| Setup | steps | cfg |\n|---|---|---|\n| Image-to-video variants with turbo LoRA | 8 | 1.0 |\n| Reference-to-video variants with turbo LoRA | 4 | 1.0 |\n\ncfg above 1.0 evaluates the model twice per step, so steps and cfg together\ndrive the run time.\n\n## Notes\n\n- Keep `UNETLoader` on `weight_dtype: default`; forcing `fp8_e4m3fn` makes the\n  quantized kernels reject the weights.\n- `ModelSamplingMiniMaxH3` sets the video and audio flow shifts together\n  (12.0 / 3.0) \u2014 the DiT derives the audio schedule from the video one.\n- `ref_image_size: max` gives the best identity fidelity but runs reference\n  tokens through every sampling step, so it is much slower than `match`.\n- Over the API, reference inputs nest under their group:\n  `\"ref_images\": {\"ref_image_1\": [\"14\", 0]}`.\n- Expect a long first start: 44\u201355 GB of weights must reach the node before\n  ComfyUI comes up.\n\n## Weights\n\nFrom [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):\n\n| File | Location | Size |\n|---|---|---|\n| `minimax_h3_fl2va_pruned_int8_convrot.safetensors` (i2v) | `models/diffusion_models/` | 21 GB |\n| `minimax_h3_ref2va_pruned_int8_convrot.safetensors` (ref2v) | `models/diffusion_models/` | 21 GB |\n| `qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | `models/text_encoders/` | 16 GB |\n| `minimax_h3_video_vae_fp16.safetensors` | `models/vae/` | 5.2 GB |\n| `minimax_h3_audio_vae_fp32.safetensors` | `models/vae/` | 0.6 GB |\n| 8-step I2V / 4-step R2V turbo LoRA | `models/loras/` | 2.0 GB |\n",
+      "variants": null,
+      "vram_requirement": 73728
+    },
+    {
+      "category": "Official|Web UI|API",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/MiniMax-Music-3/minimax.png",
+      "id": "minimax-music3",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 23552
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": 8188,
+              "gpu": true,
+              "image": "docker.io/nosana/comfyui:2.0.11",
+              "resources": [
+                {
+                  "files": [
+                    "diffusion_models/minimax_music3_dit_fp16.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-Music-3",
+                  "target": "/comfyui/models/diffusion_models/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "text_encoders/minimax_music3_text_encoder_pruned_int8_convrot.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-Music-3",
+                  "target": "/comfyui/models/text_encoders/",
+                  "type": "HF"
+                },
+                {
+                  "files": [
+                    "vae/minimax_music3_dav.safetensors"
+                  ],
+                  "repo": "Comfy-Org/MiniMax-Music-3",
+                  "target": "/comfyui/models/vae/",
+                  "type": "HF"
+                }
+              ]
+            },
+            "id": "MiniMaxMusic3-comfy",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "MiniMax Music 3",
+      "parent_template_id": null,
+      "readme": "# MiniMax Music 3\n\nOpen-weight music generation in ComfyUI. Give it lyrics and a description of the\nsound, and it renders a full song \u2014 intro / verse / chorus / bridge / outro \u2014\nin stereo, up to 5 minutes long.\n\n## Model\n\nMiniMax Music 3 is a hybrid architecture: an 8B LLM (built on Qwen3-8B) handles\nlong-range song structure, a 0.6B LLM fills in frame-level acoustic detail, and\na flow-matching + Flow-VAE stage turns the combined hidden states into audio\nrather than decoding straight from tokens \u2014 which is what keeps longer tracks\ncoherent instead of drifting.\n\nWeights are pulled from [Comfy-Org/MiniMax-Music-3](https://huggingface.co/Comfy-Org/MiniMax-Music-3):\n\n| File | Location | Size |\n|---|---|---|\n| `minimax_music3_dit_fp16.safetensors` | `models/diffusion_models/` | 4.9 GB |\n| `minimax_music3_text_encoder_pruned_int8_convrot.safetensors` | `models/text_encoders/` | 9.2 GB |\n| `minimax_music3_dav.safetensors` | `models/vae/` | 0.2 GB |\n\n- **VRAM Required**: 24 GB (peak ~14.5 GB on a 4090 at the default 120 s target)\n- **Web UI**: ComfyUI on port 8188\n- **Speed**: ~3 min for a 30 s song, ~5 min for a 2 min song, on a single 4090\n\nThe image pins ComfyUI v0.33.2; MiniMax Music 3 nodes were added in 0.33.0.\n\n## Usage\n\n1. Open the ComfyUI web interface on port 8188.\n2. Load the built-in template: **Workflow \u2192 Browse Templates \u2192 Audio \u2192 MiniMax Music 3**\n   (the workflow is also at\n   [workflow_templates](https://github.com/Comfy-Org/workflow_templates/blob/main/templates/audio_minimax_music_3.json)).\n   The model files it expects are the ones this template downloads.\n3. Fill in **Caption** and **Lyrics**, set `max_duration`, and queue the prompt.\n\n## Writing the prompt\n\n**Lyrics** carry the structure. Section tags are the only executable structural\ninstruction \u2014 the lyric text itself only conveys mood:\n\n```\n[Intro] [Verse] [Pre-Chorus] [Chorus] [Post-Chorus] [Bridge] [Instrumental] [Solo] [Outro]\n```\n\n**Caption** describes the sound. Plain prose works, but the model responds best\nto a structured caption in three sections:\n\n- **Global Metadata** \u2014 genre, BPM, key, emotional arc, production profile.\n- **Vocal Details** \u2014 gender, timbre, harmony, backing vocals, effects.\n- **Arrangement** \u2014 instruments, how they evolve section to section, groove,\n  bass, percussion, spatial effects.\n\nMiniMax publishes a caption-rewriting guide at\n[MiniMax-AI/MiniMax-Music3](https://github.com/MiniMax-AI/MiniMax-Music3).\n\n## Parameters\n\n| Parameter | Description |\n|---|---|\n| `max_duration` | Upper bound on length in seconds (default 120, up to 360 on the node). The model can and does end a song earlier when the lyrics run out. |\n| `seed` | Fix it to reproduce a take, change it for a different one. |\n| `tiled_decode` | Decodes the audio VAE in overlapping tiles to cut VRAM on long songs, at a small risk of seams. Off gives the best quality when VRAM allows. |\n\n## Notes\n\n- Output is written by `SaveAudioAdvanced` (MP3 by default; FLAC and Opus are\n  available on the node) and downloadable from the ComfyUI UI.\n- The same graph runs headless over the ComfyUI API on `/prompt`, so the\n  template works as a music-generation backend as well as a UI.\n- For a lower-VRAM run, swap the diffusion model for\n  `minimax_music3_dit_int8_convrot.safetensors` (2.5 GB) via ComfyUI-Manager or\n  the model manager, and enable tiled decode.\n",
+      "variants": null,
+      "vram_requirement": 23552
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://avatars.githubusercontent.com/u/69631?s=200&v=4",
+      "id": "muse-glimmer",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "Muse Glimmer",
+      "parent_template_id": null,
+      "readme": "# Muse Glimmer\n\nMuse Glimmer is a 30-billion-parameter causal language model with a dedicated perception encoder, distilled from Muse Spark and built for autonomous agentic tasks on consumer hardware. It combines multi-step reasoning, tool use, multimodal understanding and failure recovery in a single model. Served through Ollama, this template deploys `muse-glimmer:30b` with an OpenAI-compatible API.\n\n## Included Model\n\n### 30B\n- **Model Tag**: `muse-glimmer:30b` (27.9B parameters, Q4_K_M)\n- **Model Size**: 18.2 GB\n- **Context Length**: 128K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~18 GB at 32K context (24 GB-class GPUs and up)\n- **Use Case**: Agentic workflows, tool calling, coding assistants, screenshot and document understanding\n\nNVIDIA support for this architecture landed in Ollama 0.32.8, so the template needs at least that version. The `30b-mlx` tag is an Apple Silicon build and is not applicable to Nosana GPU nodes.\n\n## Highlights\n\n- **End-to-end agentic task completion**: strong results on DeepSearch QA, MCP-Atlas, \ud835\uded53-Bench and SWE-Bench\n- **Reliable tool use**: precise function-call schemas across extended workflows\n- **Multi-step reasoning**: coherent plans over long horizons\n- **Failure recovery**: diagnoses failed or unexpected tool results and retries instead of halting\n- **Multimodal input**: interleaved text and images through a dedicated perception encoder\n- **Scaffold compatibility**: works with OpenClaw, Hermes Agent and similar orchestration patterns\n- **Controllable effort**: selectable reasoning strengths to trade quality against speed\n- **Multilingual**: trained on data from more than 100 languages\n- **Automatic model download**: the model is pulled automatically on startup\n\n## Benchmarks\n\nReported by Meta, compared with Gemma4-31B and Qwen3.6-27B (thinking mode):\n\n| Category | Benchmark | Muse Glimmer-30B | Gemma4-31B | Qwen3.6-27B |\n| --- | --- | --- | --- | --- |\n| General Agentic | MCP Atlas (Public) | 75.5 | 54.2 | 62.5 |\n| | DeepSearch QA | 74.6 | 61.7 | 71.1 |\n| | \ud835\uded53-Banking | 23.5 | 15.1 | 16.7 |\n| | WildClawBench | 47.6 | 37.6 | 43.2 |\n| | GDPVal-AA v2 | 953 | 811 | 1141 |\n| | Gaia2 | 43.3 | 36.4 | 40.0 |\n| | SkillsBench (with skills) | 44.3 | 32.4 | 46.6 |\n| | OSWorld-Verified | 65.9 | 58.5 | 75.6 |\n| Agentic Coding | SWE-Bench Pro | 51.2 | 36.9 | 50.2 |\n| | SWE-Bench Verified | 76.0 | 66.6 | 77.2 |\n| | TerminalBench 2.1 (with terminus2) | 51.7 | 43.4 | 60.7 |\n| | SciCode | 43.6 | 43.4 | 39.8 |\n| Multimodal | Charxiv Reasoning | 78.8 | 77.7 | 78.4 |\n| | ScreenSpot Pro | 75.4 | 75.9 | 76.1 |\n| | OmniDocBench v1.5 | 75.8 | 72.5 | 77.8 |\n| | MMMU Pro | 74 | 73 | 75 |\n| General Reasoning | IFBench | 77.0 | 76.0 | 70.8 |\n| | AIME 2026 | 94.7 | 89.2 | 94.1 |\n| | GPQA Diamond (AA) | 83.5 | 85.7 | 84.2 |\n| | HLE Text (AA) | 22.0 | 23.6 | 23.1 |\n| | AA-LCR | 80.0 | 68.3 | 73.3 |\n| | Beam128K | 65.1 | 58.2 | 63.0 |\n\n## Usage\n\nThe model is served on port 11434 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n- **Generate**: `POST /api/generate`\n- **Model Info**: `GET /api/tags`\n\n### Example Request\n\n```bash\ncurl http://your-deployment-url:11434/api/chat \\\n  -d '{\n    \"model\": \"muse-glimmer:30b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Plan and run a three-step research task.\"}]\n  }'\n```\n",
+      "variants": [
+        {
+          "description": "Muse Glimmer 30B agentic model, q4_K_M (18 GB, 128K context, Text + Image)",
+          "id": "30b",
+          "job_definition": "job-definition-30b.json",
+          "name": "30B Model"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|OCR|vLLM",
+      "cuda_requirement": null,
+      "icon": "https://avatars.githubusercontent.com/u/30330951?s=200&v=4",
+      "id": "Nanonets-OCR2",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "Nanonets OCR 2 Models",
+      "parent_template_id": null,
+      "readme": "# Nanonets-OCR2-3B OCR Inference (VLLM)\n\nHigh-performance OCR inference API for `nanonets/Nanonets-OCR2-3B` using VLLM.\n\n## Model Overview\n\n### 3B\n\n- **Model**: nanonets/Nanonets-OCR2-3B\n- **Parameters**: 3 billion\n- **VRAM Required**: 10GB\n\n### 1.5B\n\n- **Model**: nanonets/Nanonets-OCR2-1.5B-exp\n- **Parameters**: 1.5 billion\n- **VRAM Required**: 8GB\n\n## Features\n\n- OpenAI-compatible API endpoints via VLLM\n- Automatic model downloading and serving\n- Health checks for reliability\n- GPU acceleration for fast inference\n- Support for large context windows (up to 30,000 tokens)\n\n## Usage\n\nThe model is served on port 8000 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n\n### Example Request\n\n```bash\ncurl https://your-deployment-url.node.k8s.prd.nos.ci/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"nanonets/Nanonets-OCR2-3B\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": [\n          {\n            \"type\": \"image_url\",\n            \"image_url\": {\n              \"url\": \"https://i.imgur.com/8w5LtGV.jpeg\"\n            }\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"Extract the car's license plate from the image. Please return the license in plain text.\"\n          }\n        ]\n      }\n    ],\n    \"temperature\": 0.0,\n    \"max_tokens\": 15000\n  }'\n```\n\n## Model Details\n\n`nanonets/Nanonets-OCR2-3B` is an open-source OCR model optimized for extracting text from images. It is ideal for:\n\n- License plate recognition\n- Document OCR\n- Text extraction from photos\n- Automated data entry\n\nThe model is automatically downloaded and served via VLLM, providing a robust and scalable inference platform with GPU acceleration.\n",
+      "variants": [
+        {
+          "description": "Nanonets OCR 2 3B parameter model - balanced performance and efficiency",
+          "id": "3b",
+          "job_definition": "job-definition-3b.json",
+          "name": "3B Model"
+        },
+        {
+          "description": "Nanonets OCR 2 1.5B parameter model - optimized for lower resource usage",
+          "id": "1-5b",
+          "job_definition": "job-definition-1.5b.json",
+          "name": "1.5B Model"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|OCR|vLLM",
+      "cuda_requirement": null,
+      "icon": "https://avatars.githubusercontent.com/u/30330951?s=200&v=4",
+      "id": "Nanonets-OCR2-3b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "nanonets/Nanonets-OCR2-3B"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 8192
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "--model",
+                "%%global.variables.MODEL%%",
+                "--served-model-name",
+                "%%global.variables.MODEL%%",
+                "--port",
+                "8000",
+                "--max-model-len",
+                "30000"
+              ],
+              "expose": 8000,
+              "gpu": true,
+              "image": "docker.io/vllm/vllm-openai:v0.32.0"
+            },
+            "id": "Nanonets-OCR2:3B",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Nanonets OCR 2 Models - 3B Model",
+      "parent_template_id": "Nanonets-OCR2",
+      "readme": "# Nanonets-OCR2-3B OCR Inference (VLLM)\n\nHigh-performance OCR inference API for `nanonets/Nanonets-OCR2-3B` using VLLM.\n\n## Model Overview\n\n### 3B\n\n- **Model**: nanonets/Nanonets-OCR2-3B\n- **Parameters**: 3 billion\n- **VRAM Required**: 10GB\n\n### 1.5B\n\n- **Model**: nanonets/Nanonets-OCR2-1.5B-exp\n- **Parameters**: 1.5 billion\n- **VRAM Required**: 8GB\n\n## Features\n\n- OpenAI-compatible API endpoints via VLLM\n- Automatic model downloading and serving\n- Health checks for reliability\n- GPU acceleration for fast inference\n- Support for large context windows (up to 30,000 tokens)\n\n## Usage\n\nThe model is served on port 8000 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n\n### Example Request\n\n```bash\ncurl https://your-deployment-url.node.k8s.prd.nos.ci/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"nanonets/Nanonets-OCR2-3B\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": [\n          {\n            \"type\": \"image_url\",\n            \"image_url\": {\n              \"url\": \"https://i.imgur.com/8w5LtGV.jpeg\"\n            }\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"Extract the car's license plate from the image. Please return the license in plain text.\"\n          }\n        ]\n      }\n    ],\n    \"temperature\": 0.0,\n    \"max_tokens\": 15000\n  }'\n```\n\n## Model Details\n\n`nanonets/Nanonets-OCR2-3B` is an open-source OCR model optimized for extracting text from images. It is ideal for:\n\n- License plate recognition\n- Document OCR\n- Text extraction from photos\n- Automated data entry\n\nThe model is automatically downloaded and served via VLLM, providing a robust and scalable inference platform with GPU acceleration.\n",
+      "variants": null,
+      "vram_requirement": 8192
+    },
+    {
+      "category": "Official|API|OCR|vLLM",
+      "cuda_requirement": null,
+      "icon": "https://avatars.githubusercontent.com/u/30330951?s=200&v=4",
+      "id": "Nanonets-OCR2-1-5b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "nanonets/Nanonets-OCR2-1.5B-exp"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 6144
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "--model",
+                "%%global.variables.MODEL%%",
+                "--served-model-name",
+                "%%global.variables.MODEL%%",
+                "--port",
+                "8000",
+                "--max-model-len",
+                "30000"
+              ],
+              "expose": 8000,
+              "gpu": true,
+              "image": "docker.io/vllm/vllm-openai:v0.32.0"
+            },
+            "id": "Nanonets-OCR2:1-5B",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Nanonets OCR 2 Models - 1.5B Model",
+      "parent_template_id": "Nanonets-OCR2",
+      "readme": "# Nanonets-OCR2-3B OCR Inference (VLLM)\n\nHigh-performance OCR inference API for `nanonets/Nanonets-OCR2-3B` using VLLM.\n\n## Model Overview\n\n### 3B\n\n- **Model**: nanonets/Nanonets-OCR2-3B\n- **Parameters**: 3 billion\n- **VRAM Required**: 10GB\n\n### 1.5B\n\n- **Model**: nanonets/Nanonets-OCR2-1.5B-exp\n- **Parameters**: 1.5 billion\n- **VRAM Required**: 8GB\n\n## Features\n\n- OpenAI-compatible API endpoints via VLLM\n- Automatic model downloading and serving\n- Health checks for reliability\n- GPU acceleration for fast inference\n- Support for large context windows (up to 30,000 tokens)\n\n## Usage\n\nThe model is served on port 8000 with OpenAI-compatible endpoints:\n\n- **Chat Completions**: `POST /v1/chat/completions`\n\n### Example Request\n\n```bash\ncurl https://your-deployment-url.node.k8s.prd.nos.ci/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"nanonets/Nanonets-OCR2-3B\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": [\n          {\n            \"type\": \"image_url\",\n            \"image_url\": {\n              \"url\": \"https://i.imgur.com/8w5LtGV.jpeg\"\n            }\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"Extract the car's license plate from the image. Please return the license in plain text.\"\n          }\n        ]\n      }\n    ],\n    \"temperature\": 0.0,\n    \"max_tokens\": 15000\n  }'\n```\n\n## Model Details\n\n`nanonets/Nanonets-OCR2-3B` is an open-source OCR model optimized for extracting text from images. It is ideal for:\n\n- License plate recognition\n- Document OCR\n- Text extraction from photos\n- Automated data entry\n\nThe model is automatically downloaded and served via VLLM, providing a robust and scalable inference platform with GPU acceleration.\n",
+      "variants": null,
+      "vram_requirement": 6144
+    },
+    {
+      "category": "Official|Web UI",
+      "cuda_requirement": null,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYIA6aP7c8oWKOF_BUwlZMdKHLi8HiyhDHqA&s",
+      "id": "openclaw",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "OpenClaw",
+      "parent_template_id": null,
+      "readme": "# OpenClaw Application\n\nThis template provides a basic setup for deploying the OpenClaw application.\n\n## Features\n\n- Customizable deployment options\n\n## Usage\n\nThis template can be used to deploy and run the OpenClaw application. Refer to the `job-definition.json` for specific deployment configurations.\n",
+      "variants": [
+        {
+          "description": "OpenClaw with GPT-OSS 120B parameter model",
+          "id": "gpt-120b",
+          "job_definition": "job-definition-gpt-120b.json",
+          "name": "GPT-OSS 120B"
+        },
+        {
+          "description": "OpenClaw with GPT-OSS 20B parameter model",
+          "id": "gpt-20b",
+          "job_definition": "job-definition-gpt-20b.json",
+          "name": "GPT-OSS 20B"
+        },
+        {
+          "description": "OpenClaw with GLM-4.7-Flash Q4_K_M parameter model",
+          "id": "glm-q4",
+          "job_definition": "job-definition-GLM-q4.json",
+          "name": "GLM-4.7-Flash Q4_K_M"
+        },
+        {
+          "description": "OpenClaw with GLM-4.7-Flash BF16 parameter model",
+          "id": "glm-16fp",
+          "job_definition": "job-definition-GLM-16fp.json",
+          "name": "GLM-4.7-Flash BF16"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|LLM|Ollama|vLLM",
+      "cuda_requirement": null,
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Qwen_logo.svg/3840px-Qwen_logo.svg.png",
+      "id": "qwen-9b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "qwen3.5:9b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 9216
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Qwen Models - Qwen 3.5 9B",
+      "parent_template_id": "qwen",
+      "readme": "# Qwen Models\n\nAlibaba's open-weight Qwen models, one variant per GPU size: the newest Qwen that fits each.\n\n## Variants\n\n### Qwen 3.5 9B\n- **Engine**: Ollama, `qwen3.5:9b` (6.6 GB)\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~9 GB, for 10 GB GPUs and up\n\n### Qwen 3.8 27B\nQwen3.8-27B is a 27-billion-parameter dense model, released in August 2026 under Apache 2.0, with strong coding and agentic results for its size.\n\n- **Engine**: Ollama, `qwen3.8:27b` (4-bit, 18 GB)\n- **Context**: Ollama sizes it to the free GPU memory\n- **Modalities**: Text, Image\n- **VRAM Required**: ~23 GB, fits a 24 GB GPU such as the RTX 4090 or 3090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 32K context\n- **Engine**: vLLM, AWQ 4-bit weights ([cyankiwi/Qwen3.8-27B-AWQ-INT4](https://huggingface.co/cyankiwi/Qwen3.8-27B-AWQ-INT4)), about 19 GB loaded\n- **Context**: 32K tokens, 4 concurrent requests\n- **VRAM Required**: ~28 GB, for 32 GB GPUs such as the RTX 5090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 128K context\n- **Engine**: vLLM, the same AWQ 4-bit weights\n- **Context**: 128K tokens, 8 concurrent requests\n- **VRAM Required**: ~45 GB, for 48 GB GPUs and up\n\nThe vLLM variants are the setup that serves Qwen 3.8 on the Nosana LLM gateway: FP8 KV cache, tool calling (`qwen3_xml`) and reasoning output (`qwen3`), served as `qwen3.8-27b` on port 8000. Their context length and concurrency are global variables (`MAX_MODEL_LEN`, `MAX_NUM_SEQS`, `GPU_MEM_UTIL`) at the top of the job definition. In vLLM the AWQ weights alone take about 19 GB, too much of a 24 GB card to leave room for the cache, so 24 GB cards use the Ollama variant.\n\n## Usage\n\nThe Ollama variants serve on port 11434 and the vLLM variants on port 8000, both with an OpenAI-compatible `POST /v1/chat/completions`.\n\n```bash\ncurl https://your-deployment-url/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"qwen3.8:27b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Write a function that reverses a linked list.\"}],\n    \"max_tokens\": 1024\n  }'\n```\n\nFor the vLLM variants, use `\"model\": \"qwen3.8-27b\"`.\n",
+      "variants": null,
+      "vram_requirement": 9216
+    },
+    {
+      "category": "Official|Web UI",
+      "cuda_requirement": null,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYIA6aP7c8oWKOF_BUwlZMdKHLi8HiyhDHqA&s",
+      "id": "openclaw-gpt-120b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "OPENCLAW_GATEWAY_TOKEN": "MY_SECRET_TOKEN",
+            "OPENCLAW_MODEL": "gpt-oss:120b"
+          }
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "--auth-choice",
+                "skip",
+                "--gateway-bind",
+                "lan",
+                "--token",
+                "%%global.variables.OPENCLAW_GATEWAY_TOKEN%%"
+              ],
+              "entrypoint": [
+                "/bin/sh",
+                "/root/entrypoint/entrypoint.sh"
+              ],
+              "env": {
+                "OPENCLAW_GATEWAY_TOKEN": "%%global.variables.OPENCLAW_GATEWAY_TOKEN%%",
+                "OPENCLAW_MODEL": "%%global.variables.OPENCLAW_MODEL%%"
+              },
+              "expose": 18789,
+              "gpu": true,
+              "image": "ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "target": "/root/entrypoint",
+                  "type": "S3",
+                  "url": "https://models.nosana.io/OpenClaw"
+                },
+                {
+                  "model": "%%global.variables.OPENCLAW_MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "openclaw",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "OpenClaw - GPT-OSS 120B",
+      "parent_template_id": "openclaw",
+      "readme": "# OpenClaw Application\n\nThis template provides a basic setup for deploying the OpenClaw application.\n\n## Features\n\n- Customizable deployment options\n\n## Usage\n\nThis template can be used to deploy and run the OpenClaw application. Refer to the `job-definition.json` for specific deployment configurations.\n",
+      "variants": null,
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|Web UI",
+      "cuda_requirement": null,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYIA6aP7c8oWKOF_BUwlZMdKHLi8HiyhDHqA&s",
+      "id": "openclaw-gpt-20b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "OPENCLAW_GATEWAY_TOKEN": "MY_SECRET_TOKEN",
+            "OPENCLAW_MODEL": "gpt-oss:20b"
+          }
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "--auth-choice",
+                "skip",
+                "--gateway-bind",
+                "lan",
+                "--token",
+                "%%global.variables.OPENCLAW_GATEWAY_TOKEN%%"
+              ],
+              "entrypoint": [
+                "/bin/sh",
+                "/root/entrypoint/entrypoint.sh"
+              ],
+              "env": {
+                "OPENCLAW_GATEWAY_TOKEN": "%%global.variables.OPENCLAW_GATEWAY_TOKEN%%",
+                "OPENCLAW_MODEL": "%%global.variables.OPENCLAW_MODEL%%"
+              },
+              "expose": 18789,
+              "gpu": true,
+              "image": "ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "target": "/root/entrypoint",
+                  "type": "S3",
+                  "url": "https://models.nosana.io/OpenClaw"
+                },
+                {
+                  "model": "%%global.variables.OPENCLAW_MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "openclaw",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "OpenClaw - GPT-OSS 20B",
+      "parent_template_id": "openclaw",
+      "readme": "# OpenClaw Application\n\nThis template provides a basic setup for deploying the OpenClaw application.\n\n## Features\n\n- Customizable deployment options\n\n## Usage\n\nThis template can be used to deploy and run the OpenClaw application. Refer to the `job-definition.json` for specific deployment configurations.\n",
+      "variants": null,
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|Web UI",
+      "cuda_requirement": null,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYIA6aP7c8oWKOF_BUwlZMdKHLi8HiyhDHqA&s",
+      "id": "openclaw-glm-q4",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "OPENCLAW_GATEWAY_TOKEN": "MY_SECRET_TOKEN",
+            "OPENCLAW_MODEL": "glm-4.7-flash:q4_K_M"
+          }
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "--auth-choice",
+                "skip",
+                "--gateway-bind",
+                "lan",
+                "--token",
+                "%%global.variables.OPENCLAW_GATEWAY_TOKEN%%"
+              ],
+              "entrypoint": [
+                "/bin/sh",
+                "/root/entrypoint/entrypoint.sh"
+              ],
+              "env": {
+                "OPENCLAW_GATEWAY_TOKEN": "%%global.variables.OPENCLAW_GATEWAY_TOKEN%%",
+                "OPENCLAW_MODEL": "%%global.variables.OPENCLAW_MODEL%%"
+              },
+              "expose": 18789,
+              "gpu": true,
+              "image": "ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "target": "/root/entrypoint",
+                  "type": "S3",
+                  "url": "https://models.nosana.io/OpenClaw"
+                },
+                {
+                  "model": "%%global.variables.OPENCLAW_MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "openclaw",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "OpenClaw - GLM-4.7-Flash Q4_K_M",
+      "parent_template_id": "openclaw",
+      "readme": "# OpenClaw Application\n\nThis template provides a basic setup for deploying the OpenClaw application.\n\n## Features\n\n- Customizable deployment options\n\n## Usage\n\nThis template can be used to deploy and run the OpenClaw application. Refer to the `job-definition.json` for specific deployment configurations.\n",
+      "variants": null,
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|Web UI",
+      "cuda_requirement": null,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYIA6aP7c8oWKOF_BUwlZMdKHLi8HiyhDHqA&s",
+      "id": "openclaw-glm-16fp",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "OPENCLAW_GATEWAY_TOKEN": "MY_SECRET_TOKEN",
+            "OPENCLAW_MODEL": "glm-4.7-flash:bf16"
+          }
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "--auth-choice",
+                "skip",
+                "--gateway-bind",
+                "lan",
+                "--token",
+                "%%global.variables.OPENCLAW_GATEWAY_TOKEN%%"
+              ],
+              "entrypoint": [
+                "/bin/sh",
+                "/root/entrypoint/entrypoint.sh"
+              ],
+              "env": {
+                "OPENCLAW_GATEWAY_TOKEN": "%%global.variables.OPENCLAW_GATEWAY_TOKEN%%",
+                "OPENCLAW_MODEL": "%%global.variables.OPENCLAW_MODEL%%"
+              },
+              "expose": 18789,
+              "gpu": true,
+              "image": "ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "target": "/root/entrypoint",
+                  "type": "S3",
+                  "url": "https://models.nosana.io/OpenClaw"
+                },
+                {
+                  "model": "%%global.variables.OPENCLAW_MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "openclaw",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "OpenClaw - GLM-4.7-Flash BF16",
+      "parent_template_id": "openclaw",
+      "readme": "# OpenClaw Application\n\nThis template provides a basic setup for deploying the OpenClaw application.\n\n## Features\n\n- Customizable deployment options\n\n## Usage\n\nThis template can be used to deploy and run the OpenClaw application. Refer to the `job-definition.json` for specific deployment configurations.\n",
+      "variants": null,
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Ornith/ornith.png",
+      "id": "ornith",
+      "is_variant_template": false,
+      "jobDefinition": null,
+      "name": "Ornith",
+      "parent_template_id": null,
+      "readme": "# Ornith\n\nOrnith is a self-improving family of open-source models for agentic coding. Served through Ollama, this template deploys the open-weight `ornith:9b` model.\n\n## Included Model\n\n### 9B\n- **Model Tag**: `ornith:9b`\n- **Model Size**: 5.6 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text\n- **VRAM Required**: ~7 GB\n- **Use Case**: Lightweight agentic coding; low-VRAM performance baseline\n\n## Highlights\n\n- **Small footprint**: Runs on ~all benchmark-class GPUs\n- **Long context**: 256K tokens\n- **Tool ready**: Designed for coding assistants and agentic workflows\n",
+      "variants": [
+        {
+          "description": "Ornith 9B agentic-coding model (5.6 GB, 256K context, Text)",
+          "id": "9b",
+          "job_definition": "job-definition-9b.json",
+          "name": "9B Model"
+        }
+      ],
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|API|LLM|Ollama",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/Ornith/ornith.png",
+      "id": "ornith-9b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "ornith:9b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 7168
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Ornith - 9B Model",
+      "parent_template_id": "ornith",
+      "readme": "# Ornith\n\nOrnith is a self-improving family of open-source models for agentic coding. Served through Ollama, this template deploys the open-weight `ornith:9b` model.\n\n## Included Model\n\n### 9B\n- **Model Tag**: `ornith:9b`\n- **Model Size**: 5.6 GB\n- **Context Length**: 256K tokens\n- **Modalities**: Text\n- **VRAM Required**: ~7 GB\n- **Use Case**: Lightweight agentic coding; low-VRAM performance baseline\n\n## Highlights\n\n- **Small footprint**: Runs on ~all benchmark-class GPUs\n- **Long context**: 256K tokens\n- **Tool ready**: Designed for coding assistants and agentic workflows\n",
+      "variants": null,
+      "vram_requirement": 7168
+    },
+    {
+      "category": "Official|API|LLM|Ollama|vLLM",
+      "cuda_requirement": null,
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Qwen_logo.svg/3840px-Qwen_logo.svg.png",
+      "id": "qwen-27b",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "MODEL": "qwen3.8:27b"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 23552
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": false,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/api/tags",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 11434
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/ollama/ollama:0.35.1",
+              "resources": [
+                {
+                  "model": "%%global.variables.MODEL%%",
+                  "type": "Ollama"
+                }
+              ]
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Qwen Models - Qwen 3.8 27B",
+      "parent_template_id": "qwen",
+      "readme": "# Qwen Models\n\nAlibaba's open-weight Qwen models, one variant per GPU size: the newest Qwen that fits each.\n\n## Variants\n\n### Qwen 3.5 9B\n- **Engine**: Ollama, `qwen3.5:9b` (6.6 GB)\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~9 GB, for 10 GB GPUs and up\n\n### Qwen 3.8 27B\nQwen3.8-27B is a 27-billion-parameter dense model, released in August 2026 under Apache 2.0, with strong coding and agentic results for its size.\n\n- **Engine**: Ollama, `qwen3.8:27b` (4-bit, 18 GB)\n- **Context**: Ollama sizes it to the free GPU memory\n- **Modalities**: Text, Image\n- **VRAM Required**: ~23 GB, fits a 24 GB GPU such as the RTX 4090 or 3090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 32K context\n- **Engine**: vLLM, AWQ 4-bit weights ([cyankiwi/Qwen3.8-27B-AWQ-INT4](https://huggingface.co/cyankiwi/Qwen3.8-27B-AWQ-INT4)), about 19 GB loaded\n- **Context**: 32K tokens, 4 concurrent requests\n- **VRAM Required**: ~28 GB, for 32 GB GPUs such as the RTX 5090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 128K context\n- **Engine**: vLLM, the same AWQ 4-bit weights\n- **Context**: 128K tokens, 8 concurrent requests\n- **VRAM Required**: ~45 GB, for 48 GB GPUs and up\n\nThe vLLM variants are the setup that serves Qwen 3.8 on the Nosana LLM gateway: FP8 KV cache, tool calling (`qwen3_xml`) and reasoning output (`qwen3`), served as `qwen3.8-27b` on port 8000. Their context length and concurrency are global variables (`MAX_MODEL_LEN`, `MAX_NUM_SEQS`, `GPU_MEM_UTIL`) at the top of the job definition. In vLLM the AWQ weights alone take about 19 GB, too much of a 24 GB card to leave room for the cache, so 24 GB cards use the Ollama variant.\n\n## Usage\n\nThe Ollama variants serve on port 11434 and the vLLM variants on port 8000, both with an OpenAI-compatible `POST /v1/chat/completions`.\n\n```bash\ncurl https://your-deployment-url/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"qwen3.8:27b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Write a function that reverses a linked list.\"}],\n    \"max_tokens\": 1024\n  }'\n```\n\nFor the vLLM variants, use `\"model\": \"qwen3.8-27b\"`.\n",
+      "variants": null,
+      "vram_requirement": 23552
+    },
+    {
+      "category": "Official|API|LLM|Ollama|vLLM",
+      "cuda_requirement": null,
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Qwen_logo.svg/3840px-Qwen_logo.svg.png",
+      "id": "qwen-27b-32k",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "GPU_MEM_UTIL": "0.90",
+            "MAX_MODEL_LEN": "32768",
+            "MAX_NUM_SEQS": "4"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 28672
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "/models/qwen3.8-27b-awq",
+                "--served-model-name",
+                "qwen3.8-27b",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000",
+                "--max-model-len",
+                "%%global.variables.MAX_MODEL_LEN%%",
+                "--gpu-memory-utilization",
+                "%%global.variables.GPU_MEM_UTIL%%",
+                "--max-num-seqs",
+                "%%global.variables.MAX_NUM_SEQS%%",
+                "--kv-cache-dtype",
+                "fp8",
+                "--mm-encoder-attn-backend",
+                "TORCH_SDPA",
+                "--enable-auto-tool-choice",
+                "--tool-call-parser",
+                "qwen3_xml",
+                "--reasoning-parser",
+                "qwen3"
+              ],
+              "entrypoint": [
+                "vllm",
+                "serve"
+              ],
+              "env": {
+                "HF_HUB_OFFLINE": "1",
+                "VLLM_LOGGING_LEVEL": "INFO"
+              },
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": true,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/health",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 8000
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/vllm/vllm-openai:v0.32.0",
+              "resources": [
+                {
+                  "files": [
+                    "chat_template.jinja",
+                    "config.json",
+                    "generation_config.json",
+                    "merges.txt",
+                    "model-00001-of-00005.safetensors",
+                    "model-00002-of-00005.safetensors",
+                    "model-00003-of-00005.safetensors",
+                    "model-00004-of-00005.safetensors",
+                    "model-00005-of-00005.safetensors",
+                    "model.safetensors.index.json",
+                    "preprocessor_config.json",
+                    "tokenizer.json",
+                    "tokenizer_config.json",
+                    "video_preprocessor_config.json",
+                    "vocab.json"
+                  ],
+                  "repo": "cyankiwi/Qwen3.8-27B-AWQ-INT4",
+                  "target": "/models/qwen3.8-27b-awq",
+                  "type": "HF"
+                }
+              ],
+              "restart_policy": {
+                "policy": "on-failure",
+                "restart_tries": 3
+              }
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Qwen Models - Qwen 3.8 27B \u00b7 vLLM \u00b7 32K context",
+      "parent_template_id": "qwen",
+      "readme": "# Qwen Models\n\nAlibaba's open-weight Qwen models, one variant per GPU size: the newest Qwen that fits each.\n\n## Variants\n\n### Qwen 3.5 9B\n- **Engine**: Ollama, `qwen3.5:9b` (6.6 GB)\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~9 GB, for 10 GB GPUs and up\n\n### Qwen 3.8 27B\nQwen3.8-27B is a 27-billion-parameter dense model, released in August 2026 under Apache 2.0, with strong coding and agentic results for its size.\n\n- **Engine**: Ollama, `qwen3.8:27b` (4-bit, 18 GB)\n- **Context**: Ollama sizes it to the free GPU memory\n- **Modalities**: Text, Image\n- **VRAM Required**: ~23 GB, fits a 24 GB GPU such as the RTX 4090 or 3090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 32K context\n- **Engine**: vLLM, AWQ 4-bit weights ([cyankiwi/Qwen3.8-27B-AWQ-INT4](https://huggingface.co/cyankiwi/Qwen3.8-27B-AWQ-INT4)), about 19 GB loaded\n- **Context**: 32K tokens, 4 concurrent requests\n- **VRAM Required**: ~28 GB, for 32 GB GPUs such as the RTX 5090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 128K context\n- **Engine**: vLLM, the same AWQ 4-bit weights\n- **Context**: 128K tokens, 8 concurrent requests\n- **VRAM Required**: ~45 GB, for 48 GB GPUs and up\n\nThe vLLM variants are the setup that serves Qwen 3.8 on the Nosana LLM gateway: FP8 KV cache, tool calling (`qwen3_xml`) and reasoning output (`qwen3`), served as `qwen3.8-27b` on port 8000. Their context length and concurrency are global variables (`MAX_MODEL_LEN`, `MAX_NUM_SEQS`, `GPU_MEM_UTIL`) at the top of the job definition. In vLLM the AWQ weights alone take about 19 GB, too much of a 24 GB card to leave room for the cache, so 24 GB cards use the Ollama variant.\n\n## Usage\n\nThe Ollama variants serve on port 11434 and the vLLM variants on port 8000, both with an OpenAI-compatible `POST /v1/chat/completions`.\n\n```bash\ncurl https://your-deployment-url/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"qwen3.8:27b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Write a function that reverses a linked list.\"}],\n    \"max_tokens\": 1024\n  }'\n```\n\nFor the vLLM variants, use `\"model\": \"qwen3.8-27b\"`.\n",
+      "variants": null,
+      "vram_requirement": 28672
+    },
+    {
+      "category": "Official|API|LLM|Ollama|vLLM",
+      "cuda_requirement": null,
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Qwen_logo.svg/3840px-Qwen_logo.svg.png",
+      "id": "qwen-27b-128k",
+      "is_variant_template": true,
+      "jobDefinition": {
+        "global": {
+          "variables": {
+            "GPU_MEM_UTIL": "0.90",
+            "MAX_MODEL_LEN": "131072",
+            "MAX_NUM_SEQS": "8"
+          }
+        },
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 46080
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "/models/qwen3.8-27b-awq",
+                "--served-model-name",
+                "qwen3.8-27b",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000",
+                "--max-model-len",
+                "%%global.variables.MAX_MODEL_LEN%%",
+                "--gpu-memory-utilization",
+                "%%global.variables.GPU_MEM_UTIL%%",
+                "--max-num-seqs",
+                "%%global.variables.MAX_NUM_SEQS%%",
+                "--kv-cache-dtype",
+                "fp8",
+                "--mm-encoder-attn-backend",
+                "TORCH_SDPA",
+                "--enable-auto-tool-choice",
+                "--tool-call-parser",
+                "qwen3_xml",
+                "--reasoning-parser",
+                "qwen3"
+              ],
+              "entrypoint": [
+                "vllm",
+                "serve"
+              ],
+              "env": {
+                "HF_HUB_OFFLINE": "1",
+                "VLLM_LOGGING_LEVEL": "INFO"
+              },
+              "expose": [
+                {
+                  "health_checks": [
+                    {
+                      "continuous": true,
+                      "expected_status": 200,
+                      "method": "GET",
+                      "path": "/health",
+                      "type": "http"
+                    }
+                  ],
+                  "port": 8000
+                }
+              ],
+              "gpu": true,
+              "image": "docker.io/vllm/vllm-openai:v0.32.0",
+              "resources": [
+                {
+                  "files": [
+                    "chat_template.jinja",
+                    "config.json",
+                    "generation_config.json",
+                    "merges.txt",
+                    "model-00001-of-00005.safetensors",
+                    "model-00002-of-00005.safetensors",
+                    "model-00003-of-00005.safetensors",
+                    "model-00004-of-00005.safetensors",
+                    "model-00005-of-00005.safetensors",
+                    "model.safetensors.index.json",
+                    "preprocessor_config.json",
+                    "tokenizer.json",
+                    "tokenizer_config.json",
+                    "video_preprocessor_config.json",
+                    "vocab.json"
+                  ],
+                  "repo": "cyankiwi/Qwen3.8-27B-AWQ-INT4",
+                  "target": "/models/qwen3.8-27b-awq",
+                  "type": "HF"
+                }
+              ],
+              "restart_policy": {
+                "policy": "on-failure",
+                "restart_tries": 3
+              }
+            },
+            "id": "server",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Qwen Models - Qwen 3.8 27B \u00b7 vLLM \u00b7 128K context",
+      "parent_template_id": "qwen",
+      "readme": "# Qwen Models\n\nAlibaba's open-weight Qwen models, one variant per GPU size: the newest Qwen that fits each.\n\n## Variants\n\n### Qwen 3.5 9B\n- **Engine**: Ollama, `qwen3.5:9b` (6.6 GB)\n- **Context Length**: 256K tokens\n- **Modalities**: Text, Image\n- **VRAM Required**: ~9 GB, for 10 GB GPUs and up\n\n### Qwen 3.8 27B\nQwen3.8-27B is a 27-billion-parameter dense model, released in August 2026 under Apache 2.0, with strong coding and agentic results for its size.\n\n- **Engine**: Ollama, `qwen3.8:27b` (4-bit, 18 GB)\n- **Context**: Ollama sizes it to the free GPU memory\n- **Modalities**: Text, Image\n- **VRAM Required**: ~23 GB, fits a 24 GB GPU such as the RTX 4090 or 3090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 32K context\n- **Engine**: vLLM, AWQ 4-bit weights ([cyankiwi/Qwen3.8-27B-AWQ-INT4](https://huggingface.co/cyankiwi/Qwen3.8-27B-AWQ-INT4)), about 19 GB loaded\n- **Context**: 32K tokens, 4 concurrent requests\n- **VRAM Required**: ~28 GB, for 32 GB GPUs such as the RTX 5090\n\n### Qwen 3.8 27B \u00b7 vLLM \u00b7 128K context\n- **Engine**: vLLM, the same AWQ 4-bit weights\n- **Context**: 128K tokens, 8 concurrent requests\n- **VRAM Required**: ~45 GB, for 48 GB GPUs and up\n\nThe vLLM variants are the setup that serves Qwen 3.8 on the Nosana LLM gateway: FP8 KV cache, tool calling (`qwen3_xml`) and reasoning output (`qwen3`), served as `qwen3.8-27b` on port 8000. Their context length and concurrency are global variables (`MAX_MODEL_LEN`, `MAX_NUM_SEQS`, `GPU_MEM_UTIL`) at the top of the job definition. In vLLM the AWQ weights alone take about 19 GB, too much of a 24 GB card to leave room for the cache, so 24 GB cards use the Ollama variant.\n\n## Usage\n\nThe Ollama variants serve on port 11434 and the vLLM variants on port 8000, both with an OpenAI-compatible `POST /v1/chat/completions`.\n\n```bash\ncurl https://your-deployment-url/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"qwen3.8:27b\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Write a function that reverses a linked list.\"}],\n    \"max_tokens\": 1024\n  }'\n```\n\nFor the vLLM variants, use `\"model\": \"qwen3.8-27b\"`.\n",
+      "variants": null,
+      "vram_requirement": 46080
+    },
+    {
+      "category": "Official|Web UI|API",
+      "cuda_requirement": null,
+      "icon": "https://www.clipartmax.com/png/middle/299-2995960_1-check-for-version-updates-logo-r-studio.png",
+      "id": "rstudio",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "meta": {
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [],
+              "env": {},
+              "expose": 8787,
+              "gpu": true,
+              "image": "docker.io/nosana/rstudio:2.0.0"
+            },
+            "id": "Rocker-rstudio",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "RStudio Server",
+      "parent_template_id": null,
+      "readme": "A professional development environment for R programming accessible through your web browser.\n\nUnleash the power of R development with Nosana! Effortlessly run your RStudio instance on high-performance GPU-backed nodes, ensuring optimal performance for your data science projects.\n\n## Key Features\n- Interactive R environment\n- Package management\n- Data visualization tools\n- Project organization\n- GPU acceleration support\n\n## Configuration\n- Port: 8787\n- GPU: Required\n- Username: rstudio\n- Password: Configurable via environment\n",
+      "variants": null,
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|Web UI|API",
+      "cuda_requirement": null,
+      "icon": "https://user-images.githubusercontent.com/40668801/42043955-fbb838a2-7af7-11e8-9795-7f890e871d13.png",
+      "id": "tf-jupyter",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 4096
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "jupyter",
+                "lab",
+                "--ip=0.0.0.0",
+                "--port=8888",
+                "--no-browser",
+                "--allow-root",
+                "--ServerApp.token=''",
+                "--ServerApp.password=''"
+              ],
+              "expose": 8888,
+              "gpu": true,
+              "image": "docker.io/nosana/tensorflow-jupyter:2.0.0"
+            },
+            "id": "Tf",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Tensorflow Jupyter Notebook",
+      "parent_template_id": null,
+      "readme": "A Jupyter Notebook environment with TensorFlow pre-installed for machine learning development.\n\nUnleash the power of TensorFlow with Nosana! Effortlessly run your Jupyter environment on high-performance GPU-backed nodes, ensuring optimal performance for your ML projects.\n\n## Key Features\n- Interactive Python environment\n- Pre-installed TensorFlow\n- CUDA support\n- Notebook sharing\n- GPU acceleration support\n\n## Configuration\n- Port: 8888\n- GPU: Required\n- No authentication required\n",
+      "variants": null,
+      "vram_requirement": 4096
+    },
+    {
+      "category": "Official|Web UI|API",
+      "cuda_requirement": null,
+      "icon": "https://avatars.githubusercontent.com/u/12324908?s=280&v=4",
+      "id": "vscode-server",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "meta": {
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [],
+              "env": {},
+              "expose": 8080,
+              "gpu": true,
+              "image": "docker.io/nosana/vscode-server:2.0.0"
+            },
+            "id": "Vscode",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "VSCode Server",
+      "parent_template_id": null,
+      "readme": "A full-featured development environment accessible through your web browser.\n\nUnleash the power of cloud development with Nosana! Effortlessly run your VSCode Server instance on high-performance GPU-backed nodes, ensuring optimal development experience for your projects.\n\n## Key Features\n- Full IDE capabilities\n- Extension support\n- Terminal access\n- Git integration\n- GPU acceleration support\n\n## Configuration\n- Port: 8443\n- GPU: Required\n- Password protection\n\n\n\n",
+      "variants": null,
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|Web UI",
+      "cuda_requirement": null,
+      "icon": "https://www.datocms-assets.com/96965/1685731715-open-ai-stars-2x.png",
+      "id": "whisper-asr",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "meta": {
+          "system_requirements": {
+            "vram_total_mb": 5120
+          },
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [
+                "python",
+                "app.py"
+              ],
+              "expose": 7860,
+              "gpu": true,
+              "image": "registry.hf.space/openai-whisper:latest"
+            },
+            "id": "Whisper",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Whisper ASR UI",
+      "parent_template_id": null,
+      "readme": "A robust speech recognition service powered by OpenAI's Whisper model.\n\nUnleash the power of speech recognition with Nosana! Effortlessly run your Whisper ASR instance on high-performance GPU-backed nodes, ensuring optimal transcription for your audio processing needs.\n\n## Key Features\n- Multilingual transcription in around 100 languages\n- Translation of spoken audio into English text\n- Automatic language identification\n- Long-form audio, processed in 30 second chunks\n- Web UI for uploading or recording audio, with a Gradio API for automation\n- GPU acceleration support\n\n## Configuration\n- Port: 7860\n- GPU: Required\n- VRAM: 5 GB\n- Model: [Whisper large-v3](https://huggingface.co/openai/whisper-large-v3) (about 1.5B parameters, MIT license)\n- Image: `registry.hf.space/openai-whisper:latest`, the container of OpenAI's [Whisper Space](https://huggingface.co/spaces/openai/whisper)\n\n## Usage\n1. Open the service URL.\n2. Upload an audio file or record from your microphone.\n3. Choose **transcribe** to get text in the spoken language, or **translate** to get English text.\n4. Submit and copy the result from the output box.\n\n## Notes\n- The image uses the `latest` tag, so the model and interface follow whatever OpenAI's Space currently runs.\n",
+      "variants": null,
+      "vram_requirement": 5120
+    },
+    {
+      "category": "Official|Featured",
+      "cuda_requirement": null,
+      "icon": "https://raw.githubusercontent.com/nosana-ci/pipeline-templates/refs/heads/main/templates/hello-world/nosana.png",
+      "id": "hello-world",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "meta": {
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": "echo hello world",
+              "gpu": true,
+              "image": "ubuntu"
+            },
+            "id": "Hello-world",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Hello World",
+      "parent_template_id": null,
+      "readme": "This is a simple template that prints hello world with the 'ubuntu' docker image. ",
+      "variants": null,
+      "vram_requirement": null
+    },
+    {
+      "category": "Official|Web UI|API|LLM",
+      "cuda_requirement": null,
+      "icon": "https://openwebui.com/user.png",
+      "id": "open-webui",
+      "is_variant_template": false,
+      "jobDefinition": {
+        "meta": {
+          "trigger": "dashboard"
+        },
+        "ops": [
+          {
+            "args": {
+              "cmd": [],
+              "env": {
+                "WEBUI_AUTH": "False",
+                "WEBUI_NAME": "Nosana Chat"
+              },
+              "expose": 8080,
+              "gpu": true,
+              "image": "ghcr.io/open-webui/open-webui:ollama"
+            },
+            "id": "Webui",
+            "type": "container/run"
+          }
+        ],
+        "type": "container",
+        "version": "0.1"
+      },
+      "name": "Open WebUI using Ollama",
+      "parent_template_id": null,
+      "readme": "A user-friendly web interface for interacting with Ollama's language models.\n\nUnleash the power of LLMs with Nosana! Effortlessly run your Open WebUI instance on high-performance GPU-backed nodes, ensuring optimal chat experience for your applications.\n\n## Key Features\n- Multiple model support\n- Chat interface\n- System prompt templates\n- Model management\n- GPU acceleration support\n\n## Configuration\n- Port: 8080\n- GPU: Required\n- No authentication required\n",
+      "variants": null,
+      "vram_requirement": null
+    }
+  ],
+  "http_status": 200
+}

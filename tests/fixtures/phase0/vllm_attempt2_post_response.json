@@ -1,0 +1,14 @@
+{
+  "body": {
+    "credits": {
+      "costUSD": 0.175,
+      "creditsUsed": 175,
+      "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+      "reservationId": "38514b4a-dfbf-4dc4-ac94-b75fcb3b72ee"
+    },
+    "job": "3B4LtaAEUCEDrKWs4RgSPMXcBGvuk645DSxmyNN6795K",
+    "run": "5AqHmudzoyLUyykNj3xb3vkfFF6CacdFp9xQ7XMhEbQA",
+    "tx": "3YQZcH1pfRpvWXJd6XZiWZ2V2KLD5RA8j9LNjFKNcGrantehbQ4CV2avepeg1xR1V6VT3iC9Bz4ixTKLRxTfLdCT"
+  },
+  "http_status": 200
+}

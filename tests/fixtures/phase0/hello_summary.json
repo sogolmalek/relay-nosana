@@ -1,0 +1,59 @@
+{
+  "account": {
+    "address": "GaWjy48VRM4VdTeQk5H8gzFhr49qbN9HBmLFkK8GCQ42",
+    "ipfs_job": "QmNdyDQtZLewTM8NcLrsQyW1NEPKscMamktDr3bYLKQsii",
+    "ipfs_result": "QmRmvbF4doXAPNHcMVGSfxgUhqstz9EYpFGvGVXBJr83xr",
+    "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "node": "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot",
+    "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+    "price": 110,
+    "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+    "state": 2,
+    "state_name": "COMPLETED",
+    "time_end": 1794249669,
+    "time_start": 1794249660,
+    "timeout": 3600
+  },
+  "check_ipfsJob_equals_pinned": true,
+  "credits_reserved_usd": 0.175,
+  "credits_spent_usd": 0.01,
+  "job": "GaWjy48VRM4VdTeQk5H8gzFhr49qbN9HBmLFkK8GCQ42",
+  "job_definition_cid": "QmNdyDQtZLewTM8NcLrsQyW1NEPKscMamktDr3bYLKQsii",
+  "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+  "requested_node": null,
+  "result_bytes": 1409,
+  "result_check": {
+    "exit_codes": [
+      0
+    ],
+    "ok": true,
+    "reasons": [],
+    "status": "success"
+  },
+  "result_cid": "QmRmvbF4doXAPNHcMVGSfxgUhqstz9EYpFGvGVXBJr83xr",
+  "result_exit_codes": [
+    0
+  ],
+  "result_gateway": "https://nosana.mypinata.cloud/ipfs/",
+  "result_logs_contain_hello": true,
+  "result_op_results": [
+    {
+      "hello": [
+        "RELAY_PHASE0_HELLO_7f3a",
+        "RELAY_PHASE0_HELLO_7f3a"
+      ],
+      "input_lines": [
+        "RELAY_INPUT_LINES=3",
+        "3"
+      ],
+      "inputs_sha256": [
+        "RELAY_INPUTS_SHA256=75bb0a9a2e6747d400de4ffd494deb5100a1d2f13c8690a5ba55e770d2090742",
+        "75bb0a9a2e6747d400de4ffd494deb5100a1d2f13c8690a5ba55e770d2090742"
+      ]
+    }
+  ],
+  "run": "C4D3wScmN4KKoGR9zs64EkUVkPf3jnbUn7bcoGmPmP3v",
+  "tx": "UVzQUtgWMuTWU1H8aUV6QWsnumaxRjQ1HL9epkPaUFk4767Yap5W4qKSe2CRt5i6EYZRzC1YKcWVDuwc6C3xFyA",
+  "wall_post_to_done_s": 20.9,
+  "wall_post_to_running_s": null
+}

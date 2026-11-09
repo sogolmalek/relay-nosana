@@ -1,0 +1,32 @@
+{
+  "local_cidv0": "QmNdyDQtZLewTM8NcLrsQyW1NEPKscMamktDr3bYLKQsii",
+  "nosana_pinFileToIPFS": {
+    "body": {
+      "GroupId": null,
+      "ID": "01a1c186-4bc3-73c0-a2b2-0caa999f04e1",
+      "IpfsHash": "QmNdyDQtZLewTM8NcLrsQyW1NEPKscMamktDr3bYLKQsii",
+      "Keyvalues": null,
+      "MimeType": "application/json",
+      "Name": "relay-phase0-hello.json",
+      "NumberOfFiles": 1,
+      "PinSize": 975,
+      "Timestamp": "2026-11-09T18:16:06.592Z"
+    },
+    "http_status": 200
+  },
+  "own_pinFileToIPFS": {
+    "body": {
+      "GroupId": null,
+      "ID": "01a1c177-a3e7-7692-9c66-9ed397e28507",
+      "IpfsHash": "QmNdyDQtZLewTM8NcLrsQyW1NEPKscMamktDr3bYLKQsii",
+      "Keyvalues": null,
+      "MimeType": "application/json",
+      "Name": "relay-phase0-hello.json",
+      "NumberOfFiles": 1,
+      "PinSize": 975,
+      "Timestamp": "2026-11-09T18:00:06.314Z",
+      "isDuplicate": true
+    },
+    "http_status": 200
+  }
+}

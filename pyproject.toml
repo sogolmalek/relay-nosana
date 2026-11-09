@@ -30,7 +30,7 @@ relay = "relay_nosana.cli:app"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["relay_nosana*"]
+include = ["relay_nosana*", "relay_verify*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

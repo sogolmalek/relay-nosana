@@ -1,0 +1,140 @@
+{
+  "body": [
+    {
+      "address": "9HnJacS25TnErsKMYJmKqWeCAMYuwY7gzhz9Eqhp5VE7",
+      "name": "NVIDIA 5080",
+      "usd_reward_per_hour": 0.19998
+    },
+    {
+      "address": "An4tqwD3mTzRipAdVxqSNrTtGfiqRh9DSgUjZ86zNrDa",
+      "name": "zephyr-skyline NVIDIA 4090",
+      "usd_reward_per_hour": 0.385
+    },
+    {
+      "address": "RXP7JK8MTY4uPJng4UjC9ZJdDDSG6wGr8pvVf3mwgXF",
+      "name": "NVIDIA 3070",
+      "usd_reward_per_hour": 0.07997000000000001
+    },
+    {
+      "address": "7AtiXMSH6R1jjBxrcYjehCkkSF7zvYWte63gwEDBcGHq",
+      "name": "NVIDIA 3060",
+      "usd_reward_per_hour": 0.04796
+    },
+    {
+      "address": "5CRDSHGzMtGCohobfvLU3p1h7uKvAzuLpGKrfutLz3U5",
+      "name": "4090 (Reserved)",
+      "usd_reward_per_hour": 0.77
+    },
+    {
+      "address": "6Xt8hgVLLL2PSHC9NtJP8E8oTdA5ZJc95hZEnHcdqKqb",
+      "name": "NVIDIA 5090",
+      "usd_reward_per_hour": 0.49995000000000006
+    },
+    {
+      "address": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+      "name": "NVIDIA 3090",
+      "usd_reward_per_hour": 0.19195
+    },
+    {
+      "address": "47LQHZwT7gfVoBDYnRYhsYv6vKk8a1oW3Y3SdHAp1gTr",
+      "name": "NVIDIA 4060",
+      "usd_reward_per_hour": 0.06402000000000001
+    },
+    {
+      "address": "37VPcEfrA34vLRygFQd7bWiosBwv3a5jPv4hcXdumytC",
+      "name": "NVIDIA Pro 6000 (6x)",
+      "usd_reward_per_hour": 13.200000000000001
+    },
+    {
+      "address": "EuYwNdSDduvFuTTS4fEgNL23rZRaTMbecM1J6fJJoQR1",
+      "name": "NVIDIA Pro 6000 Server Edition (CC)",
+      "usd_reward_per_hour": 2.343
+    },
+    {
+      "address": "5eX3kWkrcbwejEc1svbfP4F7NKYjtPDuyU5KnV1hUBKg",
+      "name": "NVIDIA 5070",
+      "usd_reward_per_hour": 0.15004
+    },
+    {
+      "address": "31P9d5ahEY9iSmZuXJ2xwJsbRztFK5AUCdkvgziUM3vn",
+      "name": "ember-drift NVIDIA 4090",
+      "usd_reward_per_hour": 0.40700000000000003
+    },
+    {
+      "address": "BLqSzPzcXMX5gseNXE4Ma45f31Eo6tNFVYoRmPG7kxP2",
+      "name": "NVIDIA A40",
+      "usd_reward_per_hour": 0.39996
+    },
+    {
+      "address": "C8JnyH6qhid3EaovSwb8JTkwAGP5n6GGqkktrazuKDqC",
+      "name": "silent-ridge NVIDIA 4090",
+      "usd_reward_per_hour": 0.31999
+    },
+    {
+      "address": "7fnuvPYzfd961iRDPRgMSKLrUf1QjTGnn7viu3P12Zuc",
+      "name": "NVIDIA 4000/A4000",
+      "usd_reward_per_hour": 0.12804000000000001
+    },
+    {
+      "address": "77wdaAuYVxBW5u2QiqddkAzoBZ5cuKxH9ZCbx5HfFUb2",
+      "name": "NVIDIA 4080",
+      "usd_reward_per_hour": 0.16005
+    },
+    {
+      "address": "6eMivCx49anWFYwNgg8KNJQfSJYB5nBdif8CK6z52dem",
+      "name": "NVIDIA 6000 Ada",
+      "usd_reward_per_hour": 0.70004
+    },
+    {
+      "address": "FNchga9tXmcQU1DXCWapysjMCgUioiY6vQAb38Ts612K",
+      "name": "NVIDIA 4090 SEV TEE",
+      "usd_reward_per_hour": 0.55
+    },
+    {
+      "address": "7RepDm4Xt9k6qV5oiSHvi8oBoty4Q2tfBGnCYjFLj6vA",
+      "name": "NVIDIA 3080",
+      "usd_reward_per_hour": 0.09603
+    },
+    {
+      "address": "EjryZ6XEthz3z7nnLfjXBYafyn7VyHgChfbfM47LfAao",
+      "name": "NVIDIA A6000",
+      "usd_reward_per_hour": 0.39996
+    },
+    {
+      "address": "97G9NnvBDQ2WpKu6fasoMsAKmfj63C9rhysJnkeWodAf",
+      "name": "NVIDIA 4090",
+      "usd_reward_per_hour": 0.39996
+    },
+    {
+      "address": "Crop49jpc7prcgAcS82WbWyGHwbN5GgDym3uFbxxCTZg",
+      "name": "NVIDIA H100",
+      "usd_reward_per_hour": 1.49996
+    },
+    {
+      "address": "4uBye3vJ1FAYukDdrvqQ36MZZZxqW3o8utWu8fyomRuN",
+      "name": "NVIDIA 5000/A5000",
+      "usd_reward_per_hour": 0.19998
+    },
+    {
+      "address": "F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB",
+      "name": "NVIDIA A100 40GB",
+      "usd_reward_per_hour": 0.60995
+    },
+    {
+      "address": "GLJHzqRN9fKGBsvsFzmGnaQGknUtLN1dqaFR8n3YdM22",
+      "name": "NVIDIA A100 80GB",
+      "usd_reward_per_hour": 0.8999100000000001
+    },
+    {
+      "address": "EzuHhkrhmV98HWzREsgLenKj2iHdJgrKmzfL8psP8Aso",
+      "name": "NVIDIA 4070",
+      "usd_reward_per_hour": 0.09603
+    },
+    {
+      "address": "Ekro9NTNqLbnMkN7x7y2rY9AeTkazcHj2PPaTxT1Cogz",
+      "name": "NVIDIA Pro 6000 (SOC2)",
+      "usd_reward_per_hour": 2.24301
+    }
+  ],
+  "http_status": 200
+}

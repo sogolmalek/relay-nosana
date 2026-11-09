@@ -1,0 +1,67 @@
+{
+  "account": {
+    "address": "Hs7FRTa6EgiKxNdqaG7rnhpkSu8QpyYaceRrRsbGyN1z",
+    "ipfs_job": "QmUauK6wymj8rWJekQ1xeY7Rj5BtJQUoYqbKoenxeThdyK",
+    "ipfs_result": "QmdbWUk9R4hqtWqXr48KDPh1sWQypvMoRRswVmWYEEDiTZ",
+    "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "node": "3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV",
+    "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+    "price": 111,
+    "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+    "state": 2,
+    "state_name": "COMPLETED",
+    "time_end": 1794253631,
+    "time_start": 1794252327,
+    "timeout": 3600
+  },
+  "check_ipfsJob_equals_pinned": true,
+  "credits_reserved_usd": 0.175,
+  "credits_spent_usd": 0.01,
+  "job": "Hs7FRTa6EgiKxNdqaG7rnhpkSu8QpyYaceRrRsbGyN1z",
+  "job_definition_cid": "QmUauK6wymj8rWJekQ1xeY7Rj5BtJQUoYqbKoenxeThdyK",
+  "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+  "requested_node": null,
+  "result_bytes": 7148,
+  "result_check": {
+    "exit_codes": [
+      0
+    ],
+    "ok": true,
+    "reasons": [],
+    "status": "success"
+  },
+  "result_cid": "QmdbWUk9R4hqtWqXr48KDPh1sWQypvMoRRswVmWYEEDiTZ",
+  "result_exit_codes": [
+    0
+  ],
+  "result_gateway": "https://nosana.mypinata.cloud/ipfs/",
+  "result_logs_contain_hello": false,
+  "result_op_results": [
+    {
+      "gen_s": [
+        "RELAY_T_GEN_S=3.1",
+        "3.1"
+      ],
+      "import_s": [
+        "RELAY_T_IMPORT_S=10.8",
+        "10.8"
+      ],
+      "load_s": [
+        "RELAY_T_LOAD_S=1233.3",
+        "1233.3"
+      ],
+      "output_sha256": [
+        "RELAY_OUTPUT_SHA256=b24d6d33736ecd5604a4b17bc9c6481039fac362bb7df044ef1c10a2bfd21db6",
+        "b24d6d33736ecd5604a4b17bc9c6481039fac362bb7df044ef1c10a2bfd21db6"
+      ],
+      "vllm_version": [
+        "RELAY_VLLM_VERSION=0.10.2",
+        "0.10.2"
+      ]
+    }
+  ],
+  "run": "GesDJSKDj2GLdnw4aJ6tNHWN3tprfSxZMteugg9xo1Fy",
+  "tx": "4BcYVNhsJW6HqXU91Mp74E2aibDSZZNfhjG3QypLE2v9wJAVM1Jp54156ebZ2Exotjj7SSGNoQKLZ5EVFeftrtXy",
+  "wall_post_to_done_s": 1322.0,
+  "wall_post_to_running_s": 3.7
+}

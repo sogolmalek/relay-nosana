@@ -1,0 +1,15 @@
+{
+  "address": "5tRB9eAwPVjkTmVbF5Btsox1mJUYuHc73r4rxYooHG28",
+  "ipfs_job": "QmPqLnev7ArRxtyQspah5YxsxCqYHpBM5aAaLYQmk3qg8V",
+  "ipfs_result": "QmULPxYhbtrGKtRN8nqqY8L7saCxaBgdUJiWnsZuffRVQ4",
+  "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+  "node": "6YDndB2aWPEK5vDdvJCVHPe9hs7Lf7ZXyQbHADY2FmKC",
+  "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+  "price": 110,
+  "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+  "state": 2,
+  "state_name": "COMPLETED",
+  "time_end": 1794250043,
+  "time_start": 1794249854,
+  "timeout": 3600
+}
