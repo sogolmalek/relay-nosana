@@ -163,13 +163,16 @@ verifies, and 18 of the 21 record a wrong answer. The bar is what stops these pa
 ## How to reproduce
 
 ```bash
-cd ~/relay-nosana && set -a && . ./.env && set +a
-.venv/bin/python -m relay_nosana.payouts.run_poc prepare  --run-id payouts-2026-11-10
-.venv/bin/python -m relay_nosana.payouts.run_poc nosana   --run-id payouts-2026-11-10 --max-attempts 6
-.venv/bin/python -m relay_nosana.payouts.run_poc declared --run-id payouts-2026-11-10
-.venv/bin/python -m relay_nosana.payouts.run_poc issue    --run-id payouts-2026-11-10
-.venv/bin/python -m relay_nosana.payouts.run_poc verify   --run-id payouts-2026-11-10
-.venv/bin/python -m relay_nosana.payouts.run_poc export   --run-id payouts-2026-11-10
+cd ~/relay-nosana
+# Never source .env as a script: a line that isn't valid shell prints its value. with_env loads
+# .env with a parser (python-dotenv, already in the venv), prints nothing, and runs the command.
+with_env() { .venv/bin/python -c 'import os, sys, dotenv; os.environ.update({k: v for k, v in dotenv.dotenv_values(".env").items() if v is not None}); os.execvp(sys.argv[1], sys.argv[1:])' "$@"; }
+with_env .venv/bin/python -m relay_nosana.payouts.run_poc prepare  --run-id payouts-2026-11-10
+with_env .venv/bin/python -m relay_nosana.payouts.run_poc nosana   --run-id payouts-2026-11-10 --max-attempts 6
+with_env .venv/bin/python -m relay_nosana.payouts.run_poc declared --run-id payouts-2026-11-10
+with_env .venv/bin/python -m relay_nosana.payouts.run_poc issue    --run-id payouts-2026-11-10
+with_env .venv/bin/python -m relay_nosana.payouts.run_poc verify   --run-id payouts-2026-11-10
+with_env .venv/bin/python -m relay_nosana.payouts.run_poc export   --run-id payouts-2026-11-10
 .venv/bin/relay-verify runs/payouts-2026-11-10/receipts/P-0101.json
 ```
 
