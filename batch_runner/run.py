@@ -128,8 +128,12 @@ def parse_inputs(gz_b64):
     return raw, [json.loads(line) for line in raw.decode("utf-8").splitlines() if line.strip()]
 
 
-def parse_output(text, schema):
-    """Parsed output, or {"parse_error": true} when the text isn't a JSON object with the schema's keys."""
+RAW_MAX = 600  # output_raw kept per row (the result must stay one IPFS block, <= 256 KiB)
+
+
+def parse_output(text, schema, keys=None):
+    """Parsed output, or {"parse_error": true} when the text isn't a JSON object with the schema's keys.
+    With `keys`, only those keys are kept: what the receipt hashes (Phase 1b: not the reasoning)."""
     try:
         obj = json.loads(text.strip())
     except Exception:
@@ -143,16 +147,22 @@ def parse_output(text, schema):
         for key, spec in props.items():
             if "enum" in spec and obj[key] not in spec["enum"]:
                 return {"parse_error": True}
-    return obj
+    return {k: obj[k] for k in keys} if keys else obj
 
 
-def build_outputs(inputs, texts, schema):
-    """outputs.jsonl rows (sorted by item_id) and the Merkle root, from raw model texts."""
+def build_outputs(inputs, texts, schema, keys=None, meta=None):
+    """outputs.jsonl rows (sorted by item_id) and the Merkle root, from raw model texts. `meta` (per item:
+    token counts, finish reason) goes into the row but not into output_sha256 or the Merkle leaf."""
     rows = []
-    for inp, text in zip(inputs, texts):
-        out = parse_output(text, schema)
-        rows.append({"item_id": inp["item_id"], "input_sha256": sha256_hex(inp), "output": out,
-                     "output_raw": text, "output_sha256": sha256_hex(out)})
+    for i, (inp, text) in enumerate(zip(inputs, texts)):
+        out = parse_output(text, schema, keys)
+        row = {"item_id": inp["item_id"], "input_sha256": sha256_hex(inp), "output": out,
+               "output_raw": text[:RAW_MAX], "output_sha256": sha256_hex(out)}
+        if len(text) > RAW_MAX:
+            row["output_raw_truncated"] = len(text)
+        if meta:
+            row.update(meta[i])
+        rows.append(row)
     rows.sort(key=lambda r: r["item_id"])
     return rows, merkle_root(rows)
 
@@ -231,9 +241,13 @@ def main():
     print("RELAY_GUIDED=%s" % mode, flush=True)
     outs = llm.chat([inp["messages"] for inp in inputs], params, use_tqdm=False)
     texts = [o.outputs[0].text for o in outs]
+    meta = [{"tokens_in": len(getattr(o, "prompt_token_ids", None) or []),
+             "tokens_out": len(getattr(o.outputs[0], "token_ids", None) or []),
+             "finish": getattr(o.outputs[0], "finish_reason", None)} for o in outs]
     t3 = time.time()
     print("RELAY_T_GEN_S=%.1f" % (t3 - t2), flush=True)
-    rows, root = build_outputs(inputs, texts, schema)
+    keys = [k for k in os.environ.get("RELAY_OUTPUT_KEYS", "").split(",") if k] or None
+    rows, root = build_outputs(inputs, texts, schema, keys, meta)
     for row in rows:
         print("RELAY_OUT " + canonical(row).decode("utf-8"), flush=True)
     summary = {"merkle_root": root, "count": len(rows), "model": model, "revision": revision,

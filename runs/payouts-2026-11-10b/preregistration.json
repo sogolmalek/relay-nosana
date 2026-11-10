@@ -1,0 +1,85 @@
+{
+  "arms": {
+    "compiled": "Compiled arm: only decisions that reference this payout's seller_id or one of its SKUs, plus the\n    global rules (the refund-approval rule applies to every payout). Selected by reference, never by the answer.",
+    "raw": "Raw arm: every decision in the ledger, for every payout."
+  },
+  "bar": {
+    "ci_lower_gte": 0.9,
+    "metric": "accuracy_vs_ground_truth"
+  },
+  "cap_usd": 2.0,
+  "data": "synthetic",
+  "expectation": "compiled > raw (Phase 1: raw-style context, no reasoning, 4/30)",
+  "generation_key_order": [
+    "reasoning",
+    "decision",
+    "reason_code"
+  ],
+  "hashed_output_keys": [
+    "decision",
+    "reason_code"
+  ],
+  "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+  "inputs_cid": "QmQYakJhc8JFDHqataz2mzrwp5i61mMuF4hVWDsV8ZGpW9",
+  "inputs_sha256": "6a1edaae6e589f7743352dcb2fe2f8069718b9881a1ef314aeb1266615186014",
+  "job_definition_cid": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+  "model": "Qwen/Qwen2.5-7B-Instruct@a09a35458c702b33eeacc393d103063234e8bc28",
+  "nodes": "known-good node list per market from measured outcomes (relay_nosana/nosana/nodes.py), open market as fallback; in-container deadline 20 min",
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "decision": {
+        "enum": [
+          "approve",
+          "hold"
+        ],
+        "type": "string"
+      },
+      "reason_code": {
+        "enum": [
+          "ok",
+          "seller_on_hold",
+          "duplicate",
+          "amount_mismatch",
+          "stale_price",
+          "needs_approval"
+        ],
+        "type": "string"
+      },
+      "reasoning": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "decision",
+      "reason_code"
+    ],
+    "type": "object"
+  },
+  "params": {
+    "guided_json": true,
+    "max_tokens": 256,
+    "seed": 0,
+    "temperature": 0
+  },
+  "payouts": 60,
+  "phase": "1b",
+  "plan": "Phase 1 label mix x2",
+  "rerun": {
+    "always_if": {
+      "amount_usd_gt": 5000
+    },
+    "sample_min": 15,
+    "sample_rate": 0.1
+  },
+  "rerun_arm": "compiled",
+  "routing": "compiled arm if its CI lower bound >= 0.90, else human review for payouts > $500",
+  "rule_snapshot_sha256": "2b8892f58c3b81ba3d061d2cb830d289e77a254166ae8584a354aa27f9489f16",
+  "run_id": "payouts-2026-11-10b",
+  "scoring": "exact match of {decision, reason_code} against data.truth(); per arm over all 60 payouts, Wilson 95% CI; also the > $500 subset; paired discordant counts with an exact two-sided binomial (sign) test",
+  "seed": 20261110,
+  "system_prompt_sha256": "592015eb9b42ed45f290eaf52904d14e04cacc2d3c2f90439dc9b2de9b5a5b91",
+  "why_60": "Wilson 95% lower bound for 30/30 is 0.886 < 0.90; at n = 60, 59/60 gives 0.911",
+  "written_at": "2026-11-10T08:55:37Z"
+}

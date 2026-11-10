@@ -31,6 +31,58 @@ If none applies, approve with reason_code "ok". A hold always names the rule tha
 Reply with JSON only: {"decision": "approve" | "hold", "reason_code": "ok" | "seller_on_hold" | "duplicate" | "amount_mismatch" | "stale_price" | "needs_approval"}"""
 
 
+# ---------------------------------------------------------------- Phase 1b: reasoning first, two arms
+
+# Key order matters: guided decoding writes the keys in this order, so the model reasons before it
+# commits to a decision. The job definition carries this schema with its key order kept (not JCS).
+OUTPUT_SCHEMA_1B = {
+    "type": "object",
+    "properties": {
+        "reasoning": {"type": "string"},
+        "decision": {"type": "string", "enum": ["approve", "hold"]},
+        "reason_code": {"type": "string", "enum": REASONS},
+    },
+    "required": ["reasoning", "decision", "reason_code"],
+    "additionalProperties": False,
+}
+# What the receipts hash (output_sha256, the Merkle leaf): the parsed decision only, not the reasoning.
+OUTPUT_KEYS_1B = ["decision", "reason_code"]
+MAX_TOKENS_1B = 256  # the same budget for both arms
+
+SYSTEM_1B = SYSTEM.replace(
+    """Reply with JSON only: {"decision": "approve" | "hold", "reason_code": "ok" | "seller_on_hold" | "duplicate" | "amount_mismatch" | "stale_price" | "needs_approval"}""",
+    """Reply with JSON only: {"reasoning": "<at most 60 words: check each rule in order against this payout's own fields>", "decision": "approve" | "hold", "reason_code": "ok" | "seller_on_hold" | "duplicate" | "amount_mismatch" | "stale_price" | "needs_approval"}""")
+assert SYSTEM_1B != SYSTEM
+
+ARMS = ("raw", "compiled")
+
+
+def decisions_raw(payout: dict) -> list[dict]:
+    """Raw arm: every decision in the ledger, for every payout."""
+    return [{"id": d["id"], "date": d["date"], "text": d["text"]} for d in DECISIONS]
+
+
+def decisions_compiled(payout: dict) -> list[dict]:
+    """Compiled arm: only decisions that reference this payout's seller_id or one of its SKUs, plus the
+    global rules (the refund-approval rule applies to every payout). Selected by reference, never by the answer."""
+    skus = {x.get("sku") for x in payout["lines"]}
+    out = []
+    for d in DECISIONS:
+        if (d["kind"] == "price_change" and d["sku"] in skus) \
+                or (d["kind"] == "seller_hold" and d["seller"] == payout["seller_id"]) \
+                or d["kind"] == "refund_approval":
+            out.append({"id": d["id"], "date": d["date"], "text": d["text"]})
+    return out
+
+
+def input_line_1b(payout: dict, paid_invoices: dict[str, list[str]], arm: str, seed: int = 0) -> dict:
+    sel = {"raw": decisions_raw, "compiled": decisions_compiled}[arm]
+    return {"item_id": f"{payout['payout_id']}/{arm}", "task": TASK, "arm": arm,
+            "messages": [{"role": "system", "content": SYSTEM_1B},
+                         {"role": "user", "content": user_message(payout, paid_invoices, sel(payout))}],
+            "params": {"temperature": 0, "max_tokens": MAX_TOKENS_1B, "seed": seed}}
+
+
 def _line_view(x: dict) -> dict:
     if x["type"] == "sale":
         return {"type": "sale", "sku": x["sku"], "product": SKUS[x["sku"]]["name"], "qty": x["qty"],
@@ -56,12 +108,12 @@ def decisions_for(payout: dict) -> list[dict]:
     return out
 
 
-def user_message(payout: dict, paid_invoices: dict[str, list[str]]) -> str:
+def user_message(payout: dict, paid_invoices: dict[str, list[str]], decisions: list[dict] | None = None) -> str:
     view = {"payout_id": payout["payout_id"], "payout_date": payout["payout_date"], "seller_id": payout["seller_id"],
             "invoice_id": payout["invoice_id"], "currency": payout["currency"],
             "amount_usd": usd(payout["amount_cents"]), "lines": [_line_view(x) for x in payout["lines"]]}
     import json
-    return ("Decisions in force:\n" + json.dumps(decisions_for(payout), indent=1)
+    return ("Decisions in force:\n" + json.dumps(decisions_for(payout) if decisions is None else decisions, indent=1)
             + f"\n\nPaid invoices for seller {payout['seller_id']}: "
             + json.dumps(paid_invoices.get(payout["seller_id"], []))
             + "\n\nPayout:\n" + json.dumps(view, indent=1))

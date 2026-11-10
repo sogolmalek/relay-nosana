@@ -50,6 +50,13 @@ PLAN = (
 )
 
 
+# Phase 1b (2026-11-10): a fresh seed, never used before, and the Phase 1 label mix doubled to 60 payouts.
+# 60 because the bar (Wilson 95% lower bound >= 0.90) can't be reached at n = 30 even with 30/30 (0.886);
+# at n = 60 it is reached with at most one error (59/60 -> 0.911).
+SEED_1B = 20261110
+PLAN_1B = PLAN * 2
+
+
 def usd(cents: int) -> str:
     sign = "-" if cents < 0 else ""
     return f"{sign}{abs(cents) // 100}.{abs(cents) % 100:02d}"
@@ -115,11 +122,12 @@ def _base_lines(rng, band):
     return lines
 
 
-def generate(seed: int = SEED) -> dict:
+def generate(seed: int = SEED, plan: list | tuple = PLAN) -> dict:
     rng = random.Random(seed)
-    plan = list(PLAN)
+    plan = list(plan)
     rng.shuffle(plan)
-    normal_sellers = [f"S-{n}" for n in range(101, 140) if f"S-{n}" not in ("S-114",)]
+    # 101..139 for the 30-payout plan (unchanged from Phase 1); more sellers for a longer plan
+    normal_sellers = [f"S-{n}" for n in range(101, max(140, 110 + len(plan))) if f"S-{n}" not in ("S-114",)]
     rng.shuffle(normal_sellers)
     paid_invoices: dict[str, list[str]] = {}
     payouts = []

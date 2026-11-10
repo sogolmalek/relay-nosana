@@ -44,9 +44,11 @@ def test_cid_digest_roundtrip_and_change_detected():
     assert cidv0_of_bytes(b'{"a":2}') != cid
 
 
-def test_cid_rejects_multiblock():
-    with pytest.raises(ValueError):
-        cidv0_of_bytes(b"x" * (262144 + 1))
+def test_cid_multiblock_one_level_only():
+    # two chunks: a balanced root with two links (checked against Pinata in tests/test_phase1b.py)
+    assert cidv0_of_bytes(b"x" * (262144 + 1)) != cidv0_of_bytes(b"x" * 262144)
+    with pytest.raises(ValueError):  # more than 174 chunks needs a second DAG level
+        cidv0_of_bytes(b"x" * (262144 * 174 + 1))
 
 
 def _fake_job_bytes(state=2, t_start=1_700_000_000, t_end=1_700_000_300):

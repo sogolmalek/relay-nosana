@@ -7,6 +7,7 @@ from __future__ import annotations
 import base64
 import gzip
 import hashlib
+import json
 from pathlib import Path
 
 from relay_verify.cid import cidv0_of_bytes
@@ -38,15 +39,21 @@ def inputs_bytes(lines: list[dict]) -> bytes:
 
 
 def build(lines: list[dict], schema: dict, run_id: str, tag: str, task: str,
-          image: str = IMAGE, model: str = MODEL, revision: str = REVISION) -> tuple[dict, bytes, str]:
-    """(job definition, inputs.jsonl bytes, inputs CID)."""
+          image: str = IMAGE, model: str = MODEL, revision: str = REVISION, *, phase: str = "1",
+          keep_schema_order: bool = False, output_keys: list[str] | None = None,
+          deadline_s: int = 2700) -> tuple[dict, bytes, str]:
+    """(job definition, inputs.jsonl bytes, inputs CID).
+    keep_schema_order: pass the schema with its key order as written (guided decoding generates keys in
+    schema order; JCS would sort `reasoning` after `decision`). output_keys: what the receipts hash."""
+    schema_bytes = (json.dumps(schema, separators=(",", ":"), ensure_ascii=False).encode()
+                    if keep_schema_order else canonical(schema))
     raw = inputs_bytes(lines)
     inputs_cid = cidv0_of_bytes(raw)
     runner = RUNNER.read_text()
     jd = {
         "version": "0.1",
         "meta": {"trigger": "api", "relay": {
-            "phase": "1", "run_id": run_id, "tag": tag, "task": task, "count": len(lines),
+            "phase": phase, "run_id": run_id, "tag": tag, "task": task, "count": len(lines),
             "inputs_cid": inputs_cid, "inputs_sha256": hashlib.sha256(raw).hexdigest(),
             "runner_sha256": hashlib.sha256(runner.encode()).hexdigest(),
             "data": "synthetic"}},
@@ -61,10 +68,11 @@ def build(lines: list[dict], schema: dict, run_id: str, tag: str, task: str,
                     "MODEL": model, "REVISION": revision,
                     "RELAY_INPUTS_GZ_B64": base64.b64encode(gzip.compress(raw, mtime=0)).decode(),
                     # base64: a raw JSON env value reached the container altered (Phase 1, batch attempt 1)
-                    "RELAY_OUTPUT_SCHEMA_B64": base64.b64encode(canonical(schema)).decode(),
+                    "RELAY_OUTPUT_SCHEMA_B64": base64.b64encode(schema_bytes).decode(),
                     "HF_HUB_ENABLE_HF_TRANSFER": "0", "HF_HUB_DISABLE_PROGRESS_BARS": "1",
                     "VLLM_LOGGING_LEVEL": "WARNING",
-                    "RELAY_DEADLINE_S": "2700", "RELAY_HEARTBEAT_S": "180",
+                    "RELAY_DEADLINE_S": str(deadline_s), "RELAY_HEARTBEAT_S": "180",
+                    **({"RELAY_OUTPUT_KEYS": ",".join(output_keys)} if output_keys else {}),
                 },
                 "gpu": True,
                 "required_vram": 20,
