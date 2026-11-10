@@ -1,0 +1,869 @@
+{
+ "run_id": "payouts-2026-11-10b",
+ "cluster": "devnet",
+ "rpc": "https://api.devnet.solana.com",
+ "payer": "2b6sbT9reoEyvdcr61TkXFXCaXErQLSQPv4jp9P3fYtv",
+ "memo_program": "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+ "lamports_per_cent": 1000,
+ "executed_at": "2026-11-10T19:24:57.450Z",
+ "dry_run": false,
+ "verified_with": {
+  "rpc": "https://solana-rpc.publicnode.com",
+  "gateways": [
+   "https://nosana.mypinata.cloud/ipfs/",
+   "https://gateway.pinata.cloud/ipfs/",
+   "https://ipfs.io/ipfs/",
+   "https://dweb.link/ipfs/"
+  ]
+ },
+ "summary": {
+  "pay": 0,
+  "paid": 0,
+  "hold": 0,
+  "human_review": 42,
+  "refuse": 18
+ },
+ "items": [
+  {
+   "payout_id": "P-0101",
+   "seller_id": "S-152",
+   "amount_usd": 7684,
+   "lane": "payouts-need-proof",
+   "receipt_id": "ccf74560f949564dd6956deda7e7d3a43c8b8ad447e35692415f132e4c32b161",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0102",
+   "seller_id": "S-167",
+   "amount_usd": 126,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0103",
+   "seller_id": "S-158",
+   "amount_usd": 1506,
+   "lane": "payouts-need-proof",
+   "receipt_id": "2c51bcd70aadb5507b39914c66eb562f28b7f84a7ff44276ec3dfa940393d550",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0104",
+   "seller_id": "S-165",
+   "amount_usd": 9729,
+   "lane": "payouts-need-proof",
+   "receipt_id": "4880d4665ad3d474b18ba513c84bf988779b3bf8551c52bb3c6358409fa35297",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0105",
+   "seller_id": "S-114",
+   "amount_usd": 6395,
+   "lane": "payouts-need-proof",
+   "receipt_id": "d38f99c6870a76d2a853c77ee1a2a78c29e50c9146c2902f7b54e20dd6c8cd68",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0106",
+   "seller_id": "S-161",
+   "amount_usd": 2448,
+   "lane": "payouts-need-proof",
+   "receipt_id": "a5d7457594d94699465a8b4c3edc5c92971b710c2f013cefda257b6ec21457d7",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0107",
+   "seller_id": "S-125",
+   "amount_usd": 1926,
+   "lane": "payouts-need-proof",
+   "receipt_id": "bd80b95a5ae02daf84feaa165afb6df28b4af7c56186f63e12f33f78f1afb711",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0108",
+   "seller_id": "S-106",
+   "amount_usd": 252,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0109",
+   "seller_id": "S-114",
+   "amount_usd": 204,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0110",
+   "seller_id": "S-134",
+   "amount_usd": 9845,
+   "lane": "payouts-need-proof",
+   "receipt_id": "885629b09d7f712fe9183dac7ce047a7f38dfa2a8b18cceb8020729c1d352723",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0111",
+   "seller_id": "S-133",
+   "amount_usd": 6516,
+   "lane": "payouts-need-proof",
+   "receipt_id": "e54c3807ccb193e980ee4d8623c32ee325885b3f43d58f64d62711022c56686e",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0112",
+   "seller_id": "S-136",
+   "amount_usd": 255,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0113",
+   "seller_id": "S-109",
+   "amount_usd": 162,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0114",
+   "seller_id": "S-121",
+   "amount_usd": 3129,
+   "lane": "payouts-need-proof",
+   "receipt_id": "7ce94b161c1837aab04c66c45abd619965c2da7707c9d416212a9120cba7ab8d",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0115",
+   "seller_id": "S-147",
+   "amount_usd": 1420,
+   "lane": "payouts-need-proof",
+   "receipt_id": "9d3d28d201ca2fe3dda328914084c85c444d913c89bfc2f2c8a3c668de6bf64e",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0116",
+   "seller_id": "S-137",
+   "amount_usd": 1845,
+   "lane": "payouts-need-proof",
+   "receipt_id": "25c3fcc8d3cadf76b33be72859cd069d3f2c141c6dcf63d6054ffc4d10e259c0",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0117",
+   "seller_id": "S-144",
+   "amount_usd": 2751,
+   "lane": "payouts-need-proof",
+   "receipt_id": "fb82ad97423e1ad008793f2b9fdc582012339e334cc2d5d0e02343239ea7628d",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0118",
+   "seller_id": "S-127",
+   "amount_usd": 3174,
+   "lane": "payouts-need-proof",
+   "receipt_id": "653bdc572b5348732a4345bdb89ae03c2933ec22dde05ec6681fd3a205f7528a",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0119",
+   "seller_id": "S-118",
+   "amount_usd": 168,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0120",
+   "seller_id": "S-108",
+   "amount_usd": 2964,
+   "lane": "payouts-need-proof",
+   "receipt_id": "18d76fe9c09aae7f1e9a6fb5342849b0a491b8b557fa0e31eaeba9d951e56740",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0121",
+   "seller_id": "S-145",
+   "amount_usd": 864,
+   "lane": "payouts-need-proof",
+   "receipt_id": "3faab80680d98fca52230e003d5d5e41fa2914f0a6f1ee53dc2cda4911083d2f",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0122",
+   "seller_id": "S-166",
+   "amount_usd": 255,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0123",
+   "seller_id": "S-114",
+   "amount_usd": 3432,
+   "lane": "payouts-need-proof",
+   "receipt_id": "b124bdb972e0b7124668795248bf1f1182ff79471dd69259db2547df46a99bbe",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0124",
+   "seller_id": "S-115",
+   "amount_usd": 9845,
+   "lane": "payouts-need-proof",
+   "receipt_id": "dcba99cca76e2aa1f6e407b00f26f8a0724ce1b5214247a9bbcbde312f0a4ed7",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0125",
+   "seller_id": "S-103",
+   "amount_usd": 3445,
+   "lane": "payouts-need-proof",
+   "receipt_id": "9ed5a61bc91d09c1dc23ab67f2f472af5946579fa1b40eeaaa1d50c13741abd6",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0126",
+   "seller_id": "S-105",
+   "amount_usd": 237,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0127",
+   "seller_id": "S-132",
+   "amount_usd": 813,
+   "lane": "payouts-need-proof",
+   "receipt_id": "732b2f6c6b1f24a72a539c92526185182fbc45def861c6845e7edd21de1b4054",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0128",
+   "seller_id": "S-123",
+   "amount_usd": 9458,
+   "lane": "payouts-need-proof",
+   "receipt_id": "37befbfd991854da4305acdce78cc02cf60814ac7347163c54416ff5f2356f8e",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "re-run disagreed: the re-run on node 2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot (job 2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB) returned a different output for the same input; the gate holds the payout for human review",
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0129",
+   "seller_id": "S-116",
+   "amount_usd": 1368,
+   "lane": "payouts-need-proof",
+   "receipt_id": "b02a061aadf6222a85d2ad13d894e366a52015167b374b1bebec2fb3b2d816d5",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0130",
+   "seller_id": "S-169",
+   "amount_usd": 2313,
+   "lane": "payouts-need-proof",
+   "receipt_id": "bdf2bb1efbbe18ca9980377e58cede87aad1df84dc86793df684118e02ea3b0c",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0131",
+   "seller_id": "S-156",
+   "amount_usd": 3348,
+   "lane": "payouts-need-proof",
+   "receipt_id": "e136d3f0f20dc5128a746c7360a8ed17d3860377b302394b841c3cda96f86e21",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0132",
+   "seller_id": "S-207",
+   "amount_usd": 312,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0133",
+   "seller_id": "S-124",
+   "amount_usd": 255,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0134",
+   "seller_id": "S-135",
+   "amount_usd": 111,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0135",
+   "seller_id": "S-207",
+   "amount_usd": 3051,
+   "lane": "payouts-need-proof",
+   "receipt_id": "925cb090e03a5f0f7c77cac579342a6782437365f37094cb0da1c7364c888505",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0136",
+   "seller_id": "S-128",
+   "amount_usd": 2925,
+   "lane": "payouts-need-proof",
+   "receipt_id": "54945eaa014a4267a22e3f2699c57e8dc0867da42554f6bc982dd129634a1e59",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0137",
+   "seller_id": "S-157",
+   "amount_usd": 900,
+   "lane": "payouts-need-proof",
+   "receipt_id": "96fedd444340b0650787c9c798e58bde97304b95e955036dbaf6b30f106f4d48",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0138",
+   "seller_id": "S-162",
+   "amount_usd": 8179,
+   "lane": "payouts-need-proof",
+   "receipt_id": "8bf55438404078aecb0ac284fbcd0ffce14400ef8ff7a81625d536fd64180ad9",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0139",
+   "seller_id": "S-151",
+   "amount_usd": 5879,
+   "lane": "payouts-need-proof",
+   "receipt_id": "28820b55596446890f41fc8d3c6d0b303f7228fbc837ba6205c7c2cfaedb0ec0",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0140",
+   "seller_id": "S-168",
+   "amount_usd": 3351,
+   "lane": "payouts-need-proof",
+   "receipt_id": "61b0ba6e9971fb35833276fc9f72821752464f0e89afcf06599017c9fb6bcf65",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0141",
+   "seller_id": "S-101",
+   "amount_usd": 1863,
+   "lane": "payouts-need-proof",
+   "receipt_id": "cd7f6c82cc1bec73ec423d36f4b1281ff2ed476f1454d5c3c3dcf2757c29db4f",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0142",
+   "seller_id": "S-163",
+   "amount_usd": 24,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0143",
+   "seller_id": "S-154",
+   "amount_usd": 2664,
+   "lane": "payouts-need-proof",
+   "receipt_id": "7844905836d664a51cd042a7b8e0ea29416b8eee5117c2c8f374e254002f6501",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0144",
+   "seller_id": "S-149",
+   "amount_usd": 3315,
+   "lane": "payouts-need-proof",
+   "receipt_id": "90b872d26e12ed21021a0b8885f3c4516f41c4c91f56865711c4672ef4885315",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0145",
+   "seller_id": "S-114",
+   "amount_usd": 945,
+   "lane": "payouts-need-proof",
+   "receipt_id": "c30230c0c949bdcc019e00c47f162ee19bd81b9220fae9fcf231584a84e4ce7b",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0146",
+   "seller_id": "S-111",
+   "amount_usd": 1281,
+   "lane": "payouts-need-proof",
+   "receipt_id": "0bd4774989e67cfc2c681e7eb97f84c8df066717ed840a0304195cbf2ce23cc6",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0147",
+   "seller_id": "S-126",
+   "amount_usd": 2835,
+   "lane": "payouts-need-proof",
+   "receipt_id": "d7b045877d2e068ba26cdcad519a213cd7f7e3ae71007f34562294fc67e5d48e",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0148",
+   "seller_id": "S-131",
+   "amount_usd": 87,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0149",
+   "seller_id": "S-142",
+   "amount_usd": 150,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0150",
+   "seller_id": "S-153",
+   "amount_usd": 135,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0151",
+   "seller_id": "S-117",
+   "amount_usd": 126,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0152",
+   "seller_id": "S-150",
+   "amount_usd": 864,
+   "lane": "payouts-need-proof",
+   "receipt_id": "1e7751b03122d27ae4f5d90967d2e45ae9f9da82f0dbcde31082ccd4ddc21d7f",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0153",
+   "seller_id": "S-113",
+   "amount_usd": 321,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0154",
+   "seller_id": "S-207",
+   "amount_usd": 8308,
+   "lane": "payouts-need-proof",
+   "receipt_id": "f5c92ca404c0a294b3cf446b95d6833f17cd4c9456a379ea6c7acd3e6aba7bfa",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0155",
+   "seller_id": "S-207",
+   "amount_usd": 1245,
+   "lane": "payouts-need-proof",
+   "receipt_id": "3f0f690089385440f45528ead5e317f5501acb18bfd8470023295f314f82c87f",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0156",
+   "seller_id": "S-122",
+   "amount_usd": 189,
+   "lane": "payouts-default",
+   "receipt_id": null,
+   "grade": null,
+   "verify": null,
+   "action": "refuse",
+   "reasons": [
+    "no receipt for this payout"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0157",
+   "seller_id": "S-141",
+   "amount_usd": 2106,
+   "lane": "payouts-need-proof",
+   "receipt_id": "f5a49a2978acdbf9374b34107c256c1cac1ec07083de350e87c04fc482941add",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0158",
+   "seller_id": "S-155",
+   "amount_usd": 2448,
+   "lane": "payouts-need-proof",
+   "receipt_id": "a0aa0400a9ce4f66cc648c11697c1b066eb9f7fc329a0dbe36b3bbace11fe6be",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0159",
+   "seller_id": "S-102",
+   "amount_usd": 945,
+   "lane": "payouts-need-proof",
+   "receipt_id": "81a64f1b2bdb2b7003333c62abec4a606f8ba1836a3450c2e23b9d14f2cbd9ba",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  },
+  {
+   "payout_id": "P-0160",
+   "seller_id": "S-164",
+   "amount_usd": 3048,
+   "lane": "payouts-need-proof",
+   "receipt_id": "a8a397e4bb753719de07454ccf6e5496d42a0a8b474a02dc91823d89ba941694",
+   "grade": "anchored",
+   "verify": "verified",
+   "action": "human_review",
+   "reasons": [
+    "held: the open model missed the bar (Qwen2.5-7B-Instruct (compiled arm): 23/60 = 0.383, Wilson 95% lower bound 0.271; the rule needs ≥ 0.90)"
+   ],
+   "tx": null
+  }
+ ]
+}

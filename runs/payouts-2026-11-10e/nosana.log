@@ -1,0 +1,21 @@
+[21:50:53] batch1: job definition QmUrMQER3B7mHUEMqZipuos2rddXdTAW7bFjS6Dei9pgMr pinned to Nosana's and our Pinata accounts (38127 bytes)
+[21:51:01] batch attempt 1: 3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV (known-good node, idle (best load 1233.3 s))
+[21:51:20] batch1_a1: posted 6hCKz2Fgf85VoHXRKXbarhJdngnDDWPE9rdMVb1MU5ic (node 3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV), reserved $0.175
+[21:51:23] batch1_a1: running on 3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV (picked up 19s after posting)
+[21:57:06] batch1_a1: stopped 6hCKz2Fgf85VoHXRKXbarhJdngnDDWPE9rdMVb1MU5ic: HTTP 200 ended
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 592, in <module>
+    main()
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 588, in main
+    {"prepare": cmd_prepare, "nosana": cmd_nosana, "issue": cmd_issue, "frontier": cmd_frontier}[a.cmd](a)
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 279, in cmd_nosana
+    out = run_batch(conn=conn, run_id=a.run_id, tag=key, jobdef=jd, market=a.market, rpc=a.rpc, jobs=jobs,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/lane.py", line 165, in run_batch
+    row = _watch_and_record(conn=conn, run_id=run_id, tag=tag, attempt=n, saved=saved, t_post=t_post,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/lane.py", line 217, in _watch_and_record
+    time.sleep(20)
+KeyboardInterrupt

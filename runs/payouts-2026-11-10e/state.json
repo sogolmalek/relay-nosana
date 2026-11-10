@@ -1,6 +1,20 @@
 {
+  "budget_baseline": 3.405,
   "compiler": "v2",
   "design": "1e",
+  "known_nodes": {
+    "bad": [
+      "38yH7ChdmMZJrC7TjL7WfZsVyj7cJ5iYiuLwidJnXx8J",
+      "6YDndB2aWPEK5vDdvJCVHPe9hs7Lf7ZXyQbHADY2FmKC",
+      "HM7nqCK6efwpjzuzZuMPPNi2TsaBz2Z77myXDPJkSZHB"
+    ],
+    "good": [
+      "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+      "Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst",
+      "3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV",
+      "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot"
+    ]
+  },
   "lanes": {
     "P-0101": "payouts-need-proof",
     "P-0102": "payouts-need-proof",

@@ -1,0 +1,1592 @@
+{
+ "bar": {
+  "cleared": false,
+  "measured": {
+   "accuracy": 0.3833,
+   "ci_high": 0.5098,
+   "ci_low": 0.2709,
+   "correct": 23,
+   "model": "Qwen2.5-7B-Instruct (compiled arm)",
+   "n": 60,
+   "over_500": {
+    "accuracy": 0.4524,
+    "ci_high": 0.6005,
+    "ci_low": 0.3122,
+    "correct": 19,
+    "n": 42
+   },
+   "raw": {
+    "accuracy": 0.1333,
+    "ci_high": 0.2417,
+    "ci_low": 0.0691,
+    "correct": 8,
+    "n": 60
+   }
+  },
+  "metric": "accuracy_vs_ground_truth",
+  "needed_ci_low": 0.9
+ },
+ "date": "2026-11-10",
+ "decisions": [
+  {
+   "date": "2026-11-03",
+   "id": "D-101",
+   "kind": "price_change",
+   "sku": "PRO",
+   "text": "The Pro plan price dropped from $45.00 to $42.00 per unit for sales on or after 2026-11-03."
+  },
+  {
+   "date": "2026-11-01",
+   "id": "D-102",
+   "kind": "price_change",
+   "sku": "ENT",
+   "text": "The Enterprise seat price dropped from $1200.00 to $1150.00 per unit for sales on or after 2026-11-01."
+  },
+  {
+   "date": "2026-11-05",
+   "id": "D-103",
+   "kind": "seller_hold",
+   "seller": "S-114",
+   "text": "Seller S-114 is on a fraud hold. Hold every payout to S-114."
+  },
+  {
+   "date": "2026-11-06",
+   "id": "D-104",
+   "kind": "seller_hold",
+   "seller": "S-207",
+   "text": "Seller S-207 is on a compliance hold. Hold every payout to S-207."
+  },
+  {
+   "date": "2026-10-15",
+   "id": "D-105",
+   "kind": "refund_approval",
+   "text": "A refund for an order placed more than 30 days before the payout date needs finance approval: hold the payout unless that refund line carries an approval_id."
+  }
+ ],
+ "design": "60 payouts, two arms in one job; receipts for the compiled arm",
+ "jobs": [
+  {
+   "cost_usd": null,
+   "finish_tx": "sAo9gVGkEx1vJFYq1gZunmtfMK2hzB5rPG86ZQk2tezeZkvSk6y125Vatwe8RZJkcQ2E8UqKsSeGtHkRiKP5Foe",
+   "finished_at": 1794301162,
+   "job": "EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N",
+   "job_definition_cid": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+   "listed_at": 1794300985,
+   "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+   "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+   "post_ix": "assign",
+   "post_tx": "3spYXcLto7zuczuuhBLtBKb3ksZG9zoVHU5PL4Za1MYMLSdssnt8DtQdmFcFe87xnTYJSPVpxh9CEdRAHqAGoSN6",
+   "price_per_s": 115,
+   "result_cid": "Qmf2qKekLaNWCLmfyxhYduAzh6Q7MyeA94t8HLJ1q4dRMK",
+   "tag": "batch"
+  },
+  {
+   "cost_usd": null,
+   "finish_tx": "gF2LFuCUQALSScbQHMoba3J4EUYfQHkJThiYyNHFeqUZwnkK1UWi3pgi2hD4mZrpEVPcW29hyUaggKv6SAnei2J",
+   "finished_at": 1794319658,
+   "job": "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB",
+   "job_definition_cid": "QmYG58Kbn9JKrBst8aBR3E1PHVHUiAYkE1rh9E4wX2Wx1i",
+   "listed_at": 1794319463,
+   "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+   "node": "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot",
+   "post_ix": "assign",
+   "post_tx": "5nPvizKWrtAb1NP36UxynaHPXqc6XsWoqiRgzihajC3FH596DGCa2fcYMBuD4BZRCjkhbFNGwvgdfEcfmXCWB7Br",
+   "price_per_s": 117,
+   "result_cid": "QmcLkBqsTsUv4pRRz2jG1Vy7egvRrBLxeHr2jKExaU6Z4A",
+   "tag": "rerun"
+  }
+ ],
+ "mode": "replay",
+ "model": {
+  "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+  "weights": "Qwen/Qwen2.5-7B-Instruct@a09a35458c702b33eeacc393d103063234e8bc28"
+ },
+ "nosana_spent_usd": 0.114,
+ "note": "Synthetic data generated for the Relay x Nosana POC. Not real sellers, payouts or money.",
+ "payouts": [
+  {
+   "amount_usd": 7684.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-23147",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0101",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0101.json",
+   "rerun_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "seller_id": "S-152",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 126.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-20305",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0102",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-167",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1506.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-99384",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0103",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0103.json",
+   "rerun_output": null,
+   "seller_id": "S-158",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 9729.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-84718",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0104",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0104.json",
+   "rerun_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "seller_id": "S-165",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 6395.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-59815",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0105",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "receipt": "receipts/P-0105.json",
+   "rerun_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 2448.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-86829",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0106",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0106.json",
+   "rerun_output": null,
+   "seller_id": "S-161",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 1926.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-43141",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0107",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0107.json",
+   "rerun_output": null,
+   "seller_id": "S-125",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 252.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-71983",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0108",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-106",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 204.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-78608",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0109",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 9845.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-77016",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0110",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0110.json",
+   "rerun_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "seller_id": "S-134",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 6516.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-75733",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0111",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0111.json",
+   "rerun_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "seller_id": "S-133",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 255.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-99324",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0112",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-136",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 162.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-39321",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0113",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-109",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 3129.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-26214",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0114",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0114.json",
+   "rerun_output": null,
+   "seller_id": "S-121",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1420.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-35353",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0115",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0115.json",
+   "rerun_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "seller_id": "S-147",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 1845.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-17634",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0116",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0116.json",
+   "rerun_output": null,
+   "seller_id": "S-137",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 2751.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-30977",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0117",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0117.json",
+   "rerun_output": null,
+   "seller_id": "S-144",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3174.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-21740",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0118",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0118.json",
+   "rerun_output": null,
+   "seller_id": "S-127",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 168.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-63699",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0119",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-118",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2964.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-64045",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0120",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0120.json",
+   "rerun_output": null,
+   "seller_id": "S-108",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 864.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-32698",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0121",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0121.json",
+   "rerun_output": null,
+   "seller_id": "S-145",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 255.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-38055",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0122",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-166",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3432.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-24114",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0123",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0123.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 9845.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-76752",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0124",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0124.json",
+   "rerun_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "seller_id": "S-115",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3445.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-27775",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0125",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0125.json",
+   "rerun_output": null,
+   "seller_id": "S-103",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 237.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-28348",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0126",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-105",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 813.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-50750",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0127",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0127.json",
+   "rerun_output": null,
+   "seller_id": "S-132",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 9458.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-86539",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0128",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0128.json",
+   "rerun_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "seller_id": "S-123",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1368.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-30344",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0129",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0129.json",
+   "rerun_output": null,
+   "seller_id": "S-116",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2313.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-88838",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0130",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0130.json",
+   "rerun_output": null,
+   "seller_id": "S-169",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3348.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-16093",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0131",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0131.json",
+   "rerun_output": null,
+   "seller_id": "S-156",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 312.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-30999",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0132",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 255.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-51764",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0133",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-124",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 111.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-33300",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0134",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-135",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 3051.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-70073",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0135",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0135.json",
+   "rerun_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 2925.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-50890",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0136",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0136.json",
+   "rerun_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "seller_id": "S-128",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 900.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-20199",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0137",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0137.json",
+   "rerun_output": null,
+   "seller_id": "S-157",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 8179.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-18665",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0138",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0138.json",
+   "rerun_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "seller_id": "S-162",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 5879.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-43291",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0139",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0139.json",
+   "rerun_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "seller_id": "S-151",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3351.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-66711",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0140",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0140.json",
+   "rerun_output": null,
+   "seller_id": "S-168",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 1863.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-83890",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0141",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0141.json",
+   "rerun_output": null,
+   "seller_id": "S-101",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 24.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-67077",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0142",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-163",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 2664.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-58691",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0143",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0143.json",
+   "rerun_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "seller_id": "S-154",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3315.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-17783",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0144",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0144.json",
+   "rerun_output": null,
+   "seller_id": "S-149",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 945.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-31070",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0145",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0145.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 1281.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-71681",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0146",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0146.json",
+   "rerun_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "seller_id": "S-111",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 2835.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-53055",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0147",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0147.json",
+   "rerun_output": null,
+   "seller_id": "S-126",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 87.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-21265",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "parse_error": true
+   },
+   "payout_id": "P-0148",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-131",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 150.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-75109",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0149",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-142",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 135.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-51365",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0150",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-153",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 126.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-81791",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0151",
+   "raw_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-117",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 864.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-58843",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0152",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0152.json",
+   "rerun_output": null,
+   "seller_id": "S-150",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 321.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-53392",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0153",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-113",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 8308.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-40930",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0154",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0154.json",
+   "rerun_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 1245.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-49200",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0155",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0155.json",
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 189.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-96020",
+   "lane": "payouts-default",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0156",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-122",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 2106.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-39336",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0157",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0157.json",
+   "rerun_output": null,
+   "seller_id": "S-141",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2448.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-10815",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0158",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0158.json",
+   "rerun_output": null,
+   "seller_id": "S-155",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 945.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-78008",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0159",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0159.json",
+   "rerun_output": null,
+   "seller_id": "S-102",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3048.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-44687",
+   "lane": "payouts-need-proof",
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0160",
+   "raw_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "receipt": "receipts/P-0160.json",
+   "rerun_output": null,
+   "seller_id": "S-164",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  }
+ ],
+ "report": "docs/phase1b-report.md",
+ "rerun_agreement": {
+  "agreed": 14,
+  "n": 15
+ },
+ "rerun_items": [
+  "P-0101",
+  "P-0104",
+  "P-0105",
+  "P-0110",
+  "P-0111",
+  "P-0115",
+  "P-0124",
+  "P-0128",
+  "P-0135",
+  "P-0136",
+  "P-0138",
+  "P-0139",
+  "P-0143",
+  "P-0146",
+  "P-0154"
+ ],
+ "rules": [
+  {
+   "bar": {
+    "ci_lower_gte": 0.9,
+    "metric": "accuracy_vs_ground_truth"
+   },
+   "id": "payouts-need-proof",
+   "on_no_open_model": "human_review",
+   "requires": "anchored",
+   "rerun": {
+    "always_if": {
+     "amount_usd_gt": 5000
+    },
+    "sample_min": 15,
+    "sample_rate": 0.1
+   },
+   "when": {
+    "amount_usd_gt": 500
+   },
+   "work_type": "payout_check",
+   "writes_to": "payouts"
+  },
+  {
+   "id": "payouts-default",
+   "requires": "declared",
+   "work_type": "payout_check",
+   "writes_to": "payouts"
+  }
+ ],
+ "run_date": "2026-11-09",
+ "run_id": "payouts-2026-11-10b",
+ "synthetic": true,
+ "title": "Phase 1b, run b: raw vs compiled context (pre-registered)",
+ "verify_cli": {
+  "could_not_check": 0,
+  "failed": 0,
+  "verified": 42
+ }
+}

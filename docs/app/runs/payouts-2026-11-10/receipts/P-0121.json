@@ -1,0 +1,31 @@
+{
+  "cost_usd": 0.0,
+  "grade": "declared",
+  "input_sha256": "9d08d358ce2b1b868941a53a1098887988a8c2c96fecb52b2c3f0b5e87871b6e",
+  "item_id": "P-0121",
+  "output": {
+    "decision": "approve",
+    "reason_code": "ok"
+  },
+  "output_sha256": "e85ffc72e7336add6bcac5094320818f2ee33c3c8d6018bf8800455d83bb96d9",
+  "provider": {
+    "model": "claude-opus-5-5",
+    "name": "claude-code",
+    "session_id": "653bafec-3706-47e2-8e54-df4f67c6bd79",
+    "timestamp": "2026-11-10T07:19:46Z"
+  },
+  "receipt_id": "394b3540a2bf3e8028d0a853c671a728a42561f1f39b7632c6cdb37e7463f081",
+  "receipt_version": "0.2",
+  "relay_checks": [
+    "output_schema"
+  ],
+  "rule": {
+    "id": "payouts-default",
+    "requires": "declared",
+    "snapshot_sha256": "e05b16b668047e395d4808b6e2e7cbb293a2d4c94c4346f6b50572f4426f6258"
+  },
+  "source": {
+    "vendor": "claude-code",
+    "work_type": "payout_check"
+  }
+}

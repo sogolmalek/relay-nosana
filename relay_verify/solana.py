@@ -113,7 +113,9 @@ class RpcError(RuntimeError):
 def rpc_call(rpc_url: str, method: str, params: list, timeout: float = 30.0, tries: int = 5) -> dict:
     """JSON-RPC call; retries connection errors and HTTP 429/5xx (public RPCs rate-limit)."""
     body = json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode()
-    req = urllib.request.Request(rpc_url, data=body, headers={"Content-Type": "application/json"})
+    # an explicit User-Agent: some RPCs (PublicNode) refuse urllib's default one with 403
+    req = urllib.request.Request(rpc_url, data=body, headers={"Content-Type": "application/json",
+                                                              "User-Agent": "relay-verify/0.2"})
     for attempt in range(tries):
         try:
             with urllib.request.urlopen(req, timeout=timeout) as r:

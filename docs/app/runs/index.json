@@ -1,0 +1,16 @@
+[
+ {
+  "run_id": "payouts-2026-11-10",
+  "title": "Phase 1: one real payout run",
+  "date": "2026-11-10",
+  "payouts": 30,
+  "receipts": 30
+ },
+ {
+  "run_id": "payouts-2026-11-10b",
+  "title": "Phase 1b, run b: raw vs compiled context (pre-registered)",
+  "date": "2026-11-10",
+  "payouts": 60,
+  "receipts": 42
+ }
+]

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relay on Nosana: verified payouts</title>
+<meta name="description" content="Replay of real Relay payout runs on Nosana: verify every receipt in your browser, tamper with one, and watch the gate refuse to pay.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231d5fd1'/%3E%3Cpath d='M9 17l5 5 9-12' stroke='white' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <h1>Payouts that only go out with a verified receipt</h1>
+      <p class="sub">Relay on Nosana. Pick a real run, check every receipt yourself, tamper with one, then watch the gate decide.</p>
+    </div>
+    <label class="picker">Run
+      <select id="run" data-testid="run-picker"></select>
+    </label>
+  </header>
+
+  <div class="banner" id="banner" data-testid="replay-banner"></div>
+
+  <section class="step" id="s1">
+    <div class="n">1 · The run</div>
+    <h2 id="run-title">Loading…</h2>
+    <div class="grid2">
+      <div class="box"><h3>Decisions in force</h3><ul id="decisions" class="plain"></ul></div>
+      <div class="box"><h3>Proof rules (the real config)</h3><div id="rules"></div></div>
+    </div>
+  </section>
+
+  <section class="step" id="s2">
+    <div class="n">2 · Route</div>
+    <h2>Which payouts need proof</h2>
+    <div class="big" id="route"></div>
+  </section>
+
+  <section class="step" id="s3">
+    <div class="n">3 · Run on Nosana</div>
+    <h2>One batch job, and a re-run on a second node</h2>
+    <div class="actions">
+      <button class="primary" disabled title="next step: needs the Relay server" data-testid="run-live">Run live on Nosana (next step)</button>
+      <span class="muted">Showing a replay of a real job. No credits are spent on this page.</span>
+    </div>
+    <div id="jobs" class="jobs"></div>
+  </section>
+
+  <section class="step" id="s5">
+    <div class="n">4 · Receipts</div>
+    <h2>One receipt per payout</h2>
+    <div class="actions">
+      <button class="primary" id="verify-all" data-testid="verify-all">Verify every receipt in your browser</button>
+      <span class="muted" id="verify-all-status" data-testid="verify-all-status"></span>
+    </div>
+    <div class="tablewrap"><table id="receipts" data-testid="receipts"><thead><tr>
+      <th>Payout</th><th class="r">Amount</th><th>Model said</th><th>Truth</th><th>Grade</th><th>Verify</th><th>Gate</th><th></th>
+    </tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="step" id="s6" hidden>
+    <div class="n">5 · Verify in your browser</div>
+    <h2 id="detail-title"></h2>
+    <div class="grid2">
+      <div>
+        <div class="actions">
+          <button class="primary" id="verify-one" data-testid="verify-one">Verify</button>
+          <a id="receipt-json" target="_blank" rel="noopener">receipt JSON</a>
+        </div>
+        <ul class="checks" id="checks" data-testid="checks"></ul>
+        <div class="evidence" id="evidence"></div>
+      </div>
+      <div>
+        <div class="n">6 · Tamper</div>
+        <p class="muted small">Each button edits a copy of this receipt the way a forger would (and recomputes its <code>receipt_id</code>), then runs the same verifier and the gate.</p>
+        <div class="tampers" id="tampers"></div>
+        <div id="tamper-out" data-testid="tamper-out"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="s7">
+    <div class="n">7 · Human review queue</div>
+    <h2>What the gate won't decide alone</h2>
+    <div id="bar-note" class="note" data-testid="bar-note"></div>
+    <div id="queue" data-testid="review-queue"></div>
+  </section>
+
+  <section class="step" id="s8">
+    <div class="n">8 · Pay</div>
+    <h2>The gate pays only verified approvals, on Solana devnet</h2>
+    <div class="actions">
+      <button class="primary" id="check-payouts" data-testid="check-payouts">Check the devnet payouts in your browser</button>
+      <span class="muted" id="payouts-status" data-testid="payouts-status"></span>
+    </div>
+    <div class="big" id="pay-summary"></div>
+    <div class="tablewrap"><table id="payouts" data-testid="payouts"><thead><tr>
+      <th>Payout</th><th class="r">Amount</th><th>Gate</th><th>Why</th><th>Devnet tx (memo = receipt_id)</th>
+    </tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <footer class="foot">
+    <div><b>Verify it yourself:</b> <code>pip install ./relay_verify</code> from the repo, then <code>relay-verify runs/&lt;run&gt;/receipts/P-0101.json</code>.
+      <a href="https://github.com/sogolmalek/relay-nosana">repo</a> ·
+      <a href="https://github.com/sogolmalek/relay-nosana/blob/main/docs/receipt-spec.md">receipt spec v0.2</a> ·
+      <a id="foot-receipts" href="runs/">receipts as JSON</a></div>
+    <div class="muted">Anchored and spot-checked: proves which job ran where and when, not that the node computed honestly; second-node re-runs cover that.
+      This page reads Solana through <span id="rpc-name"></span> and IPFS through public gateways, straight from your browser. Payout data is synthetic.</div>
+  </footer>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "relay-e2e-journey",
+  "private": true,
+  "scripts": {
+    "replay": "playwright test replay.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.49.1"
+  }
+}

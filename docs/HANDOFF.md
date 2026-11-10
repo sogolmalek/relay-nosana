@@ -1,3 +1,8 @@
+> **2026-11-10 (night): Phase 2a done, in replay mode.** The app is at https://sogolmalek.github.io/relay-nosana/app/:
+> the browser verifier (parity with the CLI on every receipt and tamper), the review queue (P-0128), the gate, and
+> 4 devnet payouts with `receipt_id` memos. The browser RPC is PublicNode. Run e is **paused**: one batch was posted and
+> then stopped on request ($0.017). Next: the live button and the Fly.io server. See `docs/phase2a-report.md`.
+
 > **2026-11-10 (evening): the owner's five decisions are done; run e is not posted.** Receipts are v0.2: they
 > anchor on the job's post and finish transactions, because Nosana closes job accounts about an hour after
 > the job. Phase 1 (30/30) and run b (42/42) were re-issued and verify on mainnet. A re-run disagreement goes
