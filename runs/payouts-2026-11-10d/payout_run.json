@@ -1,0 +1,961 @@
+{
+  "decisions": [
+    {
+      "date": "2026-11-03",
+      "id": "D-101",
+      "kind": "price_change",
+      "sku": "PRO",
+      "text": "The Pro plan price dropped from $45.00 to $42.00 per unit for sales on or after 2026-11-03."
+    },
+    {
+      "date": "2026-11-01",
+      "id": "D-102",
+      "kind": "price_change",
+      "sku": "ENT",
+      "text": "The Enterprise seat price dropped from $1200.00 to $1150.00 per unit for sales on or after 2026-11-01."
+    },
+    {
+      "date": "2026-11-05",
+      "id": "D-103",
+      "kind": "seller_hold",
+      "seller": "S-114",
+      "text": "Seller S-114 is on a fraud hold. Hold every payout to S-114."
+    },
+    {
+      "date": "2026-11-06",
+      "id": "D-104",
+      "kind": "seller_hold",
+      "seller": "S-207",
+      "text": "Seller S-207 is on a compliance hold. Hold every payout to S-207."
+    },
+    {
+      "date": "2026-10-15",
+      "id": "D-105",
+      "kind": "refund_approval",
+      "text": "A refund for an order placed more than 30 days before the payout date needs finance approval: hold the payout unless that refund line carries an approval_id."
+    }
+  ],
+  "note": "Synthetic data generated for the Relay x Nosana POC. Not real sellers, payouts or money.",
+  "paid_invoices": {
+    "S-101": [
+      "INV-61601",
+      "INV-85335",
+      "INV-87674"
+    ],
+    "S-104": [
+      "INV-43441",
+      "INV-97931"
+    ],
+    "S-107": [
+      "INV-35720",
+      "INV-55617"
+    ],
+    "S-109": [
+      "INV-86652"
+    ],
+    "S-112": [
+      "INV-49493",
+      "INV-80502"
+    ],
+    "S-113": [
+      "INV-38925",
+      "INV-87741"
+    ],
+    "S-114": [
+      "INV-12859",
+      "INV-53593",
+      "INV-56627",
+      "INV-61502",
+      "INV-67709",
+      "INV-90886"
+    ],
+    "S-119": [
+      "INV-17643",
+      "INV-66019"
+    ],
+    "S-123": [
+      "INV-76639"
+    ],
+    "S-127": [
+      "INV-34285"
+    ],
+    "S-128": [
+      "INV-37641"
+    ],
+    "S-136": [
+      "INV-13772",
+      "INV-31575",
+      "INV-47105"
+    ],
+    "S-138": [
+      "INV-32495",
+      "INV-45416",
+      "INV-61152"
+    ],
+    "S-139": [
+      "INV-39893",
+      "INV-73667"
+    ],
+    "S-207": [
+      "INV-18686",
+      "INV-53640",
+      "INV-81294"
+    ]
+  },
+  "payouts": [
+    {
+      "amount_cents": 23700,
+      "currency": "USD",
+      "invoice_id": "INV-13976",
+      "lines": [
+        {
+          "qty": 5,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        },
+        {
+          "qty": 3,
+          "sale_date": "2026-11-07",
+          "sku": "ADDON",
+          "type": "sale",
+          "unit_price_cents": 900
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0101",
+      "seller_id": "S-207"
+    },
+    {
+      "amount_cents": 22800,
+      "currency": "USD",
+      "invoice_id": "INV-75504",
+      "lines": [
+        {
+          "qty": 7,
+          "sale_date": "2026-11-06",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        },
+        {
+          "qty": 2,
+          "sale_date": "2026-11-06",
+          "sku": "ADDON",
+          "type": "sale",
+          "unit_price_cents": 900
+        },
+        {
+          "order_date": "2026-09-24",
+          "order_id": "O-669476",
+          "refund_cents": 8400,
+          "type": "refund"
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0102",
+      "seller_id": "S-133"
+    },
+    {
+      "amount_cents": 231900,
+      "currency": "USD",
+      "invoice_id": "INV-45193",
+      "lines": [
+        {
+          "qty": 17,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 3,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0103",
+      "seller_id": "S-109"
+    },
+    {
+      "amount_cents": 132600,
+      "currency": "USD",
+      "invoice_id": "INV-92391",
+      "lines": [
+        {
+          "qty": 8,
+          "sale_date": "2026-11-06",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 7,
+          "sale_date": "2026-11-06",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0104",
+      "seller_id": "S-111"
+    },
+    {
+      "amount_cents": 36900,
+      "currency": "USD",
+      "invoice_id": "INV-81750",
+      "lines": [
+        {
+          "qty": 7,
+          "sale_date": "2026-11-08",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4500
+        },
+        {
+          "qty": 6,
+          "sale_date": "2026-11-08",
+          "sku": "ADDON",
+          "type": "sale",
+          "unit_price_cents": 900
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0105",
+      "seller_id": "S-119"
+    },
+    {
+      "amount_cents": 852900,
+      "currency": "USD",
+      "invoice_id": "INV-78639",
+      "lines": [
+        {
+          "qty": 7,
+          "sale_date": "2026-11-08",
+          "sku": "ENT",
+          "type": "sale",
+          "unit_price_cents": 120000
+        },
+        {
+          "qty": 1,
+          "sale_date": "2026-11-08",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0106",
+      "seller_id": "S-130"
+    },
+    {
+      "amount_cents": 26100,
+      "currency": "USD",
+      "invoice_id": "INV-34222",
+      "lines": [
+        {
+          "qty": 6,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        },
+        {
+          "qty": 1,
+          "sale_date": "2026-11-07",
+          "sku": "ADDON",
+          "type": "sale",
+          "unit_price_cents": 900
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0107",
+      "seller_id": "S-132"
+    },
+    {
+      "amount_cents": 988700,
+      "currency": "USD",
+      "invoice_id": "INV-93723",
+      "lines": [
+        {
+          "qty": 8,
+          "sale_date": "2026-11-07",
+          "sku": "ENT",
+          "type": "sale",
+          "unit_price_cents": 115000
+        },
+        {
+          "qty": 5,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0108",
+      "seller_id": "S-103"
+    },
+    {
+      "amount_cents": 10200,
+      "currency": "USD",
+      "invoice_id": "INV-45030",
+      "lines": [
+        {
+          "qty": 4,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        },
+        {
+          "qty": 2,
+          "sale_date": "2026-11-07",
+          "sku": "ADDON",
+          "type": "sale",
+          "unit_price_cents": 900
+        },
+        {
+          "order_date": "2026-10-23",
+          "order_id": "O-328093",
+          "refund_cents": 8400,
+          "type": "refund"
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0109",
+      "seller_id": "S-101"
+    },
+    {
+      "amount_cents": 984500,
+      "currency": "USD",
+      "invoice_id": "INV-14846",
+      "lines": [
+        {
+          "qty": 8,
+          "sale_date": "2026-11-07",
+          "sku": "ENT",
+          "type": "sale",
+          "unit_price_cents": 115000
+        },
+        {
+          "qty": 5,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0110",
+      "seller_id": "S-127"
+    },
+    {
+      "amount_cents": 29400,
+      "currency": "USD",
+      "invoice_id": "INV-47105",
+      "lines": [
+        {
+          "qty": 7,
+          "sale_date": "2026-11-04",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0111",
+      "seller_id": "S-136"
+    },
+    {
+      "amount_cents": 106500,
+      "currency": "USD",
+      "invoice_id": "INV-43441",
+      "lines": [
+        {
+          "qty": 5,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 10,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0112",
+      "seller_id": "S-104"
+    },
+    {
+      "amount_cents": 163800,
+      "currency": "USD",
+      "invoice_id": "INV-94738",
+      "lines": [
+        {
+          "qty": 12,
+          "sale_date": "2026-11-04",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 2,
+          "sale_date": "2026-11-04",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4500
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0113",
+      "seller_id": "S-120"
+    },
+    {
+      "amount_cents": 356100,
+      "currency": "USD",
+      "invoice_id": "INV-93533",
+      "lines": [
+        {
+          "qty": 25,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 9,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0114",
+      "seller_id": "S-113"
+    },
+    {
+      "amount_cents": 248400,
+      "currency": "USD",
+      "invoice_id": "INV-30045",
+      "lines": [
+        {
+          "qty": 16,
+          "sale_date": "2026-11-05",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 10,
+          "sale_date": "2026-11-05",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0115",
+      "seller_id": "S-137"
+    },
+    {
+      "amount_cents": 997400,
+      "currency": "USD",
+      "invoice_id": "INV-31197",
+      "lines": [
+        {
+          "qty": 8,
+          "sale_date": "2026-11-07",
+          "sku": "ENT",
+          "type": "sale",
+          "unit_price_cents": 115000
+        },
+        {
+          "qty": 6,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0116",
+      "seller_id": "S-207"
+    },
+    {
+      "amount_cents": 339300,
+      "currency": "USD",
+      "invoice_id": "INV-59444",
+      "lines": [
+        {
+          "qty": 25,
+          "sale_date": "2026-11-06",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 4,
+          "sale_date": "2026-11-06",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0117",
+      "seller_id": "S-114"
+    },
+    {
+      "amount_cents": 16800,
+      "currency": "USD",
+      "invoice_id": "INV-13105",
+      "lines": [
+        {
+          "qty": 4,
+          "sale_date": "2026-11-08",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0118",
+      "seller_id": "S-112"
+    },
+    {
+      "amount_cents": 12600,
+      "currency": "USD",
+      "invoice_id": "INV-85709",
+      "lines": [
+        {
+          "qty": 3,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0119",
+      "seller_id": "S-115"
+    },
+    {
+      "amount_cents": 177900,
+      "currency": "USD",
+      "invoice_id": "INV-29635",
+      "lines": [
+        {
+          "qty": 11,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 8,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4500
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0120",
+      "seller_id": "S-139"
+    },
+    {
+      "amount_cents": 159000,
+      "currency": "USD",
+      "invoice_id": "INV-37428",
+      "lines": [
+        {
+          "qty": 12,
+          "sale_date": "2026-11-08",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 1,
+          "sale_date": "2026-11-08",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0121",
+      "seller_id": "S-138"
+    },
+    {
+      "amount_cents": 223500,
+      "currency": "USD",
+      "invoice_id": "INV-55617",
+      "lines": [
+        {
+          "qty": 17,
+          "sale_date": "2026-11-04",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 1,
+          "sale_date": "2026-11-04",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0122",
+      "seller_id": "S-107"
+    },
+    {
+      "amount_cents": 16500,
+      "currency": "USD",
+      "invoice_id": "INV-67682",
+      "lines": [
+        {
+          "qty": 7,
+          "sale_date": "2026-11-06",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0123",
+      "seller_id": "S-105"
+    },
+    {
+      "amount_cents": 189900,
+      "currency": "USD",
+      "invoice_id": "INV-54666",
+      "lines": [
+        {
+          "qty": 11,
+          "sale_date": "2026-11-06",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 5,
+          "sale_date": "2026-11-06",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        },
+        {
+          "qty": 6,
+          "sale_date": "2026-10-30",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4500
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0124",
+      "seller_id": "S-123"
+    },
+    {
+      "amount_cents": 283200,
+      "currency": "USD",
+      "invoice_id": "INV-33242",
+      "lines": [
+        {
+          "qty": 20,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 8,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        },
+        {
+          "order_date": "2026-09-26",
+          "order_id": "O-830954",
+          "refund_cents": 8400,
+          "type": "refund"
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0125",
+      "seller_id": "S-128"
+    },
+    {
+      "amount_cents": 321600,
+      "currency": "USD",
+      "invoice_id": "INV-43301",
+      "lines": [
+        {
+          "qty": 22,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 9,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0126",
+      "seller_id": "S-124"
+    },
+    {
+      "amount_cents": 188700,
+      "currency": "USD",
+      "invoice_id": "INV-82544",
+      "lines": [
+        {
+          "qty": 14,
+          "sale_date": "2026-11-07",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 5,
+          "sale_date": "2026-11-07",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        },
+        {
+          "approval_id": "FA-2587",
+          "order_date": "2026-09-12",
+          "order_id": "O-747657",
+          "refund_cents": 12900,
+          "type": "refund"
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0127",
+      "seller_id": "S-116"
+    },
+    {
+      "amount_cents": 715800,
+      "currency": "USD",
+      "invoice_id": "INV-80421",
+      "lines": [
+        {
+          "qty": 6,
+          "sale_date": "2026-11-08",
+          "sku": "ENT",
+          "type": "sale",
+          "unit_price_cents": 115000
+        },
+        {
+          "qty": 2,
+          "sale_date": "2026-11-08",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0128",
+      "seller_id": "S-134"
+    },
+    {
+      "amount_cents": 257400,
+      "currency": "USD",
+      "invoice_id": "INV-74392",
+      "lines": [
+        {
+          "qty": 19,
+          "sale_date": "2026-11-04",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 6,
+          "sale_date": "2026-11-04",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        },
+        {
+          "order_date": "2026-09-22",
+          "order_id": "O-799895",
+          "refund_cents": 12900,
+          "type": "refund"
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0129",
+      "seller_id": "S-126"
+    },
+    {
+      "amount_cents": 322200,
+      "currency": "USD",
+      "invoice_id": "INV-34604",
+      "lines": [
+        {
+          "qty": 24,
+          "sale_date": "2026-11-05",
+          "sku": "TEAM",
+          "type": "sale",
+          "unit_price_cents": 12900
+        },
+        {
+          "qty": 3,
+          "sale_date": "2026-11-05",
+          "sku": "PRO",
+          "type": "sale",
+          "unit_price_cents": 4200
+        }
+      ],
+      "payout_date": "2026-11-09",
+      "payout_id": "P-0130",
+      "seller_id": "S-114"
+    }
+  ],
+  "run_date": "2026-11-09",
+  "seed": 20261111,
+  "truth": {
+    "P-0101": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "P-0102": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "P-0103": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0104": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0105": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "P-0106": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "P-0107": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0108": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "P-0109": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0110": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0111": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "P-0112": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "P-0113": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "P-0114": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "P-0115": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0116": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "P-0117": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "P-0118": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0119": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0120": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "P-0121": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0122": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "P-0123": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "P-0124": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0125": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "P-0126": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0127": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0128": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "P-0129": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "P-0130": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    }
+  }
+}

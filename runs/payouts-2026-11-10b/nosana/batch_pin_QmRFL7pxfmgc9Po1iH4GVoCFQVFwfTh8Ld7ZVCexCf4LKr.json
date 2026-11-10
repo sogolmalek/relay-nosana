@@ -1,0 +1,34 @@
+{
+  "cid": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+  "local_cidv0": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+  "nosana": {
+    "body": {
+      "GroupId": null,
+      "ID": "01a1c4ac-1e47-7dab-8dcf-4d632546b9ae",
+      "IpfsHash": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+      "Keyvalues": null,
+      "MimeType": "application/json",
+      "Name": "relay-payouts-2026-11-10b-batch.json",
+      "NumberOfFiles": 1,
+      "PinSize": 21923,
+      "Timestamp": "2026-11-10T08:56:16.920Z",
+      "isDuplicate": true
+    },
+    "http_status": 200
+  },
+  "own": {
+    "body": {
+      "GroupId": null,
+      "ID": "01a1c4ac-276d-79c1-b1a2-646a6098f961",
+      "IpfsHash": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+      "Keyvalues": null,
+      "MimeType": "application/json",
+      "Name": "relay-payouts-2026-11-10b-batch.json",
+      "NumberOfFiles": 1,
+      "PinSize": 21923,
+      "Timestamp": "2026-11-10T08:56:19.483Z",
+      "isDuplicate": true
+    },
+    "http_status": 200
+  }
+}

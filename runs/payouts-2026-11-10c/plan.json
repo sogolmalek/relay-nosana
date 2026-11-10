@@ -1,0 +1,20 @@
+{
+  "bar": {
+    "ci_lower_gte": 0.9,
+    "metric": "accuracy_vs_ground_truth"
+  },
+  "bar_note": "at n = 30 the Wilson 95% lower bound is 0.886 even for 30/30, so the bar can't be cleared at this size; 35/35 is the smallest run that can clear it",
+  "cap_usd": 2.0,
+  "deadline_s": 1200,
+  "design": "Phase 1 / docs/POC_PAYOUTS.md, unchanged",
+  "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+  "inputs_cid": "Qmd7tayQ5jGcqG2CFxtNqQWafFES7aRSkxi9ZGtpDY3qZB",
+  "job_definition_cid": "QmbybE1TThMNCRKhDUumMeRXzkcE5EYrJTqe8e5WnJnLFn",
+  "model": "Qwen/Qwen2.5-7B-Instruct@a09a35458c702b33eeacc393d103063234e8bc28",
+  "payouts": 30,
+  "phase": "1b",
+  "run_id": "payouts-2026-11-10c",
+  "seed": 20261111,
+  "step": "2: Qwen-7B after the diagnosis",
+  "written_at": "2026-11-10T09:27:42Z"
+}

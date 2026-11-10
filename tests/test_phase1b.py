@@ -132,3 +132,35 @@ def test_sign_test():
     assert sign_test(0, 0) == 1.0
     assert sign_test(10, 0) == pytest.approx(2 / 1024)
     assert sign_test(3, 3) == 1.0
+
+
+def test_fresh_run_keeps_phase1_design_and_pins_models():
+    from relay_nosana.payouts import run_fresh
+    assert run_fresh.SEED_FRESH not in (SEED, SEED_1B)
+    run = generate(run_fresh.SEED_FRESH, PLAN)
+    lines = [task.input_line(p, run["paid_invoices"]) for p in run["payouts"]]
+    assert len(lines) == 30 and lines[0]["params"]["max_tokens"] == 48
+    assert lines[0]["messages"][0]["content"] == task.SYSTEM  # the Phase 1 prompt, no reasoning field
+    for key, (model, rev) in run_fresh.MODELS.items():
+        assert len(rev) == 40 and all(ch in "0123456789abcdef" for ch in rev)
+        jd, _, _ = run_fresh.build(lines, "t", "batch", model, rev)
+        env = jd["ops"][0]["args"]["env"]
+        assert env["MODEL"] == model and env["REVISION"] == rev and env["RELAY_DEADLINE_S"] == "1200"
+        assert json.loads(base64.b64decode(env["RELAY_OUTPUT_SCHEMA_B64"])) == task.OUTPUT_SCHEMA
+    assert task.wilson(30, 30)[0] < 0.90 <= task.wilson(35, 35)[0]
+
+
+def test_run_1b_model_is_pinned_and_7b_jobdef_unchanged():
+    from relay_verify.cid import cidv0_of_bytes
+    from relay_verify.jcs import canonical
+    from relay_nosana.payouts import run_1b
+    root = Path(__file__).resolve().parent.parent / "runs" / "payouts-2026-11-10b"
+    lines = [json.loads(x) for x in (root / "inputs.jsonl").read_text().splitlines()]
+    pre = json.loads((root / "preregistration.json").read_text())
+    jd, _, inputs_cid = run_1b.build_batch(lines, "payouts-2026-11-10b", "batch")
+    assert cidv0_of_bytes(canonical(jd)) == pre["job_definition_cid"] and inputs_cid == pre["inputs_cid"]
+    assert run_1b._model({}) == run_1b.MODELS["7b"]  # run b's state has no model_key
+    jd14, _, cid14 = run_1b.build_batch(lines, "r", "batch", "14b")
+    env = jd14["ops"][0]["args"]["env"]
+    assert (env["MODEL"], env["REVISION"]) == run_1b.MODELS["14b"] and len(env["REVISION"]) == 40
+    assert cid14 == inputs_cid  # same inputs, only the model differs

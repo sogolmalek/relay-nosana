@@ -1,0 +1,79 @@
+{
+  "cost_usd": 8.3e-05,
+  "grade": "anchored",
+  "input_sha256": "758186eaa45626f752ecafc6c9d8deae9e841db055ad43bedd0ecf07a19ae71b",
+  "item_id": "P-0155/compiled",
+  "merkle": {
+    "path": [
+      {
+        "hash": "838029e8cacf73fb98e4efafd2cae2396e6c119e177ecd7d944b546afd7a76c8",
+        "side": "R"
+      },
+      {
+        "hash": "2aa23504a90838ed8a098e2b8fc0dfcd04a81183ab0019c9e9c706cadbb6ba7c",
+        "side": "R"
+      },
+      {
+        "hash": "c7a8db2fbf53b4235d827c4a0c7ef7101eee757bb552e93f823868535b47160a",
+        "side": "L"
+      },
+      {
+        "hash": "8140dc73b12bb5c8fc45f8d222b29333d959888a66121309e87d584ade545b66",
+        "side": "L"
+      },
+      {
+        "hash": "eff953354ac071194f71ff77f5ebe97d2925baa1bb24379acb1921d70e393756",
+        "side": "R"
+      },
+      {
+        "hash": "0ddf5edbc4c2c016298dbc8db6f89b1556e0d051f275069da5803dca07bb98b7",
+        "side": "L"
+      },
+      {
+        "hash": "f6ae814ededb0f68a975fa7ed64d8eb6d4af9224cbb2bba0d530af1fcfcfe63d",
+        "side": "L"
+      }
+    ],
+    "root": "e9e64eb36a3e6ed6c89cec822c69a3783b4ed1c4860613da6ef725e9db1a8c41"
+  },
+  "model": {
+    "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+    "weights": "Qwen/Qwen2.5-7B-Instruct@a09a35458c702b33eeacc393d103063234e8bc28"
+  },
+  "nosana": {
+    "container_end": 1794301152610,
+    "container_start": 1794300988170,
+    "finished_at": 1794301162,
+    "inputs_cid": "QmQYakJhc8JFDHqataz2mzrwp5i61mMuF4hVWDsV8ZGpW9",
+    "job": "EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N",
+    "job_definition_cid": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+    "listed_at": 1794300984,
+    "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+    "result_cid": "Qmf2qKekLaNWCLmfyxhYduAzh6Q7MyeA94t8HLJ1q4dRMK"
+  },
+  "output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+  },
+  "output_sha256": "f646fee25f1afd67809e3ae146c3390d5e9c15c588244c3ffc0e7e83d974b8c9",
+  "receipt_id": "5cd7ce7aa7c1987931b65295a35ee3febc3c28b3840590db1690164449e6af7f",
+  "receipt_version": "0.1",
+  "relay_checks": [
+    "output_schema"
+  ],
+  "rule": {
+    "id": "payouts-need-proof",
+    "requires": "anchored",
+    "snapshot_sha256": "2b8892f58c3b81ba3d061d2cb830d289e77a254166ae8584a354aa27f9489f16"
+  },
+  "source": {
+    "vendor": "relay-batch",
+    "work_type": "payout_check"
+  },
+  "spot_check": {
+    "agreed": null,
+    "rerun_job": null,
+    "rerun_node": null
+  }
+}

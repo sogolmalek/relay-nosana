@@ -1,0 +1,32 @@
+{
+  "cid": "QmdnR2H1adXVHyiGGbLpZBhXgQy9a8GkT3aaoCoRa3zUMh",
+  "local_cidv0": "QmdnR2H1adXVHyiGGbLpZBhXgQy9a8GkT3aaoCoRa3zUMh",
+  "nosana": {
+    "body": {
+      "GroupId": null,
+      "ID": "01a1c4b2-f14a-7a05-a43a-43e381fc5cd9",
+      "IpfsHash": "QmdnR2H1adXVHyiGGbLpZBhXgQy9a8GkT3aaoCoRa3zUMh",
+      "Keyvalues": null,
+      "MimeType": "application/json",
+      "Name": "relay-diag-2026-11-10-diag.json",
+      "NumberOfFiles": 1,
+      "PinSize": 7681,
+      "Timestamp": "2026-11-10T09:03:44.146Z"
+    },
+    "http_status": 200
+  },
+  "own": {
+    "body": {
+      "GroupId": null,
+      "ID": "01a1c4b2-f97c-7772-905a-04846a727ec0",
+      "IpfsHash": "QmdnR2H1adXVHyiGGbLpZBhXgQy9a8GkT3aaoCoRa3zUMh",
+      "Keyvalues": null,
+      "MimeType": "application/json",
+      "Name": "relay-diag-2026-11-10-diag.json",
+      "NumberOfFiles": 1,
+      "PinSize": 7681,
+      "Timestamp": "2026-11-10T09:03:46.231Z"
+    },
+    "http_status": 200
+  }
+}

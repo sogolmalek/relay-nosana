@@ -1,4 +1,124 @@
 {
+  "arms": {
+    "compiled": {
+      "accuracy": 0.3833,
+      "anchored": {
+        "accuracy": 0.4524,
+        "ci_high": 0.6005,
+        "ci_low": 0.3122,
+        "correct": 19,
+        "n": 42
+      },
+      "by_true_reason": {
+        "amount_mismatch": "0/6",
+        "duplicate": "0/6",
+        "needs_approval": "0/6",
+        "ok": "12/26",
+        "seller_on_hold": "8/8",
+        "stale_price": "3/8"
+      },
+      "ci_high": 0.5098,
+      "ci_low": 0.2709,
+      "correct": 23,
+      "finish_length": 1,
+      "n": 60,
+      "parse_errors": 1,
+      "predicted": {
+        "approve/ok": 20,
+        "hold/needs_approval": 4,
+        "hold/ok": 1,
+        "hold/seller_on_hold": 12,
+        "hold/stale_price": 22,
+        "parse_error": 1
+      },
+      "reasoning_words_max": 40,
+      "reasoning_words_median": 15,
+      "tokens_in_mean": 688.6,
+      "tokens_out_mean": 55.5
+    },
+    "raw": {
+      "accuracy": 0.1333,
+      "anchored": {
+        "accuracy": 0.119,
+        "ci_high": 0.25,
+        "ci_low": 0.0519,
+        "correct": 5,
+        "n": 42
+      },
+      "by_true_reason": {
+        "amount_mismatch": "0/6",
+        "duplicate": "0/6",
+        "needs_approval": "0/6",
+        "ok": "1/26",
+        "seller_on_hold": "7/8",
+        "stale_price": "0/8"
+      },
+      "ci_high": 0.2417,
+      "ci_low": 0.0691,
+      "correct": 8,
+      "finish_length": 0,
+      "n": 60,
+      "parse_errors": 0,
+      "predicted": {
+        "approve/ok": 1,
+        "hold/amount_mismatch": 1,
+        "hold/seller_on_hold": 58
+      },
+      "reasoning_words_max": 27,
+      "reasoning_words_median": 11,
+      "tokens_in_mean": 868.5,
+      "tokens_out_mean": 42.8
+    }
+  },
+  "bar": {
+    "compiled_ci_low": 0.2709,
+    "compiled_cleared": false,
+    "frontier_ratio": "not measured in POC",
+    "metric": "accuracy_vs_ground_truth",
+    "needed_ci_low": 0.9,
+    "raw_ci_low": 0.0691,
+    "raw_cleared": false,
+    "rule": "payouts-need-proof"
+  },
+  "batch": {
+    "account": {
+      "address": "EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N",
+      "ipfs_job": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+      "ipfs_result": "Qmf2qKekLaNWCLmfyxhYduAzh6Q7MyeA94t8HLJ1q4dRMK",
+      "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+      "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+      "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+      "price": 115,
+      "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+      "state": 2,
+      "state_name": "COMPLETED",
+      "time_end": 1794301162,
+      "time_start": 1794300984,
+      "timeout": 3600
+    },
+    "attempts": [
+      "EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+    ],
+    "inputs_cid": "QmQYakJhc8JFDHqataz2mzrwp5i61mMuF4hVWDsV8ZGpW9",
+    "job": "EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N",
+    "jobdef_cid": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+    "ok": true,
+    "result_file": "batch_a1_result.json"
+  },
+  "budget_baseline": 3.405,
+  "known_nodes": {
+    "bad": [
+      "38yH7ChdmMZJrC7TjL7WfZsVyj7cJ5iYiuLwidJnXx8J",
+      "6YDndB2aWPEK5vDdvJCVHPe9hs7Lf7ZXyQbHADY2FmKC",
+      "HM7nqCK6efwpjzuzZuMPPNi2TsaBz2Z77myXDPJkSZHB"
+    ],
+    "good": [
+      "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+      "Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst",
+      "3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV",
+      "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot"
+    ]
+  },
   "lanes": {
     "P-0101": "payouts-need-proof",
     "P-0102": "payouts-default",
@@ -61,7 +181,19 @@
     "P-0159": "payouts-need-proof",
     "P-0160": "payouts-need-proof"
   },
+  "nosana_spent_usd": 0.03,
+  "paired": {
+    "compiled_right_raw_wrong": 16,
+    "raw_right_compiled_wrong": 1,
+    "sign_test_p": 0.000275
+  },
   "phase": "1b",
   "prepared_at": 1794300937.198615,
+  "receipts": {
+    "anchored": 42,
+    "declared": 0
+  },
+  "rerun_agreement": "not run (plan changed after the batch: see docs/phase1b-report.md)",
+  "routing": "human review for payouts over $500 (on_no_open_model)",
   "run_id": "payouts-2026-11-10b"
 }

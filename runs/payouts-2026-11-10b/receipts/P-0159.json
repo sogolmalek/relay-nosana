@@ -1,0 +1,75 @@
+{
+  "cost_usd": 8.3e-05,
+  "grade": "anchored",
+  "input_sha256": "d3988d9a765290c1a8cda103baa3911fe69c2bccf42801d1b9357408767c3703",
+  "item_id": "P-0159/compiled",
+  "merkle": {
+    "path": [
+      {
+        "hash": "1f8ab1dd7bffaab13170024531291e2f7bc3c4e3e19318204fcc7546bbd7d501",
+        "side": "R"
+      },
+      {
+        "hash": "d9f5de4bf32148b8eceffa2de38de8d454040c6d19b39107dbde22c5626d3525",
+        "side": "R"
+      },
+      {
+        "hash": "614a6625d493dbbd5ac2218d8b1db799029aed83f62f73e96a386197c7534df5",
+        "side": "L"
+      },
+      {
+        "hash": "b186ae84e2ddd31e401124f6a426216270fe93f832a51bbd9e2b50134e08c190",
+        "side": "L"
+      },
+      {
+        "hash": "0ddf5edbc4c2c016298dbc8db6f89b1556e0d051f275069da5803dca07bb98b7",
+        "side": "L"
+      },
+      {
+        "hash": "f6ae814ededb0f68a975fa7ed64d8eb6d4af9224cbb2bba0d530af1fcfcfe63d",
+        "side": "L"
+      }
+    ],
+    "root": "e9e64eb36a3e6ed6c89cec822c69a3783b4ed1c4860613da6ef725e9db1a8c41"
+  },
+  "model": {
+    "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+    "weights": "Qwen/Qwen2.5-7B-Instruct@a09a35458c702b33eeacc393d103063234e8bc28"
+  },
+  "nosana": {
+    "container_end": 1794301152610,
+    "container_start": 1794300988170,
+    "finished_at": 1794301162,
+    "inputs_cid": "QmQYakJhc8JFDHqataz2mzrwp5i61mMuF4hVWDsV8ZGpW9",
+    "job": "EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N",
+    "job_definition_cid": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
+    "listed_at": 1794300984,
+    "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+    "result_cid": "Qmf2qKekLaNWCLmfyxhYduAzh6Q7MyeA94t8HLJ1q4dRMK"
+  },
+  "output": {
+    "decision": "approve",
+    "reason_code": "ok"
+  },
+  "output_sha256": "e85ffc72e7336add6bcac5094320818f2ee33c3c8d6018bf8800455d83bb96d9",
+  "receipt_id": "52159f38ad3173b28a7232dfdd665e4b7fe5dc7ee077eef20a4d59f1190f8694",
+  "receipt_version": "0.1",
+  "relay_checks": [
+    "output_schema"
+  ],
+  "rule": {
+    "id": "payouts-need-proof",
+    "requires": "anchored",
+    "snapshot_sha256": "2b8892f58c3b81ba3d061d2cb830d289e77a254166ae8584a354aa27f9489f16"
+  },
+  "source": {
+    "vendor": "relay-batch",
+    "work_type": "payout_check"
+  },
+  "spot_check": {
+    "agreed": null,
+    "rerun_job": null,
+    "rerun_node": null
+  }
+}

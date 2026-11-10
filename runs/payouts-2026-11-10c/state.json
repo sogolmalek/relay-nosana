@@ -1,0 +1,63 @@
+{
+  "batch": {
+    "account": {
+      "address": "6LNcFPvUNbqdei51QW43zxqW6N3ZykdL8qdx5ffy1ak7",
+      "ipfs_job": "QmbybE1TThMNCRKhDUumMeRXzkcE5EYrJTqe8e5WnJnLFn",
+      "ipfs_result": "QmVCgZPAq3v48pH2k4jz98WNX5dyVkyLkw7sJz6QpgxZNt",
+      "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+      "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+      "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+      "price": 116,
+      "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+      "state": 2,
+      "state_name": "COMPLETED",
+      "time_end": 1794303053,
+      "time_start": 1794302892,
+      "timeout": 3600
+    },
+    "attempts": [
+      "6LNcFPvUNbqdei51QW43zxqW6N3ZykdL8qdx5ffy1ak7"
+    ],
+    "inputs_cid": "Qmd7tayQ5jGcqG2CFxtNqQWafFES7aRSkxi9ZGtpDY3qZB",
+    "job": "6LNcFPvUNbqdei51QW43zxqW6N3ZykdL8qdx5ffy1ak7",
+    "jobdef_cid": "QmbybE1TThMNCRKhDUumMeRXzkcE5EYrJTqe8e5WnJnLFn",
+    "ok": true,
+    "result_file": "batch_a1_result.json"
+  },
+  "lanes": {
+    "P-0101": "payouts-default",
+    "P-0102": "payouts-default",
+    "P-0103": "payouts-need-proof",
+    "P-0104": "payouts-need-proof",
+    "P-0105": "payouts-default",
+    "P-0106": "payouts-need-proof",
+    "P-0107": "payouts-default",
+    "P-0108": "payouts-need-proof",
+    "P-0109": "payouts-default",
+    "P-0110": "payouts-need-proof",
+    "P-0111": "payouts-default",
+    "P-0112": "payouts-need-proof",
+    "P-0113": "payouts-need-proof",
+    "P-0114": "payouts-need-proof",
+    "P-0115": "payouts-need-proof",
+    "P-0116": "payouts-need-proof",
+    "P-0117": "payouts-need-proof",
+    "P-0118": "payouts-default",
+    "P-0119": "payouts-default",
+    "P-0120": "payouts-need-proof",
+    "P-0121": "payouts-need-proof",
+    "P-0122": "payouts-need-proof",
+    "P-0123": "payouts-default",
+    "P-0124": "payouts-need-proof",
+    "P-0125": "payouts-need-proof",
+    "P-0126": "payouts-need-proof",
+    "P-0127": "payouts-need-proof",
+    "P-0128": "payouts-need-proof",
+    "P-0129": "payouts-need-proof",
+    "P-0130": "payouts-need-proof"
+  },
+  "model_key": "7b",
+  "phase1b_spent_usd": 0.04,
+  "prepared_at": 1794302862.5937002,
+  "run_id": "payouts-2026-11-10c"
+}

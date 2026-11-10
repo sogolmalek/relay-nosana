@@ -41,7 +41,8 @@ def inputs_bytes(lines: list[dict]) -> bytes:
 def build(lines: list[dict], schema: dict, run_id: str, tag: str, task: str,
           image: str = IMAGE, model: str = MODEL, revision: str = REVISION, *, phase: str = "1",
           keep_schema_order: bool = False, output_keys: list[str] | None = None,
-          deadline_s: int = 2700) -> tuple[dict, bytes, str]:
+          deadline_s: int = 2700, runner_path: Path = RUNNER, results: dict | None = None,
+          extra_env: dict | None = None) -> tuple[dict, bytes, str]:
     """(job definition, inputs.jsonl bytes, inputs CID).
     keep_schema_order: pass the schema with its key order as written (guided decoding generates keys in
     schema order; JCS would sort `reasoning` after `decision`). output_keys: what the receipts hash."""
@@ -49,7 +50,7 @@ def build(lines: list[dict], schema: dict, run_id: str, tag: str, task: str,
                     if keep_schema_order else canonical(schema))
     raw = inputs_bytes(lines)
     inputs_cid = cidv0_of_bytes(raw)
-    runner = RUNNER.read_text()
+    runner = runner_path.read_text()
     jd = {
         "version": "0.1",
         "meta": {"trigger": "api", "relay": {
@@ -73,11 +74,12 @@ def build(lines: list[dict], schema: dict, run_id: str, tag: str, task: str,
                     "VLLM_LOGGING_LEVEL": "WARNING",
                     "RELAY_DEADLINE_S": str(deadline_s), "RELAY_HEARTBEAT_S": "180",
                     **({"RELAY_OUTPUT_KEYS": ",".join(output_keys)} if output_keys else {}),
+                    **(extra_env or {}),
                 },
                 "gpu": True,
                 "required_vram": 20,
             },
-            "results": RESULTS,
+            "results": RESULTS if results is None else results,
         }],
     }
     if len(canonical(jd)) > 262144:

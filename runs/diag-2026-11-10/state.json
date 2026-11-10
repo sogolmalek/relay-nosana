@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "job": "3h3xqwzVbJwJhtLDLa82xte9uSmy84c39oWXRewFkrkW",
+  "result_file": "diag_a2_result.json",
+  "jobdef_cid": "QmdnR2H1adXVHyiGGbLpZBhXgQy9a8GkT3aaoCoRa3zUMh",
+  "account": {
+    "address": "3h3xqwzVbJwJhtLDLa82xte9uSmy84c39oWXRewFkrkW",
+    "ipfs_job": "QmdnR2H1adXVHyiGGbLpZBhXgQy9a8GkT3aaoCoRa3zUMh",
+    "ipfs_result": "QmXGymn9dP8NMNZ3PfS9dLnDKuCyj9oYGmBtNAu5BSi6ME",
+    "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+    "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+    "price": 116,
+    "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+    "state": 2,
+    "state_name": "COMPLETED",
+    "time_end": 1794302356,
+    "time_start": 1794302192,
+    "timeout": 3600
+  },
+  "spent_phase1b_usd": 0.03
+}
