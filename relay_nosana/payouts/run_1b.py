@@ -259,7 +259,9 @@ def cmd_nosana(a) -> None:
     conn = db(a.run_id)
     jobs = Jobs()
     budget = Budget(jobs, a.cap)
-    budget.baseline = state.get("budget_baseline", PHASE1B_BASELINE)  # all of Phase 1b, not just this run
+    # the cap counts every job since the baseline: all of Phase 1b by default; --baseline starts a new budget
+    # (Phase 1c: runs e, f, g share $2 from settled 3.536, Sogol 2026-11-10)
+    budget.baseline = a.baseline if a.baseline is not None else state.get("budget_baseline", PHASE1B_BASELINE)
     state["budget_baseline"] = budget.baseline
     state["known_nodes"] = {k: v for k, v in nodes_mod.known_nodes(a.market).items() if k != "table"}
     save_state(a.run_id, state)
@@ -577,6 +579,8 @@ def main(argv=None) -> None:
     p.add_argument("--market", default=jd_mod.MARKET_3090)
     p.add_argument("--rpc", default=os.environ.get("SOLANA_RPC", DEFAULT_RPC))
     p.add_argument("--cap", type=float, default=PHASE1B_CAP_USD)
+    p.add_argument("--baseline", type=float, default=None,
+                   help="nosana: settled credits the cap counts from (stored in the run's state)")
     p.add_argument("--max-attempts", type=int, default=4)
     p.add_argument("--batch-only", action="store_true", help="record the batch; skip the re-run")
     p.add_argument("--model", choices=sorted(MODELS), default="7b", help="prepare only: the pinned model")
