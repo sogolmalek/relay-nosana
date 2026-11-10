@@ -42,6 +42,8 @@ class NosanaClient:
             return r.json()
 
     async def available_credits(self) -> float:
+        """Available credit in USD. The balance fields are dollars, not cents: measured live in Phase 0
+        (assignedCredits 10 = $10; a $0.044 job moved reservedCredits by 0.044). See docs/phase0-report.md."""
         bal = await self.get_balance()
         assigned = float(bal.get("assignedCredits", 0))
         reserved = float(bal.get("reservedCredits", 0))

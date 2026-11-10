@@ -13,19 +13,46 @@ phases, credit caps). This file changes **which scenario the demo leads with**.
 - The `label` lane from SPEC v2 stays, as the scale and accuracy evidence (150–300 issues, accuracy
   vs frontier with CIs). It is the second exhibit, not the headline.
 
+## Where Relay sits
+
+Relay sits **before the payment rail, not instead of it**. The payout still goes out through Stripe
+(or the bank, or a Solana transfer); Relay decides whether it may be sent, and leaves a receipt.
+
+The headline holds are the ones the payment provider can't see, because the evidence lives in the
+team's own decisions, not in the payment:
+
+| Hold (`reason_code`) | What it catches | Can the payment provider see it? |
+|---|---|---|
+| `stale_price` | Invoices billed at a price the team already changed ("Pro dropped from $45 to $42 on Nov 3") | No: the charge was valid at the price billed |
+| `needs_approval` | A refund that needs an approval made somewhere else (finance, in a doc or a thread) | No: the approval isn't in the payment system |
+| `duplicate` | The same work paid twice at the business level (same seller, same invoices, new payout id) | No: two distinct, valid transfers |
+| `amount_mismatch` | Payout total doesn't equal the paid invoices minus refunds | Partly: only if the provider holds the invoices |
+| `seller_on_hold` | Seller on a fraud hold | **Also caught by the payment provider's own risk tools** (Stripe Radar and similar); kept as a cross-check, not a headline |
+
+### Why not just Stripe
+
+Stripe sees the payment: the card, the account, the amount, the risk signals from its network, and
+it is very good at that. It doesn't see why the team believes the amount is right: the price change
+agreed in a meeting, the refund approval granted in a thread, the fact that this payout covers the
+same invoices as last Tuesday's. Those are decisions, and they live in the team's tools, not on the
+rail. Relay checks the payout against those decisions before it reaches the rail, and keeps a
+receipt anyone can verify. Stripe still moves the money and still runs its own fraud checks. The
+two don't overlap: one asks "is this payment safe to process?", the other asks "did we decide to pay this?"
+
 ## The story (one payout run)
 
 A marketplace pays its sellers every night. An agent (any vendor) prepares the run: 20–40 payouts.
 The team's rule: **payouts over $500 need an anchored receipt.**
 
 1. Relay reads the run and the team's ledger of decisions (example: "the Pro plan dropped from $45
-   to $42 on Nov 3"; "seller S-114 is on a fraud hold"; "refunds over 30 days need finance approval").
+   to $42 on Nov 3"; "refunds over 30 days need finance approval"; "seller S-114 is on a fraud
+   hold", the last one also caught by the payment provider's own risk tools).
 2. Work under the rule goes to an open model on Nosana as **one batch job**. For each payout the
    model returns `{"decision": "approve" | "hold", "reason_code": str}`.
 3. Relay issues one anchored receipt per payout (Merkle path to the batch root, job on Solana).
 4. The payout executor (a gate) sends a payout **only if `relay-verify` passes** and the decision
    is `approve`. Payout = a Solana **devnet** transfer whose memo carries the `receipt_id`.
-5. Payouts under the threshold take the frontier lane and get a **declared** receipt. The gate
+5. Payouts under the threshold take the declared lane (headless Claude Code in the POC) and get a **declared** receipt. The gate
    accepts declared receipts only where the rule allows it.
 
 Chain of evidence the demo shows: **payout tx → receipt → Nosana job → node → job definition
@@ -80,7 +107,7 @@ rules:
     writes_to: payouts
     when: {amount_usd_gt: 500}
     requires: anchored
-    bar: {metric: accuracy, ratio_of_frontier: 0.9, use_ci_lower: true}
+    bar: {metric: accuracy_vs_ground_truth, ci_lower_gte: 0.90}   # absolute; frontier ratio not measured in POC
     on_no_open_model: human_review      # money: never fall back to declared silently
     rerun: {always_if: {amount_usd_gt: 5000}, sample_rate: 0.10, sample_min: 15}
 ```

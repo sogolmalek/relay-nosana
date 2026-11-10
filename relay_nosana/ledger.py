@@ -40,6 +40,63 @@ CREATE TABLE IF NOT EXISTS deployments (
     credits_before  REAL,
     credits_after   REAL
 );
+
+-- SPEC_V2 section 10 (Phase 1): Nosana jobs, receipts, rule snapshots.
+CREATE TABLE IF NOT EXISTS jobs (
+    job                 TEXT PRIMARY KEY,   -- Solana job address
+    run_id              TEXT NOT NULL,
+    tag                 TEXT,               -- batch | rerun
+    attempt             INTEGER,
+    market              TEXT,
+    requested_node      TEXT,
+    node                TEXT,
+    job_definition_cid  TEXT,
+    inputs_cid          TEXT,
+    result_cid          TEXT,
+    image               TEXT,               -- pinned by digest
+    model_revision      TEXT,               -- org/model@revision
+    listed_at           INTEGER,            -- on-chain timeStart (listing time), unix s
+    finished_at         INTEGER,            -- on-chain timeEnd, unix s
+    container_start     INTEGER,            -- from the result, unix ms
+    container_end       INTEGER,
+    post_to_running_s   REAL,               -- run account seen
+    startup_s           REAL,               -- container start -> model loaded
+    import_s            REAL,
+    download_s          REAL,               -- weights download alone (inside load_s)
+    load_s              REAL,               -- download + load
+    gen_s               REAL,
+    credits_reserved    REAL,               -- USD
+    credits_before      REAL,               -- available USD before posting
+    credits_after       REAL,               -- available USD after settlement read
+    state               TEXT,               -- COMPLETED | STOPPED | ...
+    result_status       TEXT,
+    ok                  INTEGER,            -- 1 if the result passed check_result
+    error               TEXT,
+    ts                  REAL
+);
+
+CREATE TABLE IF NOT EXISTS receipts (
+    receipt_id          TEXT PRIMARY KEY,
+    run_id              TEXT NOT NULL,
+    item_id             TEXT NOT NULL,
+    grade               TEXT NOT NULL,      -- anchored | declared
+    rule_id             TEXT,
+    rule_sha256         TEXT,
+    job                 TEXT,               -- null for declared
+    output_sha256       TEXT,
+    merkle_root         TEXT,
+    verified_at         REAL,
+    verify_verdict      TEXT,
+    spot_check_agreed   INTEGER,
+    receipt_json        TEXT
+);
+
+CREATE TABLE IF NOT EXISTS rules (
+    snapshot_sha256     TEXT PRIMARY KEY,
+    rule_id             TEXT NOT NULL,
+    rule_json           TEXT NOT NULL,
+    first_seen          REAL
+);
 """
 
 
@@ -53,6 +110,11 @@ def init_db(path: Path | None = None) -> sqlite3.Connection:
     conn = sqlite3.connect(str(p))
     conn.row_factory = sqlite3.Row
     conn.executescript(DDL)
+    for col in ("download_s REAL",):  # columns added after a ledger was first created
+        try:
+            conn.execute(f"ALTER TABLE jobs ADD COLUMN {col}")
+        except sqlite3.OperationalError:
+            pass
     conn.commit()
     return conn
 
@@ -156,3 +218,14 @@ def query_summary(conn: sqlite3.Connection, run_id: str) -> dict[str, Any]:
         (run_id,),
     ).fetchall()
     return {"run_id": run_id, "cells": [dict(r) for r in rows]}
+
+
+def upsert(conn: sqlite3.Connection, table: str, row: dict, key: str) -> None:
+    """Insert or update one row of jobs / receipts / rules by its primary key."""
+    cols = list(row)
+    sets = ", ".join(f"{c}=excluded.{c}" for c in cols if c != key)
+    conn.execute(
+        f"INSERT INTO {table} ({', '.join(cols)}) VALUES ({', '.join('?' * len(cols))}) "
+        f"ON CONFLICT({key}) DO UPDATE SET {sets}",
+        [row[c] for c in cols],
+    )

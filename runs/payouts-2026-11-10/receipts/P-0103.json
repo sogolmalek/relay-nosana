@@ -1,0 +1,72 @@
+{
+  "cost_usd": 0.000333,
+  "grade": "anchored",
+  "input_sha256": "05b1aa05644969d822a006cd1d8717140fe2164e3d18aa4870c6c1eba1f614be",
+  "item_id": "P-0103",
+  "merkle": {
+    "path": [
+      {
+        "hash": "6ed775011efdb1b267ee7de60e38c9d7a595a10e6bfff0f3bc2234544c38724c",
+        "side": "R"
+      },
+      {
+        "hash": "bca16f0c83097958d7d7333bb67fdcc632a50a3d8a11d9812d7aa4886baac3c5",
+        "side": "L"
+      },
+      {
+        "hash": "895106afdc6ee3c7d007b816818af7edccebd1d33b1a3918ec01a881cd39267a",
+        "side": "R"
+      },
+      {
+        "hash": "750bbe4a65d9a48478aba025cc7c413fb900b6f94315f6120e110933192cb8e0",
+        "side": "R"
+      },
+      {
+        "hash": "be039fc227931503ed1053463d113d7f4a832a132c8cc72c4f94c9bf05006a23",
+        "side": "R"
+      }
+    ],
+    "root": "9c606a83d83b8ebfec7af8258c74d2dc2dc2c4ebb7b6d43b6f046a690350c30b"
+  },
+  "model": {
+    "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+    "weights": "Qwen/Qwen2.5-7B-Instruct@a09a35458c702b33eeacc393d103063234e8bc28"
+  },
+  "nosana": {
+    "container_end": 1794296876169,
+    "container_start": 1794296710123,
+    "finished_at": 1794296880,
+    "inputs_cid": "QmPGy1MvpCUuGBa2UaCcAcNSyUVwumQ8kzJcQtDHv7pzbc",
+    "job": "7f1Br2taJ8ywANS1MtuqX9pavgb3qzgMikSYaCjxvY4q",
+    "job_definition_cid": "QmNYSM6RsUSbNSkLx9YBW8T2wSqVTmztQ9PcATaomBaeSw",
+    "listed_at": 1794296707,
+    "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+    "result_cid": "QmXqgLZve8aGkboYsxgyAbmFD7fKbcvEABuiTc1iDBLw2W"
+  },
+  "output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+  },
+  "output_sha256": "f646fee25f1afd67809e3ae146c3390d5e9c15c588244c3ffc0e7e83d974b8c9",
+  "receipt_id": "1e9f851d5f3e02501c603581996d285dddf77195c56100a9a0d604b440dad38c",
+  "receipt_version": "0.1",
+  "relay_checks": [
+    "output_schema",
+    "spot_check_agreed"
+  ],
+  "rule": {
+    "id": "payouts-need-proof",
+    "requires": "anchored",
+    "snapshot_sha256": "2b8892f58c3b81ba3d061d2cb830d289e77a254166ae8584a354aa27f9489f16"
+  },
+  "source": {
+    "vendor": "relay-batch",
+    "work_type": "payout_check"
+  },
+  "spot_check": {
+    "agreed": true,
+    "rerun_job": "5XvbtVDEkAkVcP127RbQuiExjixom6cYE9QvaWuQDbay",
+    "rerun_node": "Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst"
+  }
+}

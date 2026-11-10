@@ -1,0 +1,158 @@
+{
+  "accuracy": {
+    "claude-code:claude-opus-5-5": {
+      "accuracy": 1.0,
+      "ci_high": 1.0,
+      "ci_low": 0.7009,
+      "correct": 9,
+      "cost_usd": 0,
+      "n": 9
+    },
+    "nosana:Qwen/Qwen2.5-7B-Instruct@a09a35458c70": {
+      "accuracy": 0.1333,
+      "ci_high": 0.2968,
+      "ci_low": 0.0531,
+      "correct": 4,
+      "cost_usd": 0.01,
+      "n": 30
+    },
+    "nosana:Qwen/Qwen2.5-7B-Instruct@a09a35458c70 (anchored lane, > $500)": {
+      "accuracy": 0.1429,
+      "ci_high": 0.3464,
+      "ci_low": 0.0498,
+      "correct": 3,
+      "n": 21
+    }
+  },
+  "bar": {
+    "cleared": false,
+    "frontier_ratio": "not measured in POC",
+    "metric": "accuracy_vs_ground_truth",
+    "n": 30,
+    "needed_ci_low": 0.9,
+    "open_accuracy": 0.1333,
+    "open_ci_low": 0.0531,
+    "rule": "payouts-need-proof"
+  },
+  "batch": {
+    "account": {
+      "address": "7f1Br2taJ8ywANS1MtuqX9pavgb3qzgMikSYaCjxvY4q",
+      "ipfs_job": "QmNYSM6RsUSbNSkLx9YBW8T2wSqVTmztQ9PcATaomBaeSw",
+      "ipfs_result": "QmXqgLZve8aGkboYsxgyAbmFD7fKbcvEABuiTc1iDBLw2W",
+      "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+      "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+      "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+      "price": 115,
+      "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+      "state": 2,
+      "state_name": "COMPLETED",
+      "time_end": 1794296880,
+      "time_start": 1794296707,
+      "timeout": 3600
+    },
+    "attempts": [
+      "At7dH6NpuRTxWYKmVoh2bYdddjDgfiDUixRGFvRKkrQF",
+      "YYTscXhLphZxT91fwvNVpXcAythEdNYRPRtYLwn6NFT",
+      "BmW33L4Ykw4EXfvC4f7U22rf2HDNESBR82tDRhEwdSo3",
+      "2gjR5m5BYNm7jknKnfWJsGgj29w9zu6aisbk47y8NRZf",
+      "7f1Br2taJ8ywANS1MtuqX9pavgb3qzgMikSYaCjxvY4q"
+    ],
+    "inputs_cid": "QmPGy1MvpCUuGBa2UaCcAcNSyUVwumQ8kzJcQtDHv7pzbc",
+    "job": "7f1Br2taJ8ywANS1MtuqX9pavgb3qzgMikSYaCjxvY4q",
+    "jobdef_cid": "QmNYSM6RsUSbNSkLx9YBW8T2wSqVTmztQ9PcATaomBaeSw",
+    "ok": true,
+    "result_file": "batch_a5_result.json"
+  },
+  "budget_baseline": 3.027,
+  "lanes": {
+    "P-0101": "payouts-need-proof",
+    "P-0102": "payouts-default",
+    "P-0103": "payouts-need-proof",
+    "P-0104": "payouts-need-proof",
+    "P-0105": "payouts-need-proof",
+    "P-0106": "payouts-need-proof",
+    "P-0107": "payouts-need-proof",
+    "P-0108": "payouts-need-proof",
+    "P-0109": "payouts-default",
+    "P-0110": "payouts-need-proof",
+    "P-0111": "payouts-need-proof",
+    "P-0112": "payouts-need-proof",
+    "P-0113": "payouts-default",
+    "P-0114": "payouts-default",
+    "P-0115": "payouts-need-proof",
+    "P-0116": "payouts-default",
+    "P-0117": "payouts-default",
+    "P-0118": "payouts-need-proof",
+    "P-0119": "payouts-need-proof",
+    "P-0120": "payouts-need-proof",
+    "P-0121": "payouts-default",
+    "P-0122": "payouts-need-proof",
+    "P-0123": "payouts-need-proof",
+    "P-0124": "payouts-default",
+    "P-0125": "payouts-need-proof",
+    "P-0126": "payouts-need-proof",
+    "P-0127": "payouts-need-proof",
+    "P-0128": "payouts-need-proof",
+    "P-0129": "payouts-default",
+    "P-0130": "payouts-need-proof"
+  },
+  "nosana_spent_usd": 0.378,
+  "prepared_at": 1794287945.4562209,
+  "receipts": {
+    "anchored": 21,
+    "declared": 9
+  },
+  "rerun": {
+    "account": {
+      "address": "5XvbtVDEkAkVcP127RbQuiExjixom6cYE9QvaWuQDbay",
+      "ipfs_job": "QmfTesYRtZUiCyfzJoFeWCEQqc79NBGQYQVfdt9g3fD2Kf",
+      "ipfs_result": "Qmb9QFtsaSvFoSnSusVaLUn3m9KpcHTnyaMk1BeCPpgAmH",
+      "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+      "node": "Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst",
+      "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+      "price": 115,
+      "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+      "state": 2,
+      "state_name": "COMPLETED",
+      "time_end": 1794298549,
+      "time_start": 1794298228,
+      "timeout": 3600
+    },
+    "attempts": [
+      "6Q4QUmz1qAtfSQKifwqeNdfRxqERxZ8AJsHGdNRUzbUv",
+      "5XvbtVDEkAkVcP127RbQuiExjixom6cYE9QvaWuQDbay"
+    ],
+    "inputs_cid": "QmVWcEVVS38bmqGPPaXLVZ2nSWSfeRN2Jt3XjXm5TQHtj6",
+    "items": [
+      "P-0101",
+      "P-0103",
+      "P-0104",
+      "P-0105",
+      "P-0106",
+      "P-0107",
+      "P-0108",
+      "P-0115",
+      "P-0118",
+      "P-0119",
+      "P-0122",
+      "P-0125",
+      "P-0127",
+      "P-0128",
+      "P-0130"
+    ],
+    "job": "5XvbtVDEkAkVcP127RbQuiExjixom6cYE9QvaWuQDbay",
+    "jobdef_cid": "QmfTesYRtZUiCyfzJoFeWCEQqc79NBGQYQVfdt9g3fD2Kf",
+    "ok": true,
+    "result_file": "rerun_a2_result.json"
+  },
+  "rerun_agreement": {
+    "agreed": 15,
+    "n": 15
+  },
+  "run_id": "payouts-2026-11-10",
+  "verify": {
+    "could_not_check": 0,
+    "failed": 0,
+    "verified": 30
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sogolmalek/relay-nosana/docs/receipt-schema.json",
+  "title": "Relay receipt v0.1",
+  "type": "object",
+  "required": ["receipt_version", "grade", "receipt_id", "item_id", "source", "rule", "input_sha256", "output",
+               "output_sha256", "relay_checks", "cost_usd"],
+  "properties": {
+    "receipt_version": {"const": "0.1"},
+    "grade": {"enum": ["anchored", "declared"]},
+    "receipt_id": {"$ref": "#/$defs/hex64"},
+    "item_id": {"type": "string"},
+    "source": {"type": "object", "required": ["vendor", "work_type"],
+               "properties": {"vendor": {"type": "string"}, "work_type": {"type": "string"}}},
+    "rule": {"type": "object", "required": ["id", "requires"],
+             "properties": {"id": {"type": "string"}, "requires": {"enum": ["anchored", "declared", "none"]},
+                            "snapshot_sha256": {"$ref": "#/$defs/hex64"}}},
+    "input_sha256": {"$ref": "#/$defs/hex64"},
+    "output": {"type": "object"},
+    "output_sha256": {"$ref": "#/$defs/hex64"},
+    "relay_checks": {"type": "array", "items": {"type": "string"}},
+    "cost_usd": {"type": "number", "minimum": 0}
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "grade": {"const": "anchored"},
+        "merkle": {"type": "object", "required": ["root", "path"],
+                   "properties": {"root": {"$ref": "#/$defs/hex64"},
+                                  "path": {"type": "array", "items": {"type": "object", "required": ["side", "hash"],
+                                           "properties": {"side": {"enum": ["L", "R"]}, "hash": {"$ref": "#/$defs/hex64"}}}}}},
+        "nosana": {"type": "object",
+                   "required": ["job", "market", "node", "job_definition_cid", "result_cid", "inputs_cid",
+                                "listed_at", "finished_at", "container_start", "container_end"],
+                   "properties": {"job": {"$ref": "#/$defs/b58"}, "market": {"$ref": "#/$defs/b58"},
+                                  "node": {"$ref": "#/$defs/b58"}, "job_definition_cid": {"$ref": "#/$defs/cidv0"},
+                                  "result_cid": {"$ref": "#/$defs/cidv0"}, "inputs_cid": {"$ref": "#/$defs/cidv0"},
+                                  "listed_at": {"type": "integer", "description": "job account timeStart (listing time), unix s"},
+                                  "finished_at": {"type": "integer", "description": "job account timeEnd, unix s"},
+                                  "container_start": {"type": "integer", "description": "result opStates[0].startTime, unix ms"},
+                                  "container_end": {"type": "integer", "description": "result opStates[0].endTime, unix ms"}}},
+        "model": {"type": "object", "required": ["image", "weights"],
+                  "properties": {"image": {"type": "string", "pattern": "@sha256:[0-9a-f]{64}$"},
+                                 "weights": {"type": "string", "pattern": "^[^@]+@[^@]+$"}}},
+        "spot_check": {"type": "object", "required": ["rerun_job", "rerun_node", "agreed"]}
+      },
+      "required": ["merkle", "nosana", "model", "spot_check"],
+      "not": {"required": ["provider"]}
+    },
+    {
+      "properties": {
+        "grade": {"const": "declared"},
+        "provider": {"type": "object", "required": ["name", "model", "timestamp"],
+                     "anyOf": [{"required": ["request_id"]}, {"required": ["session_id"]}],
+                     "properties": {"name": {"type": "string"}, "model": {"type": "string"},
+                                    "request_id": {"type": "string", "description": "API request id (name anthropic)"},
+                                    "session_id": {"type": "string", "description": "headless Claude Code session id (name claude-code)"},
+                                    "timestamp": {"type": "string", "description": "ISO 8601 UTC"}}}
+      },
+      "required": ["provider"],
+      "not": {"anyOf": [{"required": ["nosana"]}, {"required": ["merkle"]}]}
+    }
+  ],
+  "$defs": {
+    "hex64": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "cidv0": {"type": "string", "pattern": "^Qm[1-9A-HJ-NP-Za-km-z]{44}$"},
+    "b58": {"type": "string", "pattern": "^[1-9A-HJ-NP-Za-km-z]{32,44}$"}
+  }
+}

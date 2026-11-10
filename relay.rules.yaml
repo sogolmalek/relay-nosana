@@ -1,0 +1,16 @@
+# Proof rules (SPEC_V2 section 9, docs/POC_PAYOUTS.md). The first rule whose `when` matches applies.
+rules:
+  - id: payouts-need-proof
+    work_type: payout_check
+    writes_to: payouts
+    when: {amount_usd_gt: 500}
+    requires: anchored
+    # absolute bar (Sogol, 2026-11-10): accuracy against the deterministic ground truth, Wilson 95% CI
+    # lower bound >= 0.90. The frontier ratio isn't measured in the POC (no API credits).
+    bar: {metric: accuracy_vs_ground_truth, ci_lower_gte: 0.90}
+    on_no_open_model: human_review      # money: never fall back to declared silently
+    rerun: {always_if: {amount_usd_gt: 5000}, sample_rate: 0.10, sample_min: 15}
+  - id: payouts-default
+    work_type: payout_check
+    writes_to: payouts
+    requires: declared

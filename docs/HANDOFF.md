@@ -1,5 +1,12 @@
 # Handoff: where Phase 0 stands (read before doing anything)
 
+> **2026-11-10: Phase 1 is done and committed.** One real payout run on Nosana with receipts:
+> `docs/phase1-report.md` (jobs, timing, credits, accuracy with CIs, receipts, decisions needed) and
+> `runs/payouts-2026-11-10/`. All 21 anchored receipts pass `relay-verify`; the open model (Qwen2.5-7B)
+> scored 4/30 and does **not** clear the bar, so the payouts over $500 go to human review. Phase 1
+> spend $0.378 of $3. **Phase 2 waits for Sogol's decisions at the end of the Phase 1 report.**
+> Correction to "Rules" below: the balance is USD, not cents; the v1 provider already read it right.
+
 > **2026-11-09: Phase 0 is done and committed.** Results, the checks table, spend and the changes it forces
 > on SPEC_V2 sections 6–8 are in `docs/phase0-report.md`. The notes below are the state *before* the
 > live runs. Phase 1 waits for Sogol's decisions at the end of the report.

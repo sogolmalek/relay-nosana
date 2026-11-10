@@ -25,3 +25,11 @@ report that shows it.
    job, node-dependent). Ask: `revision` on HF resources.
 6. **Balance units are undocumented.** `GET /credits/balance` is USD; `creditsUsed` in the post
    response is thousandths of a dollar.
+7. **A stopped running job leaves nothing behind**: no result, no logs, and the job account shows no
+   node. In Phase 1 two jobs on two 3090 nodes ran for 55 minutes without finishing; we stopped them
+   and can't say why they hung (85% of the Phase 1 spend). Ask: publish the logs so far when a job is
+   stopped or times out, and keep the node on the job account. (Phase 1 report, jobs table.)
+8. **Unhealthy nodes stay in the market**: one 3090 node (`6YDndB2a…`) failed every job we sent it
+   because its GPU driver doesn't initialise (`NVMLError_Unknown`), and failed a result publish in
+   Phase 0. Ask: a node health check (e.g. `nvidia-smi` before taking a job) that takes failing
+   nodes out of the queue.

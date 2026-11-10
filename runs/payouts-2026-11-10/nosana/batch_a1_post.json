@@ -1,0 +1,19 @@
+{
+  "body": {
+    "credits": {
+      "costUSD": 0.175,
+      "creditsUsed": 175,
+      "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+      "reservationId": "635b198e-b421-4bfc-a5d6-c0f7f644e6bc"
+    },
+    "job": "At7dH6NpuRTxWYKmVoh2bYdddjDgfiDUixRGFvRKkrQF",
+    "run": "AyJXxZigSRUDzfjUDvrVud5UtkD4xUtiTd1Juu5dN1CM",
+    "tx": "4dGM6MKmZnLpK8B8Fph9sHv2an2E1wcLvoJdV9Timd8hbLRhPAwb4uTkfhdt2qS8eTiYBLcSjbzonQzpjLiUsfSb"
+  },
+  "http_status": 200,
+  "request": {
+    "ipfsHash": "QmaabjguzZqMqby4QG1ZA7mtoxAHC4AXY6cggwj3E61cHo",
+    "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "timeout": 3600
+  }
+}

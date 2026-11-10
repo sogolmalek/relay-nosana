@@ -1,0 +1,14 @@
+[
+  {
+    "first_seen": 1794287945.4556491,
+    "rule_id": "payouts-need-proof",
+    "rule_json": "{\"bar\":{\"metric\":\"accuracy\",\"ratio_of_frontier\":0.9,\"use_ci_lower\":true},\"id\":\"payouts-need-proof\",\"on_no_open_model\":\"human_review\",\"requires\":\"anchored\",\"rerun\":{\"always_if\":{\"amount_usd_gt\":5000},\"sample_min\":15,\"sample_rate\":0.1},\"when\":{\"amount_usd_gt\":500},\"work_type\":\"payout_check\",\"writes_to\":\"payouts\"}",
+    "snapshot_sha256": "1fb183940da958c23039c3f9b822f5769329a0cf98e4d9f25ace901a265c1148"
+  },
+  {
+    "first_seen": 1794287945.455842,
+    "rule_id": "payouts-default",
+    "rule_json": "{\"id\":\"payouts-default\",\"requires\":\"declared\",\"work_type\":\"payout_check\",\"writes_to\":\"payouts\"}",
+    "snapshot_sha256": "e05b16b668047e395d4808b6e2e7cbb293a2d4c94c4346f6b50572f4426f6258"
+  }
+]

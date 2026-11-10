@@ -8,6 +8,8 @@ from __future__ import annotations
 import base64
 import json
 import struct
+import time
+import urllib.error
 import urllib.request
 from dataclasses import asdict, dataclass
 
@@ -108,11 +110,22 @@ class RpcError(RuntimeError):
     pass
 
 
-def rpc_call(rpc_url: str, method: str, params: list, timeout: float = 30.0) -> dict:
+def rpc_call(rpc_url: str, method: str, params: list, timeout: float = 30.0, tries: int = 5) -> dict:
+    """JSON-RPC call; retries connection errors and HTTP 429/5xx (public RPCs rate-limit)."""
     body = json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode()
     req = urllib.request.Request(rpc_url, data=body, headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        resp = json.loads(r.read())
+    for attempt in range(tries):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                resp = json.loads(r.read())
+            break
+        except urllib.error.HTTPError as e:
+            if e.code != 429 and e.code < 500 or attempt == tries - 1:
+                raise
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError):
+            if attempt == tries - 1:
+                raise
+        time.sleep(2 * (attempt + 1))
     if "error" in resp:
         raise RpcError(f"{method}: {resp['error']}")
     return resp
