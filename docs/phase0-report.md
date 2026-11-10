@@ -143,3 +143,13 @@ No key, JWT or email is in any fixture (checked before commit).
 - Confirm the receipt time fields (point 1) and the output channel (point 6).
 - Startup of 3–21 minutes per job: fine for the batched payout story. It should be stated in the
   application as measured.
+
+## Decisions taken (Sogol, 2026-11-09)
+
+1. Pinning via Nosana's community key is accepted for the POC, with the second pin on our own
+   `PINATA_JWT`. "No pinning route for API-key accounts" goes into the grant application as
+   feedback (`docs/nosana-feedback.md`).
+2. Receipt time fields: the on-chain `timeStart` becomes `listed_at`; `container_start` and
+   `container_end` come from the result.
+3. Output channel: stdout plus a regex-extracted Merkle root, each result under 256 KiB, batches of
+   at most 100 items for the label lane.
