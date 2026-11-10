@@ -181,7 +181,7 @@
     "P-0159": "payouts-need-proof",
     "P-0160": "payouts-need-proof"
   },
-  "nosana_spent_usd": 0.03,
+  "nosana_spent_usd": 0.114,
   "paired": {
     "compiled_right_raw_wrong": 16,
     "raw_right_compiled_wrong": 1,
@@ -193,7 +193,58 @@
     "anchored": 42,
     "declared": 0
   },
-  "rerun_agreement": "not run (plan changed after the batch: see docs/phase1b-report.md)",
+  "rerun": {
+    "account": {
+      "address": "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB",
+      "ipfs_job": "QmYG58Kbn9JKrBst8aBR3E1PHVHUiAYkE1rh9E4wX2Wx1i",
+      "ipfs_result": "QmcLkBqsTsUv4pRRz2jG1Vy7egvRrBLxeHr2jKExaU6Z4A",
+      "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+      "node": "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot",
+      "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+      "price": 117,
+      "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+      "state": 2,
+      "state_name": "COMPLETED",
+      "time_end": 1794319658,
+      "time_start": 1794319463,
+      "timeout": 3600
+    },
+    "attempts": [
+      "AU47PGxUne7f6QvyZaYWzjbAbxBKKakAicR74MUs7hCp",
+      "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB"
+    ],
+    "inputs_cid": "QmfVU7UBvB6t4119KDkGBqQp6cxfyFpMXw6UkchAM8ZDAR",
+    "items": [
+      "P-0101/compiled",
+      "P-0104/compiled",
+      "P-0105/compiled",
+      "P-0110/compiled",
+      "P-0111/compiled",
+      "P-0115/compiled",
+      "P-0124/compiled",
+      "P-0128/compiled",
+      "P-0135/compiled",
+      "P-0136/compiled",
+      "P-0138/compiled",
+      "P-0139/compiled",
+      "P-0143/compiled",
+      "P-0146/compiled",
+      "P-0154/compiled"
+    ],
+    "job": "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB",
+    "jobdef_cid": "QmYG58Kbn9JKrBst8aBR3E1PHVHUiAYkE1rh9E4wX2Wx1i",
+    "ok": true,
+    "result_file": "rerun_a2_result.json"
+  },
+  "rerun_agreement": {
+    "agreed": 14,
+    "n": 15
+  },
   "routing": "human review for payouts over $500 (on_no_open_model)",
-  "run_id": "payouts-2026-11-10b"
+  "run_id": "payouts-2026-11-10b",
+  "verify": {
+    "could_not_check": 0,
+    "failed": 42,
+    "verified": 0
+  }
 }

@@ -1,0 +1,192 @@
+"""Compiler v2 (run e): rules 1-3 resolved in code. Each fact is tested on hand-built payouts, then against
+the generator's labels over the whole run-e pool. The raw arm and run b's inputs must not change."""
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+import pytest
+
+from relay_nosana.payouts import task
+from relay_nosana.payouts.data import (N_1E, PLAN_1B, PLAN_1E_POOL, SEED_1B, SEED_1E, content_key, draw,
+                                       generate)
+from relay_nosana.nosana import jobdef as jd_mod
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def _payout(seller="S-101", invoice="INV-1", amount=8400, date="2026-11-09", lines=None):
+    lines = lines if lines is not None else [
+        {"type": "sale", "sku": "PRO", "qty": 2, "sale_date": "2026-11-05", "unit_price_cents": 4200}]
+    return {"payout_id": "P-0001", "payout_date": date, "seller_id": seller, "invoice_id": invoice,
+            "currency": "USD", "amount_cents": amount, "lines": lines}
+
+
+# ---------------------------------------------------------------- rule 1: seller on an active hold
+
+@pytest.mark.parametrize("seller,decision", [("S-114", "D-103"), ("S-207", "D-104")])
+def test_seller_on_active_hold(seller, decision):
+    hit, why = task.fact_seller_on_hold(_payout(seller=seller))
+    assert hit and decision in why and seller in why
+
+
+def test_seller_not_on_hold():
+    hit, why = task.fact_seller_on_hold(_payout(seller="S-101"))
+    assert not hit and "S-101" in why
+
+
+def test_hold_not_yet_in_force_does_not_apply():
+    # D-104 (S-207) is dated 2026-11-06: a payout dated before it is not held by it
+    assert not task.fact_seller_on_hold(_payout(seller="S-207", date="2026-11-05"))[0]
+    assert task.fact_seller_on_hold(_payout(seller="S-207", date="2026-11-06"))[0]
+
+
+# ---------------------------------------------------------------- rule 2: duplicate invoice
+
+def test_duplicate_when_invoice_already_paid_to_same_seller():
+    hit, why = task.fact_duplicate(_payout(invoice="INV-7"), {"S-101": ["INV-3", "INV-7"]})
+    assert hit and "INV-7" in why
+
+
+@pytest.mark.parametrize("paid", [{}, {"S-101": ["INV-3"]}, {"S-999": ["INV-7"]}])
+def test_not_duplicate(paid):
+    # unpaid, or paid only to a different seller
+    assert not task.fact_duplicate(_payout(invoice="INV-7"), paid)[0]
+
+
+# ---------------------------------------------------------------- rule 3: amount matches the lines
+
+def test_amount_matches_sales_and_refunds():
+    lines = [{"type": "sale", "sku": "TEAM", "qty": 3, "sale_date": "2026-11-05", "unit_price_cents": 12900},
+             {"type": "refund", "order_id": "O-1", "order_date": "2026-10-01", "refund_cents": 4200}]
+    hit, why = task.fact_amount_mismatch(_payout(amount=3 * 12900 - 4200, lines=lines))
+    assert not hit and "345.00" in why
+
+
+@pytest.mark.parametrize("delta", [-1, 1, 1000])
+def test_amount_mismatch(delta):
+    hit, why = task.fact_amount_mismatch(_payout(amount=8400 + delta))
+    assert hit and "84.00" in why
+
+
+# ---------------------------------------------------------------- against the generator over run e's pool
+
+def test_facts_agree_with_generator_labels_over_pool():
+    pool = generate(SEED_1E, PLAN_1E_POOL)
+    for p in pool["payouts"]:
+        facts = task.resolved_facts(p, pool["paid_invoices"])
+        code = pool["truth"][p["payout_id"]]["reason_code"]
+        if code in facts:  # the first rule that applies must be resolved as applying
+            assert facts[code][0], (p["payout_id"], code)
+        first = next((name for name, (hit, _) in facts.items() if hit), None)
+        if first is not None:
+            assert code == first, (p["payout_id"], code, first)  # rules 1-3 outrank 4-5
+
+
+def test_v2_message_carries_facts_and_keeps_v1_context():
+    pool = generate(SEED_1E, PLAN_1E_POOL)
+    p = pool["payouts"][0]
+    msg = task.input_line_1b(p, pool["paid_invoices"], "compiled", compiler="v2")["messages"][1]["content"]
+    assert msg.startswith("Resolved facts")
+    for i, name in enumerate(["seller_on_hold", "duplicate", "amount_mismatch"], start=1):
+        assert f"rule {i} {name}:" in msg
+    assert msg.endswith(task.user_message(p, pool["paid_invoices"], task.decisions_compiled(p)))
+
+
+def test_raw_arm_is_the_same_for_every_compiler():
+    pool = generate(SEED_1E, PLAN_1E_POOL)
+    p = pool["payouts"][3]
+    assert (task.input_line_1b(p, pool["paid_invoices"], "raw", compiler="v1")
+            == task.input_line_1b(p, pool["paid_invoices"], "raw", compiler="v2"))
+
+
+def test_run_b_inputs_unchanged():
+    run = generate(SEED_1B, PLAN_1B)
+    lines = [task.input_line_1b(p, run["paid_invoices"], arm) for p in run["payouts"] for arm in task.ARMS]
+    pre = json.loads((ROOT / "runs/payouts-2026-11-10b/preregistration.json").read_text())
+    assert hashlib.sha256(jd_mod.inputs_bytes(lines)).hexdigest() == pre["inputs_sha256"]
+
+
+# ---------------------------------------------------------------- run e sample
+
+def test_run_e_sample_excludes_run_b_and_is_deterministic():
+    b = json.loads((ROOT / "runs/payouts-2026-11-10b/payout_run.json").read_text())
+    excl = {content_key(p) for p in b["payouts"]}
+    pool = generate(SEED_1E, PLAN_1E_POOL)
+    e1, e2 = draw(pool, N_1E, SEED_1E, excl), draw(pool, N_1E, SEED_1E, excl)
+    assert e1["payouts"] == e2["payouts"] and len(e1["payouts"]) == 200
+    assert not ({content_key(p) for p in e1["payouts"]} & excl)
+    assert set(e1["truth"]) == {p["payout_id"] for p in e1["payouts"]}
+
+
+def test_threshold_at_n_200():
+    assert task.wilson(189, 200)[0] >= 0.90 > task.wilson(188, 200)[0]
+
+
+# ---------------------------------------------------------------- run e: support notes (judgment)
+
+from relay_nosana.payouts.data import (NOTE_CHANGES, NOTE_DISTRACTORS, NOTE_PLAN_1E, add_notes, truth_1e,  # noqa: E402
+                                       truth_rules_only)
+
+
+def _pool_1e():
+    return add_notes(generate(SEED_1E, PLAN_1E_POOL), SEED_1E)
+
+
+def test_notes_follow_plan_and_intent_is_hidden_from_the_model():
+    pool = _pool_1e()
+    got: dict[str, int] = {}
+    for p in pool["payouts"]:
+        if p["notes"]:
+            got[p["notes"][0]["intent"]] = got.get(p["notes"][0]["intent"], 0) + 1
+        for arm in task.ARMS:
+            line = task.input_line_1e(p, pool["paid_invoices"], arm)
+            assert "intent" not in line["messages"][1]["content"]
+            for word in NOTE_CHANGES + NOTE_DISTRACTORS:
+                assert word not in line["messages"][1]["content"]
+    assert got == NOTE_PLAN_1E
+
+
+def test_notes_change_exactly_the_planned_answers():
+    pool = _pool_1e()
+    for p in pool["payouts"]:
+        intent = p["notes"][0]["intent"] if p["notes"] else None
+        t, r = pool["truth"][p["payout_id"]], truth_rules_only(p, pool["paid_invoices"])
+        if intent == "finance_approval":
+            assert r["reason_code"] == "needs_approval" and t == {"decision": "approve", "reason_code": "ok"}
+        elif intent == "dispute_open":
+            assert r["reason_code"] == "ok" and t == {"decision": "hold", "reason_code": "disputed"}
+        else:  # distractors and no note: the notes don't change the answer
+            assert t == r, (p["payout_id"], intent)
+
+
+def test_distractor_notes_name_the_wrong_sender_order_or_invoice_or_are_closed():
+    pool = _pool_1e()
+    for p in pool["payouts"]:
+        if not p["notes"]:
+            continue
+        intent, notes = p["notes"][0]["intent"], p["notes"]
+        refund = next((x for x in p["lines"] if x["type"] == "refund"), None)
+        if intent == "seller_claims_approval":
+            assert notes[0]["from"] == "seller" and refund["order_id"] in notes[0]["text"]
+        if intent in ("finance_approval", "finance_approval_other_order"):
+            assert notes[0]["from"] == "finance"
+            assert (refund["order_id"] in notes[0]["text"]) == (intent == "finance_approval")
+        if intent in ("dispute_open", "dispute_other_invoice"):
+            assert (p["invoice_id"] in notes[0]["text"]) == (intent == "dispute_open")
+        if intent == "dispute_withdrawn":
+            assert len(notes) == 2 and notes[0]["date"] < notes[1]["date"] and p["invoice_id"] in notes[1]["text"]
+
+
+def test_run_e_share_of_note_dependent_items():
+    b = json.loads((ROOT / "runs/payouts-2026-11-10b/payout_run.json").read_text())
+    e = draw(_pool_1e(), N_1E, SEED_1E, {content_key(p) for p in b["payouts"]})
+    changed = [p for p in e["payouts"] if e["truth"][p["payout_id"]] != truth_rules_only(p, e["paid_invoices"])]
+    assert 0.10 <= len(changed) / N_1E <= 0.30
+
+
+def test_run_e_system_prompt_and_schema_add_rule_6_without_touching_run_b():
+    assert "6. disputed" in task.SYSTEM_1E and "6." not in task.SYSTEM_1B
+    assert task.OUTPUT_SCHEMA_1E["properties"]["reason_code"]["enum"][-1] == "disputed"
+    assert "disputed" not in task.OUTPUT_SCHEMA_1B["properties"]["reason_code"]["enum"]

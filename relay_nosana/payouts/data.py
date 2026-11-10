@@ -56,6 +56,13 @@ PLAN = (
 SEED_1B = 20261110
 PLAN_1B = PLAN * 2
 
+# Run e (pre-registered 2026-11-10): n = 200 drawn from a 210-payout pool (the Phase 1 label mix x7) on a seed
+# never used before, excluding any payout identical in content to one of run b's. The bar (Wilson 95% lower
+# bound >= 0.90) needs >= 189/200.
+SEED_1E = 20261112
+PLAN_1E_POOL = PLAN * 7
+N_1E = 200
+
 
 def usd(cents: int) -> str:
     sign = "-" if cents < 0 else ""
@@ -127,7 +134,9 @@ def generate(seed: int = SEED, plan: list | tuple = PLAN) -> dict:
     plan = list(plan)
     rng.shuffle(plan)
     # 101..139 for the 30-payout plan (unchanged from Phase 1); more sellers for a longer plan
-    normal_sellers = [f"S-{n}" for n in range(101, max(140, 110 + len(plan))) if f"S-{n}" not in ("S-114",)]
+    # Held sellers never get a normal payout. S-207 only enters the range for plans over 96 payouts, so
+    # excluding it leaves every earlier run (30 and 60 payouts) byte-identical.
+    normal_sellers = [f"S-{n}" for n in range(101, max(140, 110 + len(plan))) if f"S-{n}" not in ("S-114", "S-207")]
     rng.shuffle(normal_sellers)
     paid_invoices: dict[str, list[str]] = {}
     payouts = []
@@ -174,3 +183,154 @@ def generate(seed: int = SEED, plan: list | tuple = PLAN) -> dict:
     return {"run_date": RUN_DATE, "seed": seed, "note": SYNTHETIC_NOTE, "decisions": DECISIONS,
             "paid_invoices": paid_invoices, "payouts": payouts,
             "truth": {p["payout_id"]: truth(p, paid_invoices) for p in payouts}}
+
+
+def content_key(payout: dict) -> str:
+    """Identity of a payout by content (payout_id is renumbered per run): seller, invoice, amount, lines."""
+    import json
+    return json.dumps([payout["seller_id"], payout["invoice_id"], payout["amount_cents"], payout["lines"]],
+                      sort_keys=True)
+
+
+def draw(pool: dict, n: int, seed: int, exclude: set[str]) -> dict:
+    """n payouts from a generated pool, none whose content_key is in `exclude`, by a seeded shuffle.
+    The paid-invoices ledger stays the pool's, so truth() is unchanged for every drawn payout."""
+    eligible = [p for p in pool["payouts"] if content_key(p) not in exclude]
+    if len(eligible) < n:
+        raise ValueError(f"pool has {len(eligible)} eligible payouts, need {n}")
+    rng = random.Random(seed)
+    picked = sorted(rng.sample(eligible, n), key=lambda p: p["payout_id"])
+    ids = {p["payout_id"] for p in picked}
+    return {**pool, "payouts": picked, "truth": {k: v for k, v in pool["truth"].items() if k in ids},
+            "pool": {"size": len(pool["payouts"]), "excluded": len(pool["payouts"]) - len(eligible), "drawn": n}}
+
+
+# ---------------------------------------------------------------- run e: support notes (judgment)
+# Rules 1-5 are lookups and arithmetic: code alone gets them all right. Run e adds free-text support notes on
+# some payouts and two policies that say which notes count. A note's effect (its intent) is set by the
+# generator and never shown to the model; the model must read who wrote the note, what it refers to and
+# whether it is still in force. SYNTHETIC: our own templates, so a parser written against them could decode
+# them; they stand in for text a code-only rule set does not read.
+
+REASONS_1E = REASONS + ["disputed"]
+PRIORITY_1E = REASONS_1E[1:]
+
+DECISIONS_1E = DECISIONS + [
+    {"id": "D-106", "date": "2026-10-20", "kind": "note_policy",
+     "text": "Finance may approve an old refund in a support note: a note from the finance team that names the "
+             "refund's order_id and gives an approval id counts as that refund's approval. Notes from sellers or "
+             "buyers never count as approval."},
+    {"id": "D-107", "date": "2026-10-20", "kind": "note_policy",
+     "text": "Hold a payout while a buyer dispute or chargeback on its invoice is open (reason: disputed). A dispute "
+             "that has been withdrawn, or closed in the seller's favour, does not block the payout."},
+]
+
+# Intents that change the answer the structured fields give, and distractors that don't.
+NOTE_CHANGES = ("finance_approval", "dispute_open")
+NOTE_DISTRACTORS = ("seller_claims_approval", "finance_approval_other_order", "dispute_withdrawn",
+                    "dispute_other_invoice", "chatter")
+NOTE_PLAN_1E = {  # counts over the 210-payout pool
+    "finance_approval": 10, "dispute_open": 30,
+    "seller_claims_approval": 4, "finance_approval_other_order": 3,  # leaves 4 old refunds with no note
+    "dispute_withdrawn": 12, "dispute_other_invoice": 12, "chatter": 20,
+}
+
+_T = {
+    "finance_approval": [
+        ("finance", "Approved the late refund on {order}. Approval {fa}."),
+        ("finance", "Finance here: the refund for order {order} is signed off, reference {fa}."),
+        ("finance", "Following our review, refund {order} is approved ({fa}). OK to pay out."),
+    ],
+    "seller_claims_approval": [
+        ("seller", "Finance already approved the refund on {order}, approval {fa}. Please release the payout."),
+        ("seller", "We cleared the {order} refund with your finance team last week (ref {fa}), so this is fine."),
+    ],
+    "finance_approval_other_order": [
+        ("finance", "Approved the late refund on {other_order}. Approval {fa}."),
+        ("finance", "Finance here: refund {other_order} is signed off, reference {fa}."),
+    ],
+    "dispute_open": [
+        ("support", "The buyer filed a chargeback with their card issuer for {invoice}; case {cb} is open."),
+        ("support", "Dispute opened by the buyer on invoice {invoice}: they say the seats were never delivered. "
+                    "Case {cb}, waiting on the seller's evidence."),
+        ("buyer", "I am disputing {invoice}. We cancelled before the renewal and were charged anyway. "
+                  "Opened case {cb} with my bank."),
+    ],
+    "dispute_withdrawn": [
+        ("support", "The buyer filed a chargeback for {invoice}; case {cb} is open.",
+         "support", "Update on {invoice}: the buyer withdrew chargeback {cb}. Case closed in the seller's favour."),
+        ("buyer", "Disputing {invoice}, we never got access. Case {cb}.",
+         "support", "Case {cb} on {invoice} is resolved: access was confirmed and the buyer closed the dispute."),
+    ],
+    "dispute_other_invoice": [
+        ("support", "The buyer filed a chargeback for {other_invoice}; case {cb} is open."),
+        ("support", "Dispute opened on invoice {other_invoice} (a different payout); case {cb}."),
+    ],
+    "chatter": [
+        ("seller", "Can you confirm when this payout lands? Our bank details have not changed."),
+        ("seller", "Thanks for the fast payouts this month. Please send the remittance PDF to accounts."),
+        ("support", "Seller asked to change their payout email; verified and updated."),
+    ],
+}
+
+
+def _note_eligible(label: str, intent: str) -> bool:
+    if intent in ("finance_approval", "seller_claims_approval", "finance_approval_other_order"):
+        return label == "needs_approval"  # an old refund without approval_id
+    if intent in ("dispute_open", "dispute_withdrawn", "dispute_other_invoice"):
+        return label == "ok"              # plain ok: no other rule applies
+    return True
+
+
+def add_notes(pool: dict, seed: int, plan: dict = NOTE_PLAN_1E) -> dict:
+    """Attach support notes to pool payouts by NOTE_PLAN_1E; set truth with truth_1e. Each payout gets at
+    most one intent. `notes[*].intent` is hidden from the model (task.payout_view drops it)."""
+    rng = random.Random(seed)
+    labels = {p["payout_id"]: pool["truth"][p["payout_id"]]["reason_code"] for p in pool["payouts"]}
+    by_id = {p["payout_id"]: p for p in pool["payouts"]}
+    free = sorted(by_id)
+    rng.shuffle(free)
+    taken: set[str] = set()
+    for intent in sorted(plan, key=lambda k: (k == "chatter", k)):  # chatter last: it fits anything
+        n = plan[intent]
+        ids = [i for i in free if i not in taken and _note_eligible(labels[i], intent)
+               and (intent != "dispute_open" or by_id[i]["lines"][0]["type"] == "sale")][:n]
+        if len(ids) < n:
+            raise ValueError(f"only {len(ids)} payouts eligible for {intent}, need {n}")
+        for i in ids:
+            taken.add(i)
+            p = by_id[i]
+            refund = next((x for x in p["lines"] if x["type"] == "refund"), None)
+            fill = {"order": refund["order_id"] if refund else "", "fa": f"FA-{rng.randint(1000, 9999)}",
+                    "other_order": f"O-{rng.randint(100000, 999999)}", "invoice": p["invoice_id"],
+                    "other_invoice": f"INV-{rng.randint(10000, 99999)}", "cb": f"CB-{rng.randint(10000, 99999)}"}
+            t = rng.choice(_T[intent])
+            notes = [{"from": t[0], "date": _days_before(rng.randint(2, 4)), "text": t[1].format(**fill)}]
+            if len(t) == 4:  # an open dispute, then a later note that closes it
+                notes.append({"from": t[2], "date": _days_before(1), "text": t[3].format(**fill)})
+            for x in notes:
+                x["intent"] = intent
+            p["notes"] = notes
+    for p in pool["payouts"]:
+        p.setdefault("notes", [])
+    pool["truth"] = {p["payout_id"]: truth_1e(p, pool["paid_invoices"]) for p in pool["payouts"]}
+    pool["decisions"] = DECISIONS_1E
+    return pool
+
+
+def truth_1e(payout: dict, paid_invoices: dict[str, list[str]]) -> dict:
+    """truth() plus the notes' hidden intents: a finance approval of this payout's refund removes
+    needs_approval; an open dispute on this payout's invoice adds disputed (last in priority)."""
+    intents = {x["intent"] for x in payout.get("notes", [])}
+    base = dict(payout)
+    if "finance_approval" in intents:
+        base["lines"] = [dict(x, approval_id="FA-NOTE") if x["type"] == "refund" else x for x in payout["lines"]]
+    t = truth(base, paid_invoices)
+    if t["reason_code"] == "ok" and "dispute_open" in intents:
+        return {"decision": "hold", "reason_code": "disputed"}
+    return t
+
+
+def truth_rules_only(payout: dict, paid_invoices: dict[str, list[str]]) -> dict:
+    """The rules-only baseline: rules 1-5 in code over the structured fields; notes are free text, unread."""
+    return truth(payout, paid_invoices)

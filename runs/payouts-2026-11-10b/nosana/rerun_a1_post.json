@@ -1,0 +1,25 @@
+{
+  "balance_before": {
+    "assignedCredits": 10,
+    "reservedCredits": 0,
+    "settledCredits": 3.445
+  },
+  "body": {
+    "credits": {
+      "costUSD": 0.175,
+      "creditsUsed": 175,
+      "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+      "reservationId": "97010839-a96c-43b9-976e-8db129591b79"
+    },
+    "job": "AU47PGxUne7f6QvyZaYWzjbAbxBKKakAicR74MUs7hCp",
+    "run": "G9MFm3SNwSS1yf5s1pGcd7NBkTGvWbJi2kp2eNbjvMwH",
+    "tx": "UoeZqWMRsLE3X9wrzXGpjLfDE8zfEnyEUEPp7QqcmateLCz9cEtqrKiXRsVH1LfREM82rEqK7gmh4pqMePBHcgj"
+  },
+  "http_status": 200,
+  "request": {
+    "ipfsHash": "QmYG58Kbn9JKrBst8aBR3E1PHVHUiAYkE1rh9E4wX2Wx1i",
+    "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+    "node": "3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV",
+    "timeout": 3600
+  }
+}

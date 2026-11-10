@@ -57,10 +57,11 @@
     "reason_code": "stale_price"
   },
   "output_sha256": "acaa4ee825b878661fe310f23e478e9102f521e7b5aa68e36ef17a31a942ff03",
-  "receipt_id": "e3733fb43a44de51dad2758c659017161f717bb06dff2dd945d7a8a6688092db",
+  "receipt_id": "34ad80db47c4f90405878393352fdf38620c8a8e4b5714ccb71a57e5cc26241a",
   "receipt_version": "0.1",
   "relay_checks": [
-    "output_schema"
+    "output_schema",
+    "spot_check_agreed"
   ],
   "rule": {
     "id": "payouts-need-proof",
@@ -72,8 +73,8 @@
     "work_type": "payout_check"
   },
   "spot_check": {
-    "agreed": null,
-    "rerun_job": null,
-    "rerun_node": null
+    "agreed": true,
+    "rerun_job": "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB",
+    "rerun_node": "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot"
   }
 }

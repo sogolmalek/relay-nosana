@@ -1,0 +1,10 @@
+[17:08:53] rerun: job definition QmYG58Kbn9JKrBst8aBR3E1PHVHUiAYkE1rh9E4wX2Wx1i pinned to Nosana's and our Pinata accounts (15820 bytes)
+[17:08:56] rerun attempt 1: 3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV (known-good node, idle (best load 1233.3 s))
+[17:09:00] rerun_a1: posted AU47PGxUne7f6QvyZaYWzjbAbxBKKakAicR74MUs7hCp (node 3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV), reserved $0.175
+[17:09:05] rerun_a1: running on 3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV (picked up 6s after posting)
+[17:34:16] rerun_a1: FAILED node=3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV status=failed cost=$0.064 error=result status is 'failed', not 'success'; op 'relay-rerun' exit code 3; op 'relay-rerun' status 'failed'; deadline stage=download elapsed_s=1260
+[17:34:19] rerun attempt 2: 2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot (known-good node, idle (best load None s))
+[17:34:22] rerun_a2: posted 2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB (node 2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot), reserved $0.175
+[17:34:24] rerun_a2: running on 2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot (picked up 3s after posting)
+[17:41:13] rerun_a2: OK node=2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot status=success cost=$0.010 error=None
+[17:41:14] nosana done: batch EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N, re-run 2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB, Phase 1b spend $0.114

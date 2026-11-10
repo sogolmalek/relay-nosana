@@ -34,10 +34,15 @@ from ..nosana import nodes as nodes_mod
 from ..nosana.jobs import Jobs, idle_nodes
 from ..receipts import issue
 from . import task
-from .data import PLAN_1B, SEED_1B, generate
-from .run_poc import amounts, db, load_state, paths, save_state
+from .data import (N_1E, NOTE_CHANGES, NOTE_PLAN_1E, PLAN_1B, PLAN_1E_POOL, SEED_1B, SEED_1E, add_notes,
+                   content_key, draw, generate, truth_rules_only)
+from .run_poc import ROOT, amounts, db, load_state, paths, save_state
+
+ROOT_RUNS = ROOT / "runs"
 
 PHASE1B_CAP_USD = 2.0
+PHASE1B_BASELINE = 3.405   # settled credits when Phase 1b started: the cap counts every Phase 1b job from here
+SHARD_PAYOUTS = 100        # payouts per job when sharded: 200 result rows (~140 KB) stay in one 256 KiB block
 DEADLINE_S = 1200          # in-container deadline: 20 minutes
 RUN_WAIT_S = DEADLINE_S + 300
 MODELS = {  # pinned by commit; a run's model is fixed in its pre-registration
@@ -50,22 +55,116 @@ def _model(state: dict) -> tuple[str, str]:
     return MODELS[state.get("model_key", "7b")]  # payouts-2026-11-10b predates model_key: 7B
 
 
-def build_batch(lines: list[dict], run_id: str, tag: str, model_key: str = "7b"):
+DESIGNS = {  # design -> (system prompt, output schema). 1b: run b. 1e: run e, with support notes and rule 6.
+    "1b": (task.SYSTEM_1B, task.OUTPUT_SCHEMA_1B),
+    "1e": (task.SYSTEM_1E, task.OUTPUT_SCHEMA_1E),
+}
+
+
+def build_batch(lines: list[dict], run_id: str, tag: str, model_key: str = "7b", design: str = "1b"):
     model, revision = MODELS[model_key]
-    return jd_mod.build(lines, task.OUTPUT_SCHEMA_1B, run_id, tag, task.TASK, model=model, revision=revision,
+    return jd_mod.build(lines, DESIGNS[design][1], run_id, tag, task.TASK, model=model, revision=revision,
                         phase="1b", keep_schema_order=True, output_keys=task.OUTPUT_KEYS_1B, deadline_s=DEADLINE_S)
 
 
 # ---------------------------------------------------------------- prepare + pre-registration
+
+def _judgment_part(run: dict) -> dict:
+    """Run e's pre-registered account of what the model must judge, and the baselines it is shown against."""
+    truth, paid = run["truth"], run["paid_invoices"]
+    n = len(run["payouts"])
+    intents = {p["payout_id"]: p["notes"][0]["intent"] for p in run["payouts"] if p.get("notes")}
+    changed = [p["payout_id"] for p in run["payouts"] if truth[p["payout_id"]] != truth_rules_only(p, paid)]
+    by_intent: dict[str, int] = {}
+    for i in intents.values():
+        by_intent[i] = by_intent.get(i, 0) + 1
+    return {
+        "label_inputs": "data.truth_1e: seller_id vs seller-hold decisions; invoice_id vs the seller's paid invoices; "
+                        "amount vs the sum of line totals; each sale line's sku, sale_date and unit price vs the "
+                        "price-change decisions; each refund line's order_date (> 30 days before the payout date) "
+                        "and approval_id; the rule priority; and each support note's hidden intent (never shown to "
+                        "the model). Amount thresholds ($500, $5,000) set the lane and the re-run, never the label",
+        "judgment": {
+            "what": "free-text support notes (from finance, support, sellers or buyers) and two policies, D-106 "
+                    "(which notes count as refund approval) and D-107 (open vs withdrawn disputes). The model must "
+                    "read who wrote a note, which order or invoice it names, and whether a dispute is still open",
+            "notes_plan_pool_210": NOTE_PLAN_1E,
+            "items_with_notes": len(intents), "by_intent": dict(sorted(by_intent.items())),
+            "items_whose_answer_the_notes_change": len(changed),
+            "share_answer_depends_on_notes": round(len(changed) / n, 4),
+            "changes": f"{', '.join(NOTE_CHANGES)}: approve an old refund finance approved in a note; hold a "
+                       "payout with an open dispute on its invoice (reason disputed)",
+            "caveat": "synthetic: the notes come from our own templates, so a parser written against them could "
+                      "decode them. They stand in for text a code-only rule set does not read",
+        },
+        "baselines": {
+            "rules_only": f"code alone, no model: rules 1-5 over the structured fields, notes unread "
+                          f"(data.truth_rules_only). Scored on the same {n} items; by construction it is right on "
+                          f"every item the notes don't change: {n - len(changed)}/{n}",
+            "frontier": "declared lane, not anchored: headless Claude Code (relay_nosana/payouts/claude_code.py, "
+                        "Phase 1's lane, the owner's login, no API credits) on the compiled-arm input of each of the "
+                        f"{n} items, same schema; run_1b frontier. Its score is the frontier column; the bar stays "
+                        "absolute",
+        },
+        "report_columns": ["raw", "compiled v2", "rules only", "frontier"],
+    }
+
+
+def _ops_1e(lanes: dict, amt: dict, run_id: str) -> dict:
+    proof = next(r for r in rules_mod.load() if r["id"] == "payouts-need-proof")
+    rerun = rules_mod.rerun_sample(proof, [(p, amt[p]) for p, l in lanes.items() if l == proof["id"]], run_id)
+    return {
+        "rerun_items": len(rerun),
+        "cost_estimate_usd": {
+            "basis": "measured on this market, image and model: 7 successful 7B jobs took 161-321 s listed->finished "
+                     "and settled $0.010-0.016 (~$0.175/hour); run b's 120-line batch generated in 14.5 s",
+            "jobs": f"batch1 (200 lines), batch2 (200 lines), re-run ({len(rerun)} lines): 3 Nosana jobs",
+            "expected": "0.03-0.05",
+            "bad_node": "a download that hits the 20-min deadline ~$0.064 (seen today); a hang stopped at 1,500 s "
+                        "~$0.073",
+            "worst_case": "0.88 (all 4 attempts of all 3 jobs stopped)",
+            "frontier": "Claude Code on the owner's login: no API charge; Phase 1's notional list price was about "
+                        "$0.014 per item, so ~$2.80 notional for 200, not counted against the Nosana cap",
+        },
+        "cap_scope": "USD on Nosana, all of Phase 1b, from settled credits 3.405 (runs b, diag, c, run b's re-run, "
+                     "run e). Budget.check refuses any post (batch, re-run or retry) whose $0.175 up-front "
+                     "reservation would take the total past $2.00",
+        "result_size": "each shard's result ~140 KB (run b: 82.8 KB for 120 rows), under one 256 KiB IPFS block",
+        "posting": "not posted; requires the owner's explicit approval",
+    }
+
+
+def _threshold(n: int, ci_low: float) -> dict:
+    """Smallest k with Wilson 95% lower bound >= ci_low, and the bound at k and k - 1."""
+    k = next(k for k in range(n + 1) if task.wilson(k, n)[0] >= ci_low)
+    return {"n": n, "min_correct": k, "max_errors": n - k, "accuracy": round(k / n, 4),
+            "wilson_low_at_min": round(task.wilson(k, n)[0], 4),
+            "wilson_low_one_fewer": round(task.wilson(k - 1, n)[0], 4)}
+
 
 def cmd_prepare(a) -> None:
     P = paths(a.run_id)
     if (P["base"] / "preregistration.json").exists():
         sys.exit("already prepared: the pre-registration is fixed once written")
     P["base"].mkdir(parents=True, exist_ok=True)
-    run = generate(SEED_1B, PLAN_1B)
+    if a.sample == "1b":
+        run, seed, plan_note = generate(SEED_1B, PLAN_1B), SEED_1B, "Phase 1 label mix x2"
+    else:  # 1e: 200 of a 210-payout pool with support notes, none identical to a run-b payout
+        if a.compiler != "v2":
+            sys.exit("run e's design uses compiler v2")
+        b = json.loads((ROOT_RUNS / "payouts-2026-11-10b" / "payout_run.json").read_text())
+        pool = add_notes(generate(SEED_1E, PLAN_1E_POOL), SEED_1E)
+        run = draw(pool, N_1E, SEED_1E, {content_key(p) for p in b["payouts"]})
+        seed, plan_note = SEED_1E, ("Phase 1 label mix x7 (210-payout pool) with support notes (NOTE_PLAN_1E), "
+                                    "200 drawn, run b's payouts excluded")
+    design = a.sample
     P["run"].write_text(json.dumps(run, indent=2, sort_keys=True) + "\n")
-    lines = [task.input_line_1b(p, run["paid_invoices"], arm) for p in run["payouts"] for arm in task.ARMS]
+    build_line = ((lambda p, arm: task.input_line_1b(p, run["paid_invoices"], arm, compiler=a.compiler))
+                  if design == "1b" else (lambda p, arm: task.input_line_1e(p, run["paid_invoices"], arm)))
+    lines = [build_line(p, arm) for p in run["payouts"] for arm in task.ARMS]
+    pids = [p["payout_id"] for p in run["payouts"]]
+    shards = ([pids[i:i + SHARD_PAYOUTS] for i in range(0, len(pids), SHARD_PAYOUTS)]
+              if len(pids) > SHARD_PAYOUTS else None)
     P["inputs"].write_bytes(jd_mod.inputs_bytes(lines))
     rules = rules_mod.load()
     conn = db(a.run_id)
@@ -75,23 +174,43 @@ def cmd_prepare(a) -> None:
     conn.commit()
     amt = amounts(run)
     lanes = {pid: rules_mod.rule_for(rules, task.TASK, amt[pid])["id"] for pid in amt}
-    jd, raw, inputs_cid = build_batch(lines, a.run_id, "batch", a.model)
+    jd, raw, inputs_cid = build_batch(lines, a.run_id, "batch", a.model, design)
+    shard_defs = []
+    for i, sp in enumerate(shards or [], start=1):
+        sub = [x for x in lines if x["item_id"].split("/")[0] in set(sp)]
+        sjd, sraw, scid = build_batch(sub, a.run_id, f"batch{i}", a.model, design)
+        shard_defs.append({"tag": f"batch{i}", "payouts": [sp[0], sp[-1]], "lines": len(sub), "inputs_cid": scid,
+                           "job_definition_cid": __import__("relay_verify.cid", fromlist=["x"]).cidv0_of_bytes(
+                               canonical(sjd))})
     model, revision = MODELS[a.model]
     proof = next(r for r in rules if r["id"] == "payouts-need-proof")
     prereg = {
         "written_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "run_id": a.run_id, "phase": "1b", "data": "synthetic",
-        "seed": SEED_1B, "payouts": len(run["payouts"]), "plan": "Phase 1 label mix x2",
-        "why_60": "Wilson 95% lower bound for 30/30 is 0.886 < 0.90; at n = 60, 59/60 gives 0.911",
-        "arms": {"raw": task.decisions_raw.__doc__.strip(), "compiled": task.decisions_compiled.__doc__.strip()},
+        "seed": seed, "payouts": len(run["payouts"]), "plan": plan_note,
+        **({"why_60": "Wilson 95% lower bound for 30/30 is 0.886 < 0.90; at n = 60, 59/60 gives 0.911"}
+           if a.sample == "1b" else {"pool": run["pool"]}),
+        "threshold": _threshold(len(run["payouts"]), proof["bar"]["ci_lower_gte"]),
+        "compiler": a.compiler,
+        "arms": ({"raw": task.decisions_raw.__doc__.strip(), "compiled": task.decisions_compiled.__doc__.strip()}
+                 if design == "1b" else
+                 {"raw": task.decisions_raw_1e.__doc__.strip() + " The payout and its support notes, unchanged.",
+                  "compiled": "Compiled v2: rules 1-3 (seller on an active hold, duplicate invoice, amount vs the "
+                              "sum of lines) resolved in code (task.resolved_facts) and written as facts; then "
+                              + task.decisions_compiled_1e.__doc__.strip() + " The payout and its support notes, "
+                              "unchanged. The model checks rules 4-6 and makes the final decision. Same system "
+                              "prompt as the raw arm."}),
         "model": f"{model}@{revision}", "image": jd_mod.IMAGE, "market": a.market,
         "params": {"temperature": 0, "seed": 0, "max_tokens": task.MAX_TOKENS_1B, "guided_json": True},
-        "output_schema": task.OUTPUT_SCHEMA_1B, "hashed_output_keys": task.OUTPUT_KEYS_1B,
-        "generation_key_order": list(task.OUTPUT_SCHEMA_1B["properties"]),  # this file sorts keys; the job doesn't
-        "system_prompt_sha256": hashlib.sha256(task.SYSTEM_1B.encode()).hexdigest(),
+        "output_schema": DESIGNS[design][1], "hashed_output_keys": task.OUTPUT_KEYS_1B,
+        "generation_key_order": list(DESIGNS[design][1]["properties"]),  # this file sorts keys; the job doesn't
+        "system_prompt_sha256": hashlib.sha256(DESIGNS[design][0].encode()).hexdigest(),
+        **(_judgment_part(run) | _ops_1e(lanes, amt, a.run_id) if design == "1e" else {}),
         "inputs_cid": inputs_cid, "inputs_sha256": hashlib.sha256(raw).hexdigest(),
         "job_definition_cid": __import__("relay_verify.cid", fromlist=["x"]).cidv0_of_bytes(canonical(jd)),
-        "scoring": "exact match of {decision, reason_code} against data.truth(); per arm over all 60 payouts, "
+        **({"shards": shard_defs} if shard_defs else {}),
+        "scoring": f"exact match of {{decision, reason_code}} against data.truth(); per arm over all "
+                   f"{len(run['payouts'])} payouts, "
                    "Wilson 95% CI; also the > $500 subset; paired discordant counts with an exact two-sided "
                    "binomial (sign) test",
         "bar": proof["bar"], "rule_snapshot_sha256": rules_mod.snapshot_sha256(proof),
@@ -100,12 +219,13 @@ def cmd_prepare(a) -> None:
         "nodes": "known-good node list per market from measured outcomes (relay_nosana/nosana/nodes.py), "
                  "open market as fallback; in-container deadline 20 min",
         "cap_usd": PHASE1B_CAP_USD,
-        "expectation": "compiled > raw (Phase 1: raw-style context, no reasoning, 4/30)",
+        "expectation": a.expectation or "compiled > raw (Phase 1: raw-style context, no reasoning, 4/30)",
         **({"why": a.why} if a.why else {}),
     }
     (P["base"] / "preregistration.json").write_text(json.dumps(prereg, indent=2, sort_keys=True) + "\n")
-    save_state(a.run_id, {"run_id": a.run_id, "phase": "1b", "model_key": a.model, "lanes": lanes,
-                          "prepared_at": time.time()})
+    save_state(a.run_id, {"run_id": a.run_id, "phase": "1b", "model_key": a.model, "compiler": a.compiler,
+                          "design": design,
+                          "lanes": lanes, **({"shards": shards} if shards else {}), "prepared_at": time.time()})
     n_anch = sum(1 for v in lanes.values() if v == "payouts-need-proof")
     log(f"prepared {len(run['payouts'])} payouts x {len(task.ARMS)} arms = {len(lines)} lines; {n_anch} over $500; "
         f"inputs {P['inputs'].stat().st_size} bytes; job definition {len(canonical(jd))} bytes, "
@@ -113,6 +233,12 @@ def cmd_prepare(a) -> None:
 
 
 # ---------------------------------------------------------------- nosana
+
+def batches(state: dict) -> list[tuple[str, list[str] | None]]:
+    """(state key = job tag, payout ids or None for all). Run b: one job, "batch". Sharded runs: batch1..N."""
+    shards = state.get("shards")
+    return [("batch", None)] if not shards else [(f"batch{i}", pids) for i, pids in enumerate(shards, start=1)]
+
 
 def _tried(conn, run_id: str) -> set[str]:
     return {r["node"] for r in conn.execute("SELECT node FROM jobs WHERE run_id=? AND node IS NOT NULL", (run_id,))}
@@ -126,8 +252,7 @@ def cmd_nosana(a) -> None:
     conn = db(a.run_id)
     jobs = Jobs()
     budget = Budget(jobs, a.cap)
-    if "budget_baseline" in state:
-        budget.baseline = state["budget_baseline"]
+    budget.baseline = state.get("budget_baseline", PHASE1B_BASELINE)  # all of Phase 1b, not just this run
     state["budget_baseline"] = budget.baseline
     state["known_nodes"] = {k: v for k, v in nodes_mod.known_nodes(a.market).items() if k != "table"}
     save_state(a.run_id, state)
@@ -139,18 +264,21 @@ def cmd_nosana(a) -> None:
         log(f"batch attempt {attempt}: {node or 'open market'} ({why})")
         return node
 
-    if not (state.get("batch") or {}).get("ok"):
-        jd, _, inputs_cid = build_batch(lines, a.run_id, "batch", model_key)
-        out = run_batch(conn=conn, run_id=a.run_id, tag="batch", jobdef=jd, market=a.market, rpc=a.rpc, jobs=jobs,
+    for key, pids in batches(state):
+        if (state.get(key) or {}).get("ok"):
+            continue
+        sub = lines if pids is None else [x for x in lines if x["item_id"].split("/")[0] in set(pids)]
+        jd, _, inputs_cid = build_batch(sub, a.run_id, key, model_key, state.get("design", "1b"))
+        out = run_batch(conn=conn, run_id=a.run_id, tag=key, jobdef=jd, market=a.market, rpc=a.rpc, jobs=jobs,
                         budget=budget, fixtures=P["nosana"], image=jd_mod.IMAGE, weights=weights,
                         inputs_cid=inputs_cid, node_for_attempt=batch_node, max_attempts=a.max_attempts,
                         queue_wait_s=900, run_wait_s=RUN_WAIT_S)
-        state["batch"] = {"ok": out.ok, "job": out.job, "jobdef_cid": out.jobdef_cid, "inputs_cid": inputs_cid,
-                          "account": out.account, "attempts": [r["job"] for r in out.attempts],
-                          "result_file": out.result_file}
+        state[key] = {"ok": out.ok, "job": out.job, "jobdef_cid": out.jobdef_cid, "inputs_cid": inputs_cid,
+                      "account": out.account, "attempts": [r["job"] for r in out.attempts],
+                      "result_file": out.result_file, **({"payouts": pids} if pids else {})}
         save_state(a.run_id, state)
         if not out.ok:
-            sys.exit(f"batch failed after {len(out.attempts)} attempts; see runs/{a.run_id}/nosana/")
+            sys.exit(f"{key} failed after {len(out.attempts)} attempts; see runs/{a.run_id}/nosana/")
 
     if not (state.get("rerun") or {}).get("ok") and not a.batch_only:
         rule = next(r for r in rules_mod.load() if r["id"] == "payouts-need-proof")
@@ -158,11 +286,11 @@ def cmd_nosana(a) -> None:
         anchored = [(pid, amt[pid]) for pid, lane in state["lanes"].items() if lane == rule["id"]]
         sample = rules_mod.rerun_sample(rule, anchored, a.run_id)
         sub = [by_id[f"{pid}/compiled"] for pid in sample]
-        first = state["batch"]["account"]["node"]
+        first = {state[k]["account"]["node"] for k, _ in batches(state)}
         bad = set(nodes_mod.known_nodes(a.market)["bad"])
 
         def rerun_node(attempt: int) -> str | None:
-            avoid = _tried(conn, a.run_id) | {first}
+            avoid = _tried(conn, a.run_id) | first
             idle = idle_nodes(a.market, set())
             node, why = nodes_mod.pick(a.market, idle, avoid)
             if node is None:  # the open market could hand the re-run to the batch's own node: target instead
@@ -173,7 +301,7 @@ def cmd_nosana(a) -> None:
             log(f"rerun attempt {attempt}: {node} ({why})")
             return node
 
-        jd, _, inputs_cid = build_batch(sub, a.run_id, "rerun", model_key)
+        jd, _, inputs_cid = build_batch(sub, a.run_id, "rerun", model_key, state.get("design", "1b"))
         out = run_batch(conn=conn, run_id=a.run_id, tag="rerun", jobdef=jd, market=a.market, rpc=a.rpc, jobs=jobs,
                         budget=budget, fixtures=P["nosana"], image=jd_mod.IMAGE, weights=weights,
                         inputs_cid=inputs_cid, node_for_attempt=rerun_node, max_attempts=a.max_attempts,
@@ -186,7 +314,7 @@ def cmd_nosana(a) -> None:
             sys.exit(f"re-run failed after {len(out.attempts)} attempts")
     state["nosana_spent_usd"] = budget.spent()
     save_state(a.run_id, state)
-    log(f"nosana done: batch {state['batch']['job']}, re-run {(state.get('rerun') or {}).get('job')}, "
+    log(f"nosana done: batches {[state[k]['job'] for k, _ in batches(state)]}, re-run {(state.get('rerun') or {}).get('job')}, "
         f"Phase 1b spend ${state['nosana_spent_usd']:.3f}")
 
 
@@ -210,21 +338,68 @@ def _words(row: dict) -> int | None:
         return None
 
 
+def _score(ok: dict[str, bool], pids: list[str], changed: set[str]) -> dict:
+    k, n = sum(ok[p] for p in pids), len(pids)
+    lo, hi = task.wilson(k, n)
+    kc = sum(ok[p] for p in pids if p in changed)
+    return {"correct": k, "n": n, "accuracy": round(k / n, 4), "ci_low": round(lo, 4), "ci_high": round(hi, 4),
+            "on_note_dependent": f"{kc}/{len(changed)}",
+            "on_the_rest": f"{k - kc}/{n - len(changed)}"}
+
+
+def _columns_1e(P, run, arms, pids, truth) -> dict:
+    """raw / compiled v2 / rules only / frontier on the same items, with the note-dependent split."""
+    paid = run["paid_invoices"]
+    by_id = {p["payout_id"]: p for p in run["payouts"]}
+    changed = {p for p in pids if truth[p] != truth_rules_only(by_id[p], paid)}
+    cols = {"raw": _score(arms["raw"]["_ok"], pids, changed),
+            "compiled_v2": _score(arms["compiled"]["_ok"], pids, changed),
+            "rules_only": _score({p: truth_rules_only(by_id[p], paid) == truth[p] for p in pids}, pids, changed)}
+    f = P["base"] / "frontier.jsonl"
+    recs = {r["item_id"].split("/")[0]: r for r in map(json.loads, f.read_text().splitlines())} if f.exists() else {}
+    cols["frontier"] = (_score({p: task.correct((recs.get(p) or {}).get("output"), truth[p]) for p in pids},
+                               pids, changed) | {"errors": sum(1 for p in pids if (recs.get(p) or {}).get("error")),
+                                                 "missing": sum(1 for p in pids if p not in recs),
+                                                 "model": sorted({r.get("model") for r in recs.values()} - {None})}
+                        if recs else "not run")
+    return cols
+
+
+def cmd_frontier(a) -> None:
+    """Declared frontier column (run e): headless Claude Code on each compiled-arm input. Resumable."""
+    from . import claude_code
+    P, state = paths(a.run_id), load_state(a.run_id)
+    if state.get("design") != "1e":
+        sys.exit("the frontier column is part of run e's design only")
+    lines = [json.loads(x) for x in P["inputs"].read_text().splitlines() if '"arm": "compiled"' in x]
+    out = P["base"] / "frontier.jsonl"
+    done = {json.loads(x)["item_id"] for x in out.read_text().splitlines()} if out.exists() else set()
+    for line in lines:
+        if line["item_id"] in done:
+            continue
+        rec = claude_code.call(line, task.OUTPUT_SCHEMA_1E)
+        with out.open("a") as fh:
+            fh.write(json.dumps(rec, sort_keys=True) + "\n")
+        log(f"frontier {line['item_id']}: {rec.get('output') or rec.get('error')}")
+
+
 def cmd_issue(a) -> None:
     P, state = paths(a.run_id), load_state(a.run_id)
     run = json.loads(P["run"].read_text())
     truth, amt = run["truth"], amounts(run)
     lines = [json.loads(x) for x in P["inputs"].read_text().splitlines()]
     by_id = {x["item_id"]: x for x in lines}
-    batch_res = json.loads((P["nosana"] / state["batch"]["result_file"]).read_text())
-    rows, _ = parse_outputs(batch_res)
+    results, rows = {}, {}
+    for key, _ in batches(state):
+        results[key] = json.loads((P["nosana"] / state[key]["result_file"]).read_text())
+        rows.update(parse_outputs(results[key])[0])
     rr = state.get("rerun") or {}
     rerun_rows = parse_outputs(json.loads((P["nosana"] / rr["result_file"]).read_text()))[0] if rr.get("ok") else {}
     pids = sorted(truth)
     conn = db(a.run_id)
     conn.execute("DELETE FROM calls WHERE run_id=?", (a.run_id,))
-    cost = conn.execute("SELECT credits_before - credits_after c FROM jobs WHERE job=?",
-                        (state["batch"]["job"],)).fetchone()["c"] or 0.0
+    cost = sum(conn.execute("SELECT credits_before - credits_after c FROM jobs WHERE job=?",
+                            (state[key]["job"],)).fetchone()["c"] or 0.0 for key, _ in batches(state))
     per_item = max(0.0, cost) / len(lines)
     rules = {r["id"]: r for r in rules_mod.load()}
     proof = rules["payouts-need-proof"]
@@ -270,6 +445,8 @@ def cmd_issue(a) -> None:
                      "reasoning_words_max": max(words) if words else None,
                      "_ok": ok}
     conn.commit()
+    if state.get("design") == "1e":
+        state["columns"] = _columns_1e(P, run, arms, pids, truth)
     b = sum(arms["compiled"]["_ok"][p] and not arms["raw"]["_ok"][p] for p in pids)
     c = sum(arms["raw"]["_ok"][p] and not arms["compiled"]["_ok"][p] for p in pids)
     paired = {"compiled_right_raw_wrong": b, "raw_right_compiled_wrong": c, "sign_test_p": round(sign_test(b, c), 6)}
@@ -302,11 +479,15 @@ def cmd_issue(a) -> None:
         if iid in spots and spots[iid]["agreed"]:
             cks.append("spot_check_agreed")
         checks[iid] = cks
-    receipts = issue.anchored_from_result(
-        result=batch_res, account=state["batch"]["account"], job_definition_cid=state["batch"]["jobdef_cid"],
-        inputs_cid=state["batch"]["inputs_cid"], image=jd_mod.IMAGE, weights=f"{model}@{revision}",
-        items=items, rule=proof, rule_sha256=rules_mod.snapshot_sha256(proof), work_type=task.TASK,
-        relay_checks=checks, spot_checks=spots, cost_usd_per_item=per_item)
+    receipts = {}
+    for key, pids in batches(state):  # each receipt is anchored to the job that produced its output
+        mine = {iid: x for iid, x in items.items() if pids is None or iid.split("/")[0] in set(pids)}
+        receipts.update(issue.anchored_from_result(
+            result=results[key], account=state[key]["account"], job_definition_cid=state[key]["jobdef_cid"],
+            inputs_cid=state[key]["inputs_cid"], image=jd_mod.IMAGE, weights=f"{model}@{revision}",
+            items=mine, rule=proof, rule_sha256=rules_mod.snapshot_sha256(proof), work_type=task.TASK,
+            relay_checks={i: checks[i] for i in mine}, spot_checks={i: v for i, v in spots.items() if i in mine},
+            cost_usd_per_item=per_item))
     P["receipts"].mkdir(parents=True, exist_ok=True)
     for old in P["receipts"].glob("*.json"):
         old.unlink()
@@ -332,7 +513,7 @@ def cmd_issue(a) -> None:
 
 def main(argv=None) -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("cmd", choices=["prepare", "nosana", "issue"])
+    p.add_argument("cmd", choices=["prepare", "nosana", "issue", "frontier"])
     p.add_argument("--run-id", required=True)
     p.add_argument("--market", default=jd_mod.MARKET_3090)
     p.add_argument("--rpc", default=os.environ.get("SOLANA_RPC", DEFAULT_RPC))
@@ -341,8 +522,11 @@ def main(argv=None) -> None:
     p.add_argument("--batch-only", action="store_true", help="record the batch; skip the re-run")
     p.add_argument("--model", choices=sorted(MODELS), default="7b", help="prepare only: the pinned model")
     p.add_argument("--why", default="", help="prepare only: why this run exists (goes in the pre-registration)")
+    p.add_argument("--expectation", default="", help="prepare only: the stated expectation")
+    p.add_argument("--sample", choices=["1b", "1e"], default="1b", help="prepare only: run b's 60 or run e's 200")
+    p.add_argument("--compiler", choices=["v1", "v2"], default="v1", help="prepare only: the compiled arm's compiler")
     a = p.parse_args(argv)
-    {"prepare": cmd_prepare, "nosana": cmd_nosana, "issue": cmd_issue}[a.cmd](a)
+    {"prepare": cmd_prepare, "nosana": cmd_nosana, "issue": cmd_issue, "frontier": cmd_frontier}[a.cmd](a)
 
 
 if __name__ == "__main__":

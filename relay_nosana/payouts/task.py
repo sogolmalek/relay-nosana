@@ -75,12 +75,78 @@ def decisions_compiled(payout: dict) -> list[dict]:
     return out
 
 
-def input_line_1b(payout: dict, paid_invoices: dict[str, list[str]], arm: str, seed: int = 0) -> dict:
+def input_line_1b(payout: dict, paid_invoices: dict[str, list[str]], arm: str, seed: int = 0,
+                  compiler: str = "v1") -> dict:
+    """compiler applies to the compiled arm only: v1 (run b) selects decisions; v2 (run e) also writes the
+    resolved facts. The raw arm is the same for every compiler."""
     sel = {"raw": decisions_raw, "compiled": decisions_compiled}[arm]
+    if arm == "compiled" and compiler == "v2":
+        content = user_message_v2(payout, paid_invoices)
+    elif compiler in ("v1", "v2"):
+        content = user_message(payout, paid_invoices, sel(payout))
+    else:
+        raise ValueError(f"unknown compiler {compiler!r}")
     return {"item_id": f"{payout['payout_id']}/{arm}", "task": TASK, "arm": arm,
             "messages": [{"role": "system", "content": SYSTEM_1B},
-                         {"role": "user", "content": user_message(payout, paid_invoices, sel(payout))}],
+                         {"role": "user", "content": content}],
             "params": {"temperature": 0, "max_tokens": MAX_TOKENS_1B, "seed": seed}}
+
+
+# ---------------------------------------------------------------- compiler v2: resolved facts
+# Rules 1-3 are lookups and arithmetic, so code resolves them and the model reads the answer.
+# Each fact is computed from the payout, the decision ledger and the paid invoices only, never from truth().
+
+def active_holds(payout_date: str) -> dict[str, str]:
+    """seller_id -> decision id, for seller holds dated on or before the payout date."""
+    return {d["seller"]: d["id"] for d in DECISIONS if d["kind"] == "seller_hold" and d["date"] <= payout_date}
+
+
+def fact_seller_on_hold(payout: dict) -> tuple[bool, str]:
+    holds = active_holds(payout["payout_date"])
+    s = payout["seller_id"]
+    if s in holds:
+        return True, f"decision {holds[s]} puts seller {s} on hold"
+    return False, f"no decision in force puts seller {s} on hold"
+
+
+def fact_duplicate(payout: dict, paid_invoices: dict[str, list[str]]) -> tuple[bool, str]:
+    s, inv = payout["seller_id"], payout["invoice_id"]
+    if inv in paid_invoices.get(s, []):
+        return True, f"{inv} is already in seller {s}'s paid invoices"
+    return False, f"{inv} is not in seller {s}'s paid invoices"
+
+
+def _line_cents(x: dict) -> int:
+    return x["qty"] * x["unit_price_cents"] if x["type"] == "sale" else -x["refund_cents"]
+
+
+def fact_amount_mismatch(payout: dict) -> tuple[bool, str]:
+    total = sum(_line_cents(x) for x in payout["lines"])
+    amount = payout["amount_cents"]
+    if amount != total:
+        return True, f"amount_usd {usd(amount)} differs from the sum of line_total_usd {usd(total)}"
+    return False, f"amount_usd {usd(amount)} equals the sum of line_total_usd {usd(total)}"
+
+
+def resolved_facts(payout: dict, paid_invoices: dict[str, list[str]]) -> dict[str, tuple[bool, str]]:
+    return {"seller_on_hold": fact_seller_on_hold(payout),
+            "duplicate": fact_duplicate(payout, paid_invoices),
+            "amount_mismatch": fact_amount_mismatch(payout)}
+
+
+def facts_header(payout: dict, paid_invoices: dict[str, list[str]],
+                 remaining: str = "rule 4 stale_price, rule 5 needs_approval") -> str:
+    facts = resolved_facts(payout, paid_invoices)
+    return ("Resolved facts (computed by code from this payout, the decisions in force and the paid invoices; "
+            "use them as given):\n"
+            + "\n".join(f"- rule {i} {name}: {'APPLIES' if hit else 'does not apply'} ({why})"
+                        for i, (name, (hit, why)) in enumerate(facts.items(), start=1))
+            + f"\nStill to check from the decisions and lines below: {remaining}.\n\n")
+
+
+def user_message_v2(payout: dict, paid_invoices: dict[str, list[str]]) -> str:
+    """Compiled v2: the resolved facts for rules 1-3, then the v1 compiled context for rules 4-5."""
+    return facts_header(payout, paid_invoices) + user_message(payout, paid_invoices, decisions_compiled(payout))
 
 
 def _line_view(x: dict) -> dict:
@@ -140,3 +206,70 @@ def wilson(k: int, n: int, z: float = 1.959964) -> tuple[float, float]:
     c = (p + z * z / (2 * n)) / d
     h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
     return (max(0.0, c - h), min(1.0, c + h))
+
+
+# ---------------------------------------------------------------- run e: support notes (judgment)
+# Run b's builders above stay byte-identical; run e has its own prompt, schema and decision list.
+from .data import DECISIONS_1E, REASONS_1E  # noqa: E402
+
+SYSTEM_1E = """You check marketplace seller payouts before they are sent. For one payout, decide "approve" or "hold" and give one reason code.
+
+Apply these rules in this order and use the first one that applies:
+1. seller_on_hold: a decision in force puts the payout's seller on hold.
+2. duplicate: the payout's invoice_id is already in the seller's paid invoices.
+3. amount_mismatch: amount_usd is not equal to the sum of the lines' line_total_usd.
+4. stale_price: a sale line dated on or after a price change's effective date uses the old unit price.
+5. needs_approval: a refund line for an order placed more than 30 days before the payout date has no approval, either as an approval_id on the line or as a support note that counts under the decisions in force.
+6. disputed: under the decisions in force, a buyer dispute or chargeback on the payout's invoice is still open.
+If none applies, approve with reason_code "ok". A hold always names the rule that applies; an approve is always "ok".
+Support notes are free text from finance, support, sellers or buyers; read who wrote each one and what it refers to.
+
+Reply with JSON only: {"reasoning": "<at most 60 words: check each rule in order against this payout's own fields and notes>", "decision": "approve" | "hold", "reason_code": "ok" | "seller_on_hold" | "duplicate" | "amount_mismatch" | "stale_price" | "needs_approval" | "disputed"}"""
+
+OUTPUT_SCHEMA_1E = {
+    "type": "object",
+    "properties": {
+        "reasoning": {"type": "string"},
+        "decision": {"type": "string", "enum": ["approve", "hold"]},
+        "reason_code": {"type": "string", "enum": REASONS_1E},
+    },
+    "required": ["reasoning", "decision", "reason_code"],
+    "additionalProperties": False,
+}
+
+
+def decisions_raw_1e(payout: dict) -> list[dict]:
+    """Raw arm (run e): every decision in the run-e ledger, for every payout."""
+    return [{"id": d["id"], "date": d["date"], "text": d["text"]} for d in DECISIONS_1E]
+
+
+def decisions_compiled_1e(payout: dict) -> list[dict]:
+    """Compiled context (run e): decisions naming this payout's seller or SKUs, plus the global rules
+    (refund approval and both note policies). Selected by reference, never by the answer."""
+    skus = {x.get("sku") for x in payout["lines"]}
+    return [{"id": d["id"], "date": d["date"], "text": d["text"]} for d in DECISIONS_1E
+            if (d["kind"] == "price_change" and d["sku"] in skus)
+            or (d["kind"] == "seller_hold" and d["seller"] == payout["seller_id"])
+            or d["kind"] in ("refund_approval", "note_policy")]
+
+
+def user_message_1e(payout: dict, paid_invoices: dict[str, list[str]], decisions: list[dict]) -> str:
+    import json
+    notes = [{"from": x["from"], "date": x["date"], "text": x["text"]} for x in payout.get("notes", [])]  # no intent
+    return (user_message(payout, paid_invoices, decisions)
+            + "\n\nSupport notes on this payout:\n" + (json.dumps(notes, indent=1) if notes else "none"))
+
+
+def input_line_1e(payout: dict, paid_invoices: dict[str, list[str]], arm: str, seed: int = 0) -> dict:
+    """raw: every decision; compiled: compiler v2 (resolved facts for rules 1-3, then the compiled context)."""
+    if arm == "raw":
+        content = user_message_1e(payout, paid_invoices, decisions_raw_1e(payout))
+    elif arm == "compiled":
+        content = (facts_header(payout, paid_invoices, "rule 4 stale_price, rule 5 needs_approval (with the "
+                                "support notes), rule 6 disputed (from the support notes)")
+                   + user_message_1e(payout, paid_invoices, decisions_compiled_1e(payout)))
+    else:
+        raise ValueError(arm)
+    return {"item_id": f"{payout['payout_id']}/{arm}", "task": TASK, "arm": arm,
+            "messages": [{"role": "system", "content": SYSTEM_1E}, {"role": "user", "content": content}],
+            "params": {"temperature": 0, "max_tokens": MAX_TOKENS_1B, "seed": seed}}

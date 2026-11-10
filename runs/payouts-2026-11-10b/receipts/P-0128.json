@@ -57,7 +57,7 @@
     "reason_code": "needs_approval"
   },
   "output_sha256": "ae23a0a7b298a0076d8ff8d00b47124eacc3f5d497bc494330ae7c15dd3b638a",
-  "receipt_id": "abf31160e22c24b282b2e00d2036109063a201da0d804001909493ea9dc4eec7",
+  "receipt_id": "95d83e6aac2179e10777db24be3daf0017a308e2902e8edfea801bbb9ea37838",
   "receipt_version": "0.1",
   "relay_checks": [
     "output_schema"
@@ -72,8 +72,8 @@
     "work_type": "payout_check"
   },
   "spot_check": {
-    "agreed": null,
-    "rerun_job": null,
-    "rerun_node": null
+    "agreed": false,
+    "rerun_job": "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB",
+    "rerun_node": "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot"
   }
 }
