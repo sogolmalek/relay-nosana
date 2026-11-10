@@ -1,4 +1,7 @@
-"""Receipt schema v0.1 check (both grades). Standard library only; mirrors docs/receipt-schema.json."""
+"""Receipt schema v0.2 check (both grades). Standard library only; mirrors docs/receipt-schema.json.
+
+v0.2 (2026-11-10): anchored receipts carry the job's post and finish transaction signatures, because Nosana
+closes job accounts after the job; and a spot check records what it made Relay do (`action`), and why."""
 
 from __future__ import annotations
 
@@ -7,6 +10,9 @@ import re
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
 _CID = re.compile(r"^Qm[1-9A-HJ-NP-Za-km-z]{44}$")
 _B58 = re.compile(r"^[1-9A-HJ-NP-Za-km-z]{32,44}$")
+_SIG = re.compile(r"^[1-9A-HJ-NP-Za-km-z]{64,90}$")  # a base58 Solana transaction signature (64 bytes)
+VERSION = "0.2"
+SPOT_ACTIONS = ("none", "human_review")
 
 COMMON = {"receipt_version": str, "grade": str, "receipt_id": str, "item_id": str, "source": dict,
           "rule": dict, "input_sha256": str, "output": dict, "output_sha256": str,
@@ -14,11 +20,12 @@ COMMON = {"receipt_version": str, "grade": str, "receipt_id": str, "item_id": st
 ANCHORED = {"merkle": dict, "nosana": dict, "model": dict, "spot_check": dict}
 DECLARED = {"provider": dict}
 NOSANA = {"job": _B58, "market": _B58, "node": _B58, "job_definition_cid": _CID, "result_cid": _CID,
-          "inputs_cid": _CID, "listed_at": int, "finished_at": int, "container_start": int, "container_end": int}
+          "inputs_cid": _CID, "post_tx": _SIG, "finish_tx": _SIG,
+          "listed_at": int, "finished_at": int, "container_start": int, "container_end": int}
 
 
 def validate(r: dict) -> list[str]:
-    """Problems found; empty means the receipt has the v0.1 shape."""
+    """Problems found; empty means the receipt has the v0.2 shape."""
     errs: list[str] = []
 
     def need(obj, spec, where):
@@ -34,8 +41,10 @@ def validate(r: dict) -> list[str]:
     need(r, COMMON, "")
     if errs:
         return errs
-    if r["receipt_version"] != "0.1":
-        errs.append("receipt_version is not 0.1")
+    if r["receipt_version"] != VERSION:
+        errs.append(f"receipt_version is {r['receipt_version']!r}, not {VERSION!r}"
+                    + (" (v0.1 anchored on the job account, which Nosana closes: re-issue as v0.2)"
+                       if r["receipt_version"] == "0.1" else ""))
     for k in ("receipt_id", "input_sha256", "output_sha256"):
         if not _HEX64.match(r[k]):
             errs.append(f"{k} is not 64 hex chars")
@@ -60,6 +69,7 @@ def validate(r: dict) -> list[str]:
                 errs.append("model.image is not pinned by digest")
             if "@" not in r["model"]["weights"]:
                 errs.append("model.weights has no @revision")
+            errs.extend(_spot_check(r["spot_check"]))
     elif r["grade"] == "declared":
         need(r, DECLARED, "")
         if not errs:
@@ -72,4 +82,24 @@ def validate(r: dict) -> list[str]:
                 errs.append(f"declared receipt carries {k}")
     else:
         errs.append(f"unknown grade {r['grade']!r}")
+    return errs
+
+
+def _spot_check(sc: dict) -> list[str]:
+    """{rerun_job, rerun_node, agreed, action, reason?, rerun_output_sha256?}. A disagreement must send the item
+    to human review and say why (Sogol, 2026-11-10)."""
+    errs = [f"spot_check.{k} missing" for k in ("rerun_job", "rerun_node", "agreed", "action") if k not in sc]
+    if errs:
+        return errs
+    if sc["agreed"] not in (True, False, None):
+        errs.append("spot_check.agreed is not true, false or null")
+    if sc["action"] not in SPOT_ACTIONS:
+        errs.append(f"spot_check.action is not one of {SPOT_ACTIONS}")
+    if sc["agreed"] is False:
+        if sc["action"] != "human_review":
+            errs.append("spot_check disagreed but action is not human_review")
+        if not isinstance(sc.get("reason"), str) or not sc["reason"]:
+            errs.append("spot_check disagreed but gives no reason")
+        if not _HEX64.match(str(sc.get("rerun_output_sha256", ""))):
+            errs.append("spot_check disagreed but has no rerun_output_sha256")
     return errs

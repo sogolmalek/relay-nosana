@@ -26,8 +26,9 @@ from relay_verify.jcs import canonical
 from relay_verify.outputs import parse_outputs
 from relay_verify.solana import DEFAULT_RPC
 
+from .. import gate
 from .. import rules as rules_mod
-from ..lane import Budget, log, run_batch
+from ..lane import Budget, chain_for, log, run_batch
 from ..ledger import log_call, upsert
 from ..nosana import jobdef as jd_mod
 from ..nosana import nodes as nodes_mod
@@ -35,7 +36,8 @@ from ..nosana.jobs import Jobs, idle_nodes
 from ..receipts import issue
 from . import task
 from .data import (N_1E, NOTE_CHANGES, NOTE_PLAN_1E, PLAN_1B, PLAN_1E_POOL, SEED_1B, SEED_1E, add_notes,
-                   content_key, draw, generate, truth_rules_only)
+                   content_key, draw, generate, truth_keywords_naive, truth_rules_only,
+                   truth_rules_regex)
 from .run_poc import ROOT, amounts, db, load_state, paths, save_state
 
 ROOT_RUNS = ROOT / "runs"
@@ -101,12 +103,17 @@ def _judgment_part(run: dict) -> dict:
             "rules_only": f"code alone, no model: rules 1-5 over the structured fields, notes unread "
                           f"(data.truth_rules_only). Scored on the same {n} items; by construction it is right on "
                           f"every item the notes don't change: {n - len(changed)}/{n}",
+            "rules_regex": "code alone, no model: rules 1-5 plus a keyword/regex reading of the notes "
+                           "(data.truth_rules_regex: a finance note naming the refund's order with an approval word "
+                           "approves it; the latest note naming this invoice with a dispute word holds it, a "
+                           "withdrawn/closed word releases it). keywords_naive, reported beside it, drops the sender, "
+                           "order and invoice checks",
             "frontier": "declared lane, not anchored: headless Claude Code (relay_nosana/payouts/claude_code.py, "
                         "Phase 1's lane, the owner's login, no API credits) on the compiled-arm input of each of the "
                         f"{n} items, same schema; run_1b frontier. Its score is the frontier column; the bar stays "
                         "absolute",
         },
-        "report_columns": ["raw", "compiled v2", "rules only", "frontier"],
+        "report_columns": ["raw", "compiled v2", "rules only", "rules + regex", "frontier"],
     }
 
 
@@ -354,7 +361,11 @@ def _columns_1e(P, run, arms, pids, truth) -> dict:
     changed = {p for p in pids if truth[p] != truth_rules_only(by_id[p], paid)}
     cols = {"raw": _score(arms["raw"]["_ok"], pids, changed),
             "compiled_v2": _score(arms["compiled"]["_ok"], pids, changed),
-            "rules_only": _score({p: truth_rules_only(by_id[p], paid) == truth[p] for p in pids}, pids, changed)}
+            "rules_only": _score({p: truth_rules_only(by_id[p], paid) == truth[p] for p in pids}, pids, changed),
+            # fourth no-model baseline (Sogol, 2026-11-10): rules + a keyword/regex reading of the notes
+            "rules_regex": _score({p: truth_rules_regex(by_id[p], paid) == truth[p] for p in pids}, pids, changed),
+            "keywords_naive": _score({p: truth_keywords_naive(by_id[p], paid) == truth[p] for p in pids}, pids,
+                                     changed)}
     f = P["base"] / "frontier.jsonl"
     recs = {r["item_id"].split("/")[0]: r for r in map(json.loads, f.read_text().splitlines())} if f.exists() else {}
     cols["frontier"] = (_score({p: task.correct((recs.get(p) or {}).get("output"), truth[p]) for p in pids},
@@ -365,22 +376,61 @@ def _columns_1e(P, run, arms, pids, truth) -> dict:
     return cols
 
 
+FRONTIER_MODEL = "claude-opus-5-5"  # pinned with --model; each record also keeps the model the output reports
+
+
 def cmd_frontier(a) -> None:
-    """Declared frontier column (run e): headless Claude Code on each compiled-arm input. Resumable."""
+    """Declared frontier column (run e): headless Claude Code on each compiled-arm input, the compiled v2 system
+    prompt and user message verbatim, no tools, model pinned. Resumable."""
     from . import claude_code
     P, state = paths(a.run_id), load_state(a.run_id)
     if state.get("design") != "1e":
         sys.exit("the frontier column is part of run e's design only")
-    lines = [json.loads(x) for x in P["inputs"].read_text().splitlines() if '"arm": "compiled"' in x]
+    lines = [x for x in map(json.loads, P["inputs"].read_text().splitlines()) if x.get("arm") == "compiled"]
+    if len(lines) != len(json.loads(P["run"].read_text())["truth"]):
+        sys.exit(f"found {len(lines)} compiled-arm lines, expected one per payout")
     out = P["base"] / "frontier.jsonl"
     done = {json.loads(x)["item_id"] for x in out.read_text().splitlines()} if out.exists() else set()
     for line in lines:
         if line["item_id"] in done:
             continue
-        rec = claude_code.call(line, task.OUTPUT_SCHEMA_1E)
+        rec = claude_code.call(line, task.OUTPUT_SCHEMA_1E, model=FRONTIER_MODEL)
         with out.open("a") as fh:
             fh.write(json.dumps(rec, sort_keys=True) + "\n")
         log(f"frontier {line['item_id']}: {rec.get('output') or rec.get('error')}")
+
+
+def _frontier_receipts(P, run, amt, rules, by_id) -> dict[str, dict]:
+    """Declared receipts for the frontier column (run e): one per answered item, under the rule its amount
+    selects. Over $500 that rule requires anchored, so the gate refuses these; they record the comparison."""
+    f = P["base"] / "frontier.jsonl"
+    out_dir = P["receipts"] / "frontier"
+    if out_dir.exists():
+        for old in out_dir.glob("*.json"):
+            old.unlink()
+    if not f.exists():
+        return {}
+    out_dir.mkdir(parents=True, exist_ok=True)
+    recs = {}
+    for rec in map(json.loads, f.read_text().splitlines()):
+        if rec.get("output") is None:
+            continue
+        pid = rec["item_id"].split("/")[0]
+        rule = rules_mod.rule_for(list(rules.values()), task.TASK, amt[pid])
+        out = {k: rec["output"][k] for k in task.OUTPUT_KEYS_1B}  # hash only {decision, reason_code}, as anchored
+        recs[pid] = issue.declared(
+            item_id=rec["item_id"], input_line=by_id[rec["item_id"]], output=out,
+            provider={"name": claude_code_name(), "model": rec["model"], "session_id": rec["session_id"],
+                      "timestamp": rec["timestamp"]},
+            rule=rule, rule_sha256=rules_mod.snapshot_sha256(rule), work_type=task.TASK, vendor=claude_code_name(),
+            relay_checks=["output_schema"], cost_usd=0.0)
+        (out_dir / f"{pid}.json").write_text(json.dumps(recs[pid], indent=2, sort_keys=True) + "\n")
+    return recs
+
+
+def claude_code_name() -> str:
+    from . import claude_code
+    return claude_code.NAME
 
 
 def cmd_issue(a) -> None:
@@ -462,8 +512,14 @@ def cmd_issue(a) -> None:
     state["routing"] = ("compiled arm: payouts over $500 may be paid on a verified anchored receipt" if cleared
                         else "human review for payouts over $500 (on_no_open_model)")
 
-    spots = {iid: {"rerun_job": rr["job"], "rerun_node": rr["account"]["node"],
-                   "agreed": rerun_rows[iid]["output_sha256"] == rows[iid]["output_sha256"]}
+    chains = {key: chain_for(job=state[key]["job"], tag=key, fixtures=P["nosana"], rpc=a.rpc)
+              for key, _ in batches(state)}
+    if rr.get("ok"):
+        chains["rerun"] = chain_for(job=rr["job"], tag="rerun", fixtures=P["nosana"], rpc=a.rpc)
+    state["chains"] = chains
+    spots = {iid: issue.spot_check(rerun_job=rr["job"], rerun_node=chains["rerun"]["node"],
+                                   output_sha256=rows[iid]["output_sha256"],
+                                   rerun_output_sha256=rerun_rows[iid]["output_sha256"])
              for iid in rr.get("items", [])} if rr.get("ok") else {}
     state["rerun_agreement"] = ({"n": len(spots), "agreed": sum(s["agreed"] for s in spots.values())} if spots
                                 else "not run (plan changed after the batch: see docs/phase1b-report.md)")
@@ -483,7 +539,7 @@ def cmd_issue(a) -> None:
     for key, pids in batches(state):  # each receipt is anchored to the job that produced its output
         mine = {iid: x for iid, x in items.items() if pids is None or iid.split("/")[0] in set(pids)}
         receipts.update(issue.anchored_from_result(
-            result=results[key], account=state[key]["account"], job_definition_cid=state[key]["jobdef_cid"],
+            result=results[key], chain=chains[key], job_definition_cid=state[key]["jobdef_cid"],
             inputs_cid=state[key]["inputs_cid"], image=jd_mod.IMAGE, weights=f"{model}@{revision}",
             items=mine, rule=proof, rule_sha256=rules_mod.snapshot_sha256(proof), work_type=task.TASK,
             relay_checks={i: checks[i] for i in mine}, spot_checks={i: v for i, v in spots.items() if i in mine},
@@ -501,7 +557,10 @@ def cmd_issue(a) -> None:
             "verify_verdict": None, "spot_check_agreed": None if r["spot_check"]["agreed"] is None
             else int(r["spot_check"]["agreed"]), "receipt_json": canonical(r).decode()}, "receipt_id")
     conn.commit()
-    state["receipts"] = {"anchored": len(receipts), "declared": 0}
+    declared = _frontier_receipts(P, run, amt, rules, by_id)
+    state["receipts"] = {"anchored": len(receipts), "declared": len(declared)}
+    by_item = {iid.split("/")[0]: r for iid, r in receipts.items()}
+    state["review_queue"] = gate.write_queue(P["base"] / "review_queue.json", by_item, rules)
     save_state(a.run_id, state)
     for arm in task.ARMS:
         x = arms[arm]

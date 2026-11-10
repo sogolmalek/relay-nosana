@@ -25,7 +25,7 @@ from relay_verify.outputs import parse_outputs
 from relay_verify.solana import DEFAULT_RPC
 
 from .. import rules as rules_mod
-from ..lane import Budget, log, run_batch
+from ..lane import Budget, chain_for, log, run_batch
 from ..ledger import log_call, upsert
 from ..nosana import jobdef as jd_mod
 from ..nosana import nodes as nodes_mod
@@ -199,8 +199,13 @@ def cmd_issue(a) -> None:
     state["bar"] = {"rule": proof["id"], "cleared": cleared, "ci_low": round(lo, 4),
                     "needed": proof["bar"]["ci_lower_gte"], "max_ci_low_at_this_n": round(task.wilson(n, n)[0], 4),
                     "frontier_ratio": "not measured in POC"}
-    spots = {pid: {"rerun_job": rr["job"], "rerun_node": rr["account"]["node"],
-                   "agreed": rerun_rows[pid]["output_sha256"] == rows[pid]["output_sha256"]}
+    chains = {"batch": chain_for(job=state["batch"]["job"], tag="batch", fixtures=P["nosana"], rpc=a.rpc)}
+    if rr.get("ok"):
+        chains["rerun"] = chain_for(job=rr["job"], tag="rerun", fixtures=P["nosana"], rpc=a.rpc)
+    state["chains"] = chains
+    spots = {pid: issue.spot_check(rerun_job=rr["job"], rerun_node=chains["rerun"]["node"],
+                                   output_sha256=rows[pid]["output_sha256"],
+                                   rerun_output_sha256=rerun_rows[pid]["output_sha256"])
              for pid in rr.get("items", [])} if rr.get("ok") else {}
     state["rerun_agreement"] = ({"n": len(spots), "agreed": sum(s["agreed"] for s in spots.values())} if spots
                                 else "not run (step 2 baseline: batch only)")
@@ -213,7 +218,7 @@ def cmd_issue(a) -> None:
             cks.append("spot_check_agreed")
         checks[pid] = cks
     receipts = issue.anchored_from_result(
-        result=batch_res, account=state["batch"]["account"], job_definition_cid=state["batch"]["jobdef_cid"],
+        result=batch_res, chain=chains["batch"], job_definition_cid=state["batch"]["jobdef_cid"],
         inputs_cid=state["batch"]["inputs_cid"], image=jd_mod.IMAGE, weights=f"{model}@{rev}",
         items={p: by_id[p] for p in anchored}, rule=proof, rule_sha256=rules_mod.snapshot_sha256(proof),
         work_type=task.TASK, relay_checks=checks, spot_checks=spots, cost_usd_per_item=per_item)

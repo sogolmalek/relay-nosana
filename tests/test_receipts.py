@@ -1,4 +1,4 @@
-"""Phase 1: JCS, Merkle, the batch runner, receipts v0.1 and relay-verify (offline, fake chain/IPFS)."""
+"""Phase 1: JCS, Merkle, the batch runner, receipts v0.2 and relay-verify (offline, fake chain/IPFS)."""
 
 import copy
 import gzip
@@ -22,7 +22,9 @@ from relay_verify.checks import Unavailable, receipt_id_of, verdict, verify
 from relay_verify.cid import cidv0_of_bytes
 from relay_verify.jcs import canonical, sha256_hex
 from relay_verify.schema import validate
-from relay_verify.solana import JobAccount
+from relay_verify.b58 import b58decode, b58encode
+from relay_verify.solana import (ASSIGN_DISCRIMINATOR, FINISH_DISCRIMINATOR, NOSANA_JOBS_PROGRAM, JobAccount,
+                                 job_from_txs)
 
 ROOT = Path(__file__).resolve().parent.parent
 _spec = importlib.util.spec_from_file_location("relay_batch_runner", ROOT / "batch_runner" / "run.py")
@@ -178,8 +180,13 @@ JOB, JOB2 = "Hs7FRTa6EgiKxNdqaG7rnhpkSu8QpyYaceRrRsbGyN1z", "GaWjy48VRM4VdTeQk5H
 
 
 class FakeFetcher:
+    rpc = "fake://rpc"
+
     def __init__(self):
-        self.accounts, self.blobs = {}, {}
+        self.accounts, self.blobs, self.txs = {}, {}, {}
+
+    def transaction(self, sig):
+        return self.txs.get(sig)
 
     def put(self, data: bytes) -> str:
         cid = cidv0_of_bytes(data)
@@ -193,6 +200,37 @@ class FakeFetcher:
         if cid not in self.blobs:
             raise Unavailable(cid)
         return self.blobs[cid]
+
+
+PAYER, RUN = "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt", "8Du9jk2wHj9xMxH4zotEFbhyrjECGjqQiwqXEBPEGAD8"
+FILL = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+
+
+def _sig(seed: str) -> str:
+    return b58encode(sha256_hex({"sig": seed}).encode()[:64])
+
+
+def _tx(sig, signers, accounts, data, block_time):
+    """A getTransaction (encoding json) result with one Nosana jobs-program instruction."""
+    keys = list(dict.fromkeys(signers + accounts + [NOSANA_JOBS_PROGRAM]))
+    return {"blockTime": block_time, "slot": 1, "meta": {"err": None, "innerInstructions": [],
+                                                         "loadedAddresses": {"writable": [], "readonly": []}},
+            "transaction": {"signatures": [sig], "message": {
+                "accountKeys": keys, "header": {"numRequiredSignatures": len(signers)},
+                "instructions": [{"programIdIndex": keys.index(NOSANA_JOBS_PROGRAM),
+                                  "accounts": [keys.index(a) for a in accounts], "data": b58encode(data)}]}}}
+
+
+def _fake_txs(f, job, jd_cid, res_cid, node, t_list=1794252052, t_finish=1794252248):
+    """The real layouts (runs/*/nosana/*_tx.json): assign [job, market, run, node, ...], job signs;
+    finish [job, run, market, ..., node @8, ...], node signs."""
+    post, fin = _sig("post" + job), _sig("finish" + job)
+    f.txs[post] = _tx(post, [PAYER, job, RUN], [job, MARKET, RUN, node, FILL],
+                      ASSIGN_DISCRIMINATOR + b58decode(jd_cid)[2:] + (3600).to_bytes(8, "little"), t_list)
+    f.txs[fin] = _tx(fin, [node], [job, RUN, MARKET, FILL, FILL, FILL, PAYER, PAYER, node, FILL],
+                     FINISH_DISCRIMINATOR + b58decode(res_cid)[2:], t_finish)
+    f.chains = getattr(f, "chains", {})
+    f.chains[job] = job_from_txs(job, post, f.txs[post], fin, f.txs[fin])
 
 
 def _texts(lines, run):
@@ -221,6 +259,7 @@ def _fake_job(f, lines, run, job=JOB, node=NODE, status="success"):
         "startTime": 1794252057815, "endTime": 1794252237383, "logs": logs,
         "results": {"merkle_root": [f"RELAY_MERKLE_ROOT={root}", root]}}]}
     res_cid = f.put(canonical(result))
+    _fake_txs(f, job, jd_cid, res_cid, node)
     f.accounts[job] = JobAccount(address=job, ipfs_job=jd_cid, ipfs_result=res_cid, market=MARKET, node=node,
                                  payer="credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt", price=111,
                                  project="BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo", state=2,
@@ -237,7 +276,7 @@ def issued():
     rule = rules_mod.load()[0]
     items = {x["item_id"]: x for x in lines[:21]}
     recs = issue.anchored_from_result(
-        result=result, account=f.accounts[JOB].to_dict(), job_definition_cid=jd_cid, inputs_cid=inputs_cid,
+        result=result, chain=f.chains[JOB], job_definition_cid=jd_cid, inputs_cid=inputs_cid,
         image=jd_mod.IMAGE, weights=f"{jd_mod.MODEL}@{jd_mod.REVISION}", items=items, rule=rule,
         rule_sha256=rules_mod.snapshot_sha256(rule), work_type="payout_check", relay_checks={},
         spot_checks={}, cost_usd_per_item=0.001)
@@ -324,7 +363,7 @@ def test_completed_job_with_failed_result_fails_check_1():
     f = FakeFetcher()
     jd_cid, inputs_cid, result = _fake_job(f, lines, run, status="failed")
     with pytest.raises(ValueError):
-        issue.anchored_from_result(result=result, account=f.accounts[JOB].to_dict(), job_definition_cid=jd_cid,
+        issue.anchored_from_result(result=result, chain=f.chains[JOB], job_definition_cid=jd_cid,
                                    inputs_cid=inputs_cid, image=jd_mod.IMAGE, weights="m@r",
                                    items={x["item_id"]: x for x in lines}, rule=rules_mod.load()[0], rule_sha256="x",
                                    work_type="payout_check", relay_checks={}, spot_checks={}, cost_usd_per_item=0)
@@ -339,6 +378,11 @@ def test_network_unavailable_is_exit_2(issued):
 
 
 class FakeFetcherDown:
+    rpc = "fake://down"
+
+    def transaction(self, sig):
+        raise Unavailable("rpc down")
+
     def account(self, address):
         raise Unavailable("rpc down")
 
@@ -418,3 +462,129 @@ def test_run_node_reads_the_node_from_the_run_account():
         assert lane.run_node("rpc", "run") == node
     with patch.object(lane, "rpc_call", return_value={"result": {"value": None}}):
         assert lane.run_node("rpc", "run") is None
+
+
+# ---------------------------------------------------------------- v0.2: anchored on transactions, not the account
+
+def test_receipt_verifies_after_nosana_closes_the_job_account(issued):
+    f, recs, _, _ = issued
+    f.accounts.clear()  # Nosana's CleanAdmin closes the account about an hour after finish
+    for r in list(recs.values())[:3]:
+        cks = verify(r, f)
+        assert verdict(cks) == 0, [c for c in cks if c.ok is not True]
+        assert "closed" in next(c for c in cks if c.id == "1").reason
+
+
+def test_open_account_that_disagrees_with_the_transactions_fails_check_1(issued):
+    f, recs, _, _ = issued
+    import dataclasses
+    f.accounts[JOB] = dataclasses.replace(f.accounts[JOB], node=NODE2)
+    assert "1" in _ids_failing(next(iter(recs.values())), f)
+
+
+def test_rpc_without_the_history_is_could_not_check_and_names_archival(issued):
+    f, recs, _, _ = issued
+    r = next(iter(recs.values()))
+    f.txs.pop(r["nosana"]["finish_tx"])
+    cks = verify(r, f)
+    assert verdict(cks) == 2
+    c1 = next(c for c in cks if c.id == "1")
+    assert c1.ok is None and "archival RPC" in c1.reason and "RELAY_VERIFY_RPC" in c1.reason
+
+
+def test_tamper_post_tx_to_another_jobs_post_fails_check_1(issued):
+    f, recs, lines, run = issued
+    _fake_job(f, lines[:5], run, job=JOB2)
+    r = _retag(next(iter(recs.values())))
+    r["nosana"]["post_tx"] = f.chains[JOB2]["post_tx"]
+    r["receipt_id"] = receipt_id_of(r)
+    c1 = next(c for c in verify(r, f) if c.id == "1")
+    assert c1.ok is False and "no Nosana list or assign instruction for job" in c1.reason
+
+
+def test_finish_not_signed_by_the_node_fails_check_1(issued):
+    f, recs, _, _ = issued
+    r = next(iter(recs.values()))
+    fin = f.txs[r["nosana"]["finish_tx"]]
+    fin["transaction"]["message"]["header"]["numRequiredSignatures"] = 0
+    c1 = next(c for c in verify(r, f) if c.id == "1")
+    assert c1.ok is False and "did not sign" in c1.reason
+
+
+def test_failed_transaction_fails_check_1(issued):
+    f, recs, _, _ = issued
+    r = next(iter(recs.values()))
+    f.txs[r["nosana"]["post_tx"]]["meta"]["err"] = {"InstructionError": [0, "Custom"]}
+    assert "1" in _ids_failing(r, f)
+
+
+def test_v01_receipt_is_rejected_with_a_reissue_hint(issued):
+    f, recs, _, _ = issued
+    r = copy.deepcopy(next(iter(recs.values())))
+    r["receipt_version"] = "0.1"
+    assert any("re-issue as v0.2" in e for e in validate(r))
+
+
+REAL_RUNS = ROOT / "runs"
+
+
+@pytest.mark.parametrize("run_id,tag", [("payouts-2026-11-10", "batch"), ("payouts-2026-11-10", "rerun"),
+                                        ("payouts-2026-11-10b", "batch"), ("payouts-2026-11-10b", "rerun")])
+def test_real_transactions_decode_to_what_the_receipts_and_saved_accounts_say(run_id, tag):
+    """The layouts are read from real mainnet transactions, kept as fixtures by lane.chain_for."""
+    nos = REAL_RUNS / run_id / "nosana"
+    post, fin = (json.loads((nos / f"{tag}_{w}_tx.json").read_text()) for w in ("post", "finish"))
+    state = json.loads((REAL_RUNS / run_id / "state.json").read_text())
+    job = state[tag]["job"]
+    chain = job_from_txs(job, post["signature"], post["result"], fin["signature"], fin["result"])
+    acct = state[tag]["account"]  # decoded at the time, while the account still existed
+    assert (chain["ipfs_job"], chain["ipfs_result"], chain["node"], chain["market"]) == \
+        (acct["ipfs_job"], acct["ipfs_result"], acct["node"], acct["market"])
+    # v0.2 times are the transactions' block times; the program's clock can differ by a second
+    # (run b's batch: account timeStart 1794300984, post block time 1794300985)
+    assert abs(chain["listed_at"] - acct["time_start"]) <= 2 and abs(chain["finished_at"] - acct["time_end"]) <= 2
+    assert chain["post_ix"] == "assign" and chain["ipfs_job"] == state[tag]["jobdef_cid"]
+
+
+# ---------------------------------------------------------------- re-run disagreement -> human review
+
+def test_disagreeing_rerun_goes_to_human_review_and_the_receipt_says_why(issued):
+    from relay_nosana import gate
+    f, recs, lines, run = issued
+    rule = rules_mod.load()[0]
+    a, b = sha256_hex({"decision": "hold"}), sha256_hex({"decision": "approve"})
+    agree = issue.spot_check(rerun_job=JOB2, rerun_node=NODE2, output_sha256=a, rerun_output_sha256=a)
+    differ = issue.spot_check(rerun_job=JOB2, rerun_node=NODE2, output_sha256=a, rerun_output_sha256=b)
+    assert agree == {"rerun_job": JOB2, "rerun_node": NODE2, "agreed": True, "action": "none"}
+    assert differ["agreed"] is False and differ["action"] == "human_review" and NODE2 in differ["reason"]
+    assert differ["rerun_output_sha256"] == b
+    ids = [x["item_id"] for x in lines[:21]]
+    recs2 = issue.anchored_from_result(
+        result=_fake_job(f, lines, run)[2], chain=f.chains[JOB], job_definition_cid=f.chains[JOB]["ipfs_job"],
+        inputs_cid=next(iter(recs.values()))["nosana"]["inputs_cid"], image=jd_mod.IMAGE,
+        weights=f"{jd_mod.MODEL}@{jd_mod.REVISION}", items={x["item_id"]: x for x in lines[:21]}, rule=rule,
+        rule_sha256=rules_mod.snapshot_sha256(rule), work_type="payout_check",
+        relay_checks={i: ["output_schema", "work_type_cleared_bar"] for i in ids},
+        spot_checks={ids[0]: differ, ids[1]: agree}, cost_usd_per_item=0.001)
+    r0 = recs2[ids[0]]
+    assert verdict(verify(r0, f)) == 0  # the receipt is genuine; the gate still holds the payout
+    d = gate.decide(r0, 0, rule)
+    assert d["action"] == "human_review" and "re-run disagreed" in d["reasons"][0]
+    q = gate.review_queue(recs2, {rule["id"]: rule})
+    assert [x["item_id"] for x in q] == [ids[0]] and q[0]["spot_check_disagreed"]
+    bad = copy.deepcopy(r0)
+    bad["spot_check"]["action"] = "none"  # a disagreement can't be waved through
+    assert "spot_check disagreed but action is not human_review" in validate(bad)
+
+
+def test_gate_refuses_declared_over_threshold_and_unverified():
+    from relay_nosana import gate
+    rules = {r["id"]: r for r in rules_mod.load()}
+    proof, dflt = rules["payouts-need-proof"], rules["payouts-default"]
+    declared = {"grade": "declared", "rule": {"id": proof["id"]}, "output": {"decision": "approve"},
+                "relay_checks": []}
+    assert gate.decide(declared, 0, proof)["action"] == "refuse"
+    ok = dict(declared, rule={"id": dflt["id"]})
+    assert gate.decide(ok, 0, dflt)["action"] == "pay"
+    assert gate.decide(ok, 1, dflt)["action"] == "refuse"
+    assert gate.decide(dict(ok, output={"decision": "hold", "reason_code": "disputed"}), 0, dflt)["action"] == "hold"

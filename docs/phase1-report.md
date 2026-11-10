@@ -1,5 +1,10 @@
 # Phase 1 report: one real payout run on Nosana with receipts (2026-11-10)
 
+> **Update 2026-11-10 (evening):** these receipts were re-issued as **v0.2**, anchored on the job's post and
+> finish transactions, after Nosana closed the job account and v0.1 stopped verifying. All 30 verify
+> again (21 anchored, 9 declared). Only the version, the two transaction signatures, `spot_check.action` and the receipt ids changed.
+> See `docs/phase1b-report.md` section 4.1.
+
 SPEC_V2 Phase 1, adapted to `docs/POC_PAYOUTS.md`. Everything below comes from one live run,
 `runs/payouts-2026-11-10/` (committed: inputs, every job's raw fixtures, the receipts, the verify report,
 the ledger tables as JSON). **Phase 1 is done. Phase 2 has not started.**

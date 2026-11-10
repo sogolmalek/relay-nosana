@@ -1,6 +1,8 @@
-"""The relay-verify checks (receipt spec v0.1, SPEC_V2 section 7). Standard library only.
+"""The relay-verify checks (receipt spec v0.2, docs/receipt-spec.md). Standard library only.
 
-Everything is read from Solana and IPFS; nothing from Relay. IPFS bytes are accepted only if they
+Everything is read from Solana and IPFS; nothing from Relay. An anchored receipt is checked against the
+job's post and finish transactions, which can't be closed; the job account is only a cross-check while it
+still exists (Nosana closes it about an hour after the job finishes). IPFS bytes are accepted only if they
 hash back to the CID asked for, so a gateway can't lie. Each check returns ok=True, False, or None
 (couldn't check: network).
 """
@@ -10,6 +12,7 @@ from __future__ import annotations
 import base64
 import gzip
 import json
+import os
 import time
 import urllib.error
 import urllib.request
@@ -21,10 +24,17 @@ from .merkle import leaf_hash, root as merkle_root, root_from_path
 from .outputs import container_times, parse_outputs, regex_result
 from .result import check_result
 from .schema import validate
-from .solana import DEFAULT_RPC, JobAccount, RpcError, job_from_rpc_response, rpc_call
+from .solana import DEFAULT_RPC, JobAccount, RpcError, TxMismatch, job_from_rpc_response, job_from_txs, rpc_call
 
 DEFAULT_GATEWAYS = ["https://nosana.mypinata.cloud/ipfs/", "https://ipfs.io/ipfs/", "https://dweb.link/ipfs/"]
-UA = "relay-verify/0.1"
+UA = "relay-verify/0.2"
+RPC_ENV = "RELAY_VERIFY_RPC"
+
+
+def default_rpc() -> str:
+    """--rpc, else $RELAY_VERIFY_RPC, else the public mainnet RPC. Old receipts need an archival RPC: one that
+    still serves getTransaction for the slots of the receipt's post_tx and finish_tx."""
+    return os.environ.get(RPC_ENV) or DEFAULT_RPC
 
 
 class Unavailable(Exception):
@@ -45,25 +55,34 @@ class Check:
 class Fetcher:
     """Solana JSON-RPC and IPFS gateways, cached per run. Tests substitute a fake."""
 
-    def __init__(self, rpc: str = DEFAULT_RPC, gateways: list[str] | None = None, timeout: float = 60):
-        self.rpc, self.gateways, self.timeout = rpc, gateways or DEFAULT_GATEWAYS, timeout
+    def __init__(self, rpc: str | None = None, gateways: list[str] | None = None, timeout: float = 60):
+        self.rpc, self.gateways, self.timeout = rpc or default_rpc(), gateways or DEFAULT_GATEWAYS, timeout
         self._acct: dict[str, JobAccount | None] = {}
+        self._tx: dict[str, dict | None] = {}
         self._ipfs: dict[str, bytes] = {}
 
+    def _rpc(self, method: str, params: list) -> dict:
+        last = None
+        for attempt in range(5):
+            try:
+                return rpc_call(self.rpc, method, params, self.timeout)
+            except (urllib.error.URLError, TimeoutError, RpcError, OSError) as e:
+                last = e
+                time.sleep(2 * (attempt + 1))
+        raise Unavailable(f"Solana RPC {self.rpc}: {last}")
+
+    def transaction(self, signature: str) -> dict | None:
+        """getTransaction result, or None if this RPC has no record of it (unknown, or older than its history)."""
+        if signature not in self._tx:
+            self._tx[signature] = self._rpc("getTransaction", [signature, {
+                "encoding": "json", "maxSupportedTransactionVersion": 0, "commitment": "confirmed"}]).get("result")
+        return self._tx[signature]
+
     def account(self, address: str) -> JobAccount | None:
+        """The live job account, or None once Nosana has closed it (the verifier then relies on the transactions)."""
         if address not in self._acct:
-            last = None
-            for attempt in range(5):
-                try:
-                    resp = rpc_call(self.rpc, "getAccountInfo",
-                                    [address, {"encoding": "base64", "commitment": "confirmed"}], self.timeout)
-                    self._acct[address] = job_from_rpc_response(address, resp)
-                    break
-                except (urllib.error.URLError, TimeoutError, RpcError, OSError) as e:
-                    last = e
-                    time.sleep(2 * (attempt + 1))
-            else:
-                raise Unavailable(f"Solana RPC {self.rpc}: {last}")
+            resp = self._rpc("getAccountInfo", [address, {"encoding": "base64", "commitment": "confirmed"}])
+            self._acct[address] = job_from_rpc_response(address, resp)
         return self._acct[address]
 
     def ipfs(self, cid: str) -> bytes:
@@ -103,7 +122,7 @@ def verify(receipt: dict, f: Fetcher) -> list[Check]:
         checks.append(Check(cid, name, ok, reason))
 
     errs = validate(receipt)
-    add("schema", "receipt has the v0.1 shape", not errs, "; ".join(errs))
+    add("schema", "receipt has the v0.2 shape", not errs, "; ".join(errs))
     if errs:
         return checks
     rid = receipt_id_of(receipt)
@@ -117,35 +136,49 @@ def verify(receipt: dict, f: Fetcher) -> list[Check]:
         return checks
 
     n, m, mdl = receipt["nosana"], receipt["merkle"], receipt["model"]
-    acct = jd = result = None
+    chain = jd = result = None
 
-    # 1. job account exists, COMPLETED, and its result shows the container succeeded
+    # 1. the job's post and finish transactions succeeded and belong to this job; the result they point to
+    #    shows the container succeeded; the live job account, if Nosana hasn't closed it yet, agrees
+    name1 = "job finished on Solana"
     try:
-        acct = f.account(n["job"])
-        if acct is None:
-            add("1", "job completed on Solana", False, f"no job account at {n['job']}")
-        elif acct.state != 2:
-            add("1", "job completed on Solana", False, f"job state is {acct.state_name}")
-        elif not acct.ipfs_result:
-            add("1", "job completed on Solana", False, "job has no result CID (stopped before finishing?)")
+        post, fin = f.transaction(n["post_tx"]), f.transaction(n["finish_tx"])
+        missing = [w for w, t in (("post_tx", post), ("finish_tx", fin)) if t is None]
+        if missing:
+            add("1", name1, None, f"RPC {f.rpc} has no record of {' and '.join(missing)}. Verifying a receipt "
+                "older than the RPC's history needs an archival RPC (--rpc or RELAY_VERIFY_RPC)")
         else:
-            result = json.loads(f.ipfs(acct.ipfs_result))
+            chain = job_from_txs(n["job"], n["post_tx"], post, n["finish_tx"], fin)
+            result = json.loads(f.ipfs(chain["ipfs_result"]))
             rc = check_result(result)
-            add("1", "job completed on Solana", rc["ok"], "; ".join(rc["reasons"]))
+            bad = list(rc["reasons"])
+            acct = f.account(n["job"])
+            if acct is None:
+                note = "job account closed by Nosana after the job; checked from its transactions"
+            else:
+                note = "job account still open and agrees with the transactions"
+                if acct.state != 2:
+                    bad.append(f"job account state is {acct.state_name}")
+                for k in ("ipfs_job", "ipfs_result", "node", "market"):
+                    if getattr(acct, k) != chain[k]:
+                        bad.append(f"job account {k} is {getattr(acct, k)}, transactions say {chain[k]}")
+            add("1", name1, not bad, "; ".join(bad) if bad else note)
+    except TxMismatch as e:
+        add("1", name1, False, str(e))
     except Unavailable as e:
-        add("1", "job completed on Solana", None, str(e))
+        add("1", name1, None, str(e))
 
-    # 2. job definition from IPFS hashes to its CID, and the job account points to it
+    # 2. job definition from IPFS hashes to its CID, and the post transaction listed that CID
     try:
         jd = json.loads(f.ipfs(n["job_definition_cid"]))
-        if acct is None:
+        if chain is None:
             c1 = next(c for c in checks if c.id == "1").ok
             add("2", "job definition is the one the job ran", None if c1 is None else False,
-                "no job account to compare with")
+                "no post transaction to compare with")
         else:
-            ok = acct.ipfs_job == n["job_definition_cid"]
+            ok = chain["ipfs_job"] == n["job_definition_cid"]
             add("2", "job definition is the one the job ran", ok,
-                "" if ok else f"job account ipfsJob is {acct.ipfs_job}")
+                "" if ok else f"the post transaction lists ipfsJob {chain['ipfs_job']}")
     except Unavailable as e:
         add("2", "job definition is the one the job ran", None, str(e))
 
@@ -182,12 +215,12 @@ def verify(receipt: dict, f: Fetcher) -> list[Check]:
         add("4", "input is in the job's inputs", not bad, "; ".join(bad))
 
     # 5. result: on-chain result CID, the item's output, its Merkle path, and the batch root
-    if acct is None or result is None:
-        add("5", "output is in the job's result", None if acct is None else False, "result unavailable")
+    if chain is None or result is None:
+        add("5", "output is in the job's result", None if chain is None else False, "result unavailable")
     else:
         bad = []
-        if acct.ipfs_result != n["result_cid"]:
-            bad.append(f"job account ipfsResult is {acct.ipfs_result}")
+        if chain["ipfs_result"] != n["result_cid"]:
+            bad.append(f"the finish transaction's ipfsResult is {chain['ipfs_result']}")
         rows, summary = parse_outputs(result)
         row = rows.get(receipt["item_id"])
         if sha256_hex(receipt["output"]) != receipt["output_sha256"]:
@@ -209,15 +242,14 @@ def verify(receipt: dict, f: Fetcher) -> list[Check]:
                 bad.append(f"the result's {k} root is {v}")
         add("5", "output is in the job's result", not bad, "; ".join(bad))
 
-    # 6. node, market and times match the chain and the result
-    if acct is None:
-        add("6", "node and times match", None, "no job account")
+    # 6. node (the finish signer), market and block times match the transactions; container times the result
+    if chain is None:
+        add("6", "node and times match", None, "no transactions")
     else:
         bad = []
-        for field, chain in (("node", acct.node), ("market", acct.market),
-                             ("listed_at", acct.time_start), ("finished_at", acct.time_end)):
-            if n[field] != chain:
-                bad.append(f"{field}: chain says {chain}")
+        for field in ("node", "market", "listed_at", "finished_at"):
+            if n[field] != chain[field]:
+                bad.append(f"{field}: the transactions say {chain[field]}")
         if result is not None:
             cs, ce = container_times(result)
             if (n["container_start"], n["container_end"]) != (cs, ce):

@@ -43,13 +43,15 @@
   "nosana": {
     "container_end": 1794301152610,
     "container_start": 1794300988170,
+    "finish_tx": "sAo9gVGkEx1vJFYq1gZunmtfMK2hzB5rPG86ZQk2tezeZkvSk6y125Vatwe8RZJkcQ2E8UqKsSeGtHkRiKP5Foe",
     "finished_at": 1794301162,
     "inputs_cid": "QmQYakJhc8JFDHqataz2mzrwp5i61mMuF4hVWDsV8ZGpW9",
     "job": "EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N",
     "job_definition_cid": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
-    "listed_at": 1794300984,
+    "listed_at": 1794300985,
     "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
     "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+    "post_tx": "3spYXcLto7zuczuuhBLtBKb3ksZG9zoVHU5PL4Za1MYMLSdssnt8DtQdmFcFe87xnTYJSPVpxh9CEdRAHqAGoSN6",
     "result_cid": "Qmf2qKekLaNWCLmfyxhYduAzh6Q7MyeA94t8HLJ1q4dRMK"
   },
   "output": {
@@ -57,8 +59,8 @@
     "reason_code": "seller_on_hold"
   },
   "output_sha256": "f646fee25f1afd67809e3ae146c3390d5e9c15c588244c3ffc0e7e83d974b8c9",
-  "receipt_id": "2b039ff8e98eb9a35a9586d8b5b15788e569da3b2069f74a517ab59b77f743c7",
-  "receipt_version": "0.1",
+  "receipt_id": "d38f99c6870a76d2a853c77ee1a2a78c29e50c9146c2902f7b54e20dd6c8cd68",
+  "receipt_version": "0.2",
   "relay_checks": [
     "output_schema",
     "spot_check_agreed"
@@ -73,6 +75,7 @@
     "work_type": "payout_check"
   },
   "spot_check": {
+    "action": "none",
     "agreed": true,
     "rerun_job": "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB",
     "rerun_node": "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot"

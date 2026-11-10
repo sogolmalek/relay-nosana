@@ -19,7 +19,8 @@ from relay_verify.checks import Fetcher, Unavailable
 from relay_verify.jcs import canonical
 from relay_verify.outputs import container_times, regex_result
 from relay_verify.result import check_result
-from relay_verify.solana import b58encode, get_account_raw, job_from_rpc_response, rpc_call
+from relay_verify.solana import (TxMismatch, b58encode, find_job_txs, get_account_raw, job_from_rpc_response,
+                                 job_from_txs, rpc_call)
 
 from .ledger import upsert
 from .nosana.ipfs import pin_both
@@ -173,7 +174,7 @@ def run_batch(*, conn: sqlite3.Connection, run_id: str, tag: str, jobdef: dict, 
 
 def _adopt(out: Outcome, row: dict, fixtures: Path, tag: str, n: int, rpc: str) -> Outcome:
     acct = job_from_rpc_response(row["job"], get_account_raw(rpc, row["job"]))
-    out.ok, out.job, out.account = True, row["job"], acct.to_dict()
+    out.ok, out.job, out.account = True, row["job"], acct.to_dict() if acct else None
     out.result_file = f"{tag}_a{n}_result.json"
     out.result = json.loads((fixtures / out.result_file).read_text())
     return out
@@ -254,3 +255,25 @@ def _watch_and_record(*, conn, run_id, tag, attempt, saved, t_post, market, rpc,
     log(f"{pre}: {'OK' if row['ok'] else 'FAILED'} node={row['node']} status={row.get('result_status')} "
         f"cost=${row['credits_before'] - row['credits_after']:.3f} error={row.get('error')}")
     return row
+
+
+def chain_for(*, job: str, tag: str, fixtures: Path, rpc: str) -> dict:
+    """The job's post and finish transactions, decoded (relay_verify.solana.job_from_txs): what an anchored
+    receipt anchors on. Fetched once from the job's signature history and kept as fixtures
+    (`{tag}_post_tx.json`, `{tag}_finish_tx.json`), so re-issuing later needs no RPC history. The post must be
+    the transaction the Jobs API returned when we posted (`tx` in the saved post response)."""
+    pf, ff = fixtures / f"{tag}_post_tx.json", fixtures / f"{tag}_finish_tx.json"
+    if not (pf.exists() and ff.exists()):
+        found = find_job_txs(rpc, job)
+        missing = [w for w in ("post", "finish") if w not in found]
+        if missing:
+            raise TxMismatch(f"{job}: no {' or '.join(missing)} transaction in its signature history on {rpc}")
+        for path, (sig, tx) in ((pf, found["post"]), (ff, found["finish"])):
+            path.write_text(json.dumps({"signature": sig, "result": tx}, indent=2) + "\n")
+    post, fin = json.loads(pf.read_text()), json.loads(ff.read_text())
+    chain = job_from_txs(job, post["signature"], post["result"], fin["signature"], fin["result"])
+    posted = [json.loads(x.read_text()).get("body") or {} for x in fixtures.glob(f"{tag}_a*_post.json")]
+    api_tx = next((b.get("tx") for b in posted if b.get("job") == job), None)
+    if api_tx is not None and api_tx != chain["post_tx"]:
+        raise TxMismatch(f"{job}: the Jobs API returned post tx {api_tx}, its history shows {chain['post_tx']}")
+    return chain

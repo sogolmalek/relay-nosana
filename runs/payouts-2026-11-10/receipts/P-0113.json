@@ -14,8 +14,8 @@
     "session_id": "d445ab5d-c2a5-45b0-9813-00027babcf21",
     "timestamp": "2026-11-10T07:19:09Z"
   },
-  "receipt_id": "2e5f7b07c30ed9eb6234e8cc2e0cdc2201d7196a5b1daa7e4599b1e59bd80b7d",
-  "receipt_version": "0.1",
+  "receipt_id": "917680b32af7d4904b58859f4a8acdf9ce165b4843be34d2e08bf4421c476079",
+  "receipt_version": "0.2",
   "relay_checks": [
     "output_schema"
   ],

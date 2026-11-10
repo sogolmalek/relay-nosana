@@ -190,3 +190,59 @@ def test_run_e_system_prompt_and_schema_add_rule_6_without_touching_run_b():
     assert "6. disputed" in task.SYSTEM_1E and "6." not in task.SYSTEM_1B
     assert task.OUTPUT_SCHEMA_1E["properties"]["reason_code"]["enum"][-1] == "disputed"
     assert "disputed" not in task.OUTPUT_SCHEMA_1B["properties"]["reason_code"]["enum"]
+
+
+# ---------------------------------------------------------------- fourth no-model baseline: rules + regex on notes
+
+from relay_nosana.payouts.data import truth_keywords_naive, truth_rules_regex  # noqa: E402
+
+
+def _no_intent(p):
+    return dict(p, notes=[{k: v for k, v in n.items() if k != "intent"} for n in p["notes"]])
+
+
+def test_regex_baselines_never_read_the_hidden_intent():
+    pool = _pool_1e()
+    for p in pool["payouts"]:
+        assert truth_rules_regex(p, pool["paid_invoices"]) == truth_rules_regex(_no_intent(p), pool["paid_invoices"])
+        assert truth_keywords_naive(p, pool["paid_invoices"]) == \
+            truth_keywords_naive(_no_intent(p), pool["paid_invoices"])
+
+
+def test_regex_baselines_on_run_e_the_notes_are_template_easy():
+    """Recorded finding (2026-11-10), before run e is posted: a short regex over the notes recovers every label,
+    so on these synthetic notes the 7B column can't show judgment that code lacks."""
+    e = json.loads((ROOT / "runs" / "payouts-2026-11-10e" / "payout_run.json").read_text())
+    paid, t = e["paid_invoices"], e["truth"]
+    score = {f.__name__: sum(f(p, paid) == t[p["payout_id"]] for p in e["payouts"])
+             for f in (truth_rules_only, truth_rules_regex, truth_keywords_naive)}
+    assert score == {"truth_rules_only": 166, "truth_rules_regex": 200, "truth_keywords_naive": 183}
+
+
+def test_frontier_column_issues_declared_receipts_the_gate_refuses_over_500(tmp_path):
+    from relay_nosana import gate
+    from relay_nosana import rules as rules_mod
+    from relay_nosana.payouts import run_1b
+    from relay_nosana.payouts.run_poc import amounts
+    from relay_verify.checks import verdict, verify
+    base = ROOT / "runs" / "payouts-2026-11-10e"
+    run = json.loads((base / "payout_run.json").read_text())
+    lines = [x for x in map(json.loads, (base / "inputs.jsonl").read_text().splitlines()) if x["arm"] == "compiled"]
+    assert len(lines) == 200
+    amt = amounts(run)
+    hi = next(x for x in lines if amt[x["item_id"].split("/")[0]] > 500)
+    lo = next(x for x in lines if amt[x["item_id"].split("/")[0]] <= 500)
+    P = {"base": tmp_path, "receipts": tmp_path / "receipts"}
+    with (tmp_path / "frontier.jsonl").open("w") as fh:
+        for x in (hi, lo):
+            fh.write(json.dumps({"item_id": x["item_id"], "model": "claude-opus-5-5", "session_id": "s-" + x["item_id"],
+                                 "timestamp": "2026-11-10T18:00:00Z", "error": None,
+                                 "output": {"reasoning": "r", "decision": "approve", "reason_code": "ok"}}) + "\n")
+    rules = {r["id"]: r for r in rules_mod.load()}
+    recs = run_1b._frontier_receipts(P, run, amt, rules, {x["item_id"]: x for x in lines})
+    assert len(list((tmp_path / "receipts" / "frontier").glob("*.json"))) == 2
+    for x, want in ((hi, "refuse"), (lo, "pay")):
+        r = recs[x["item_id"].split("/")[0]]
+        assert r["grade"] == "declared" and r["output"] == {"decision": "approve", "reason_code": "ok"}
+        assert verdict(verify(r, None)) == 0
+        assert gate.decide(r, 0, rules[r["rule"]["id"]])["action"] == want

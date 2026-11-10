@@ -2,7 +2,7 @@
   {
     "item_id": "P-0101/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -18,15 +18,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -43,21 +43,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0103/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -73,15 +73,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -98,21 +98,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0104/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -128,15 +128,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -153,21 +153,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0105/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -183,15 +183,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -208,21 +208,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0106/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -238,15 +238,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -263,21 +263,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0107/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -293,15 +293,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -318,21 +318,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0110/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -348,15 +348,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -373,21 +373,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0111/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -403,15 +403,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -428,21 +428,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0114/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -458,15 +458,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -483,21 +483,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0115/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -513,15 +513,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -538,21 +538,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0116/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -568,15 +568,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -593,21 +593,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0117/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -623,15 +623,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -648,21 +648,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0118/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -678,15 +678,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -703,21 +703,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0120/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -733,15 +733,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -758,21 +758,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0121/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -788,15 +788,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -813,21 +813,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0123/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -843,15 +843,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -868,21 +868,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0124/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -898,15 +898,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -923,21 +923,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0125/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -953,15 +953,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -978,21 +978,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0127/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1008,15 +1008,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1033,21 +1033,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0128/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1063,15 +1063,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1088,21 +1088,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0129/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1118,15 +1118,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1143,21 +1143,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0130/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1173,15 +1173,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1198,21 +1198,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0131/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1228,15 +1228,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1253,21 +1253,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0135/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1283,15 +1283,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1308,21 +1308,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0136/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1338,15 +1338,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1363,21 +1363,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0137/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1393,15 +1393,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1418,21 +1418,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0138/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1448,15 +1448,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1473,21 +1473,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0139/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1503,15 +1503,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1528,21 +1528,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0140/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1558,15 +1558,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1583,21 +1583,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0141/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1613,15 +1613,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1638,21 +1638,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0143/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1668,15 +1668,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1693,21 +1693,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0144/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1723,15 +1723,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1748,21 +1748,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0145/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1778,15 +1778,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1803,21 +1803,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0146/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1833,15 +1833,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1858,21 +1858,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0147/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1888,15 +1888,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1913,21 +1913,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0152/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1943,15 +1943,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -1968,21 +1968,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0154/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -1998,15 +1998,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -2023,21 +2023,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0155/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -2053,15 +2053,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -2078,21 +2078,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0157/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -2108,15 +2108,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -2133,21 +2133,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0158/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -2163,15 +2163,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -2188,21 +2188,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0159/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -2218,15 +2218,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -2243,21 +2243,21 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   },
   {
     "item_id": "P-0160/compiled",
     "grade": "anchored",
-    "verdict": "failed",
+    "verdict": "verified",
     "checks": [
       {
         "id": "schema",
@@ -2273,15 +2273,15 @@
       },
       {
         "id": "1",
-        "name": "job completed on Solana",
-        "ok": false,
-        "reason": "no job account at EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N"
+        "name": "job finished on Solana",
+        "ok": true,
+        "reason": "job account closed by Nosana after the job; checked from its transactions"
       },
       {
         "id": "2",
         "name": "job definition is the one the job ran",
-        "ok": false,
-        "reason": "no job account to compare with"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "3",
@@ -2298,14 +2298,14 @@
       {
         "id": "5",
         "name": "output is in the job's result",
-        "ok": null,
-        "reason": "result unavailable"
+        "ok": true,
+        "reason": ""
       },
       {
         "id": "6",
         "name": "node and times match",
-        "ok": null,
-        "reason": "no job account"
+        "ok": true,
+        "reason": ""
       }
     ]
   }

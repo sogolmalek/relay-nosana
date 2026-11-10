@@ -43,13 +43,15 @@
   "nosana": {
     "container_end": 1794301152610,
     "container_start": 1794300988170,
+    "finish_tx": "sAo9gVGkEx1vJFYq1gZunmtfMK2hzB5rPG86ZQk2tezeZkvSk6y125Vatwe8RZJkcQ2E8UqKsSeGtHkRiKP5Foe",
     "finished_at": 1794301162,
     "inputs_cid": "QmQYakJhc8JFDHqataz2mzrwp5i61mMuF4hVWDsV8ZGpW9",
     "job": "EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N",
     "job_definition_cid": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
-    "listed_at": 1794300984,
+    "listed_at": 1794300985,
     "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
     "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+    "post_tx": "3spYXcLto7zuczuuhBLtBKb3ksZG9zoVHU5PL4Za1MYMLSdssnt8DtQdmFcFe87xnTYJSPVpxh9CEdRAHqAGoSN6",
     "result_cid": "Qmf2qKekLaNWCLmfyxhYduAzh6Q7MyeA94t8HLJ1q4dRMK"
   },
   "output": {
@@ -57,8 +59,8 @@
     "reason_code": "ok"
   },
   "output_sha256": "e85ffc72e7336add6bcac5094320818f2ee33c3c8d6018bf8800455d83bb96d9",
-  "receipt_id": "95bd941aa61ecb4c4020436d5bf313dfff0ffed675dc3f60bcbb45c33ab56b04",
-  "receipt_version": "0.1",
+  "receipt_id": "885629b09d7f712fe9183dac7ce047a7f38dfa2a8b18cceb8020729c1d352723",
+  "receipt_version": "0.2",
   "relay_checks": [
     "output_schema",
     "spot_check_agreed"
@@ -73,6 +75,7 @@
     "work_type": "payout_check"
   },
   "spot_check": {
+    "action": "none",
     "agreed": true,
     "rerun_job": "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB",
     "rerun_node": "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot"

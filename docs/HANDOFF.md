@@ -1,3 +1,10 @@
+> **2026-11-10 (evening): the owner's five decisions are done; run e is not posted.** Receipts are v0.2: they
+> anchor on the job's post and finish transactions, because Nosana closes job accounts about an hour after
+> the job. Phase 1 (30/30) and run b (42/42) were re-issued and verify on mainnet. A re-run disagreement goes
+> to human review (`relay_nosana/gate.py`, `runs/<run>/review_queue.json`). **Rules + a regex reading of the
+> notes scores 200/200 on run e**, so run e's notes are too easy for code: the owner decides what to do before
+> anything is posted. See `docs/phase1b-report.md` section 4 and its open decisions.
+
 # Handoff: where Phase 0 stands (read before doing anything)
 
 > **2026-11-10: Phase 1 is done and committed.** One real payout run on Nosana with receipts:

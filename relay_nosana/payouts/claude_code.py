@@ -12,6 +12,7 @@ saved, run from an empty working directory so no project CLAUDE.md is picked up.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import json
 import subprocess
 import tempfile
@@ -36,11 +37,15 @@ def reported_model(out: dict) -> str | None:
     return ",".join(sorted(set(names))) or None
 
 
-def call(line: dict, schema: dict, timeout_s: int = 300, cwd: str | None = None) -> dict:
+def call(line: dict, schema: dict, timeout_s: int = 300, cwd: str | None = None, model: str | None = None) -> dict:
+    """`model` pins the model (`--model`); the record keeps both the requested id and the one the JSON output
+    reports (`model`), so a column says exactly which model answered."""
     msgs = {m["role"]: m["content"] for m in line["messages"]}
+    flags = FLAGS + (["--model", model] if model else [])
     rec: dict = {"item_id": line["item_id"], "provider": NAME, "cli_version": _cli_version(),
-                 "flags": FLAGS, "output": None, "error": None}
-    cmd = ["claude", "-p", *FLAGS, "--system-prompt", msgs["system"], "--json-schema", json.dumps(schema)]
+                 "flags": flags, "requested_model": model, "output": None, "error": None,
+                 "system_prompt_sha256": hashlib.sha256(msgs["system"].encode()).hexdigest()}
+    cmd = ["claude", "-p", *flags, "--system-prompt", msgs["system"], "--json-schema", json.dumps(schema)]
     t0 = time.time()
     with tempfile.TemporaryDirectory(prefix="relay-cc-") as tmp:
         try:

@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/sogolmalek/relay-nosana/docs/receipt-schema.json",
-  "title": "Relay receipt v0.1",
+  "title": "Relay receipt v0.2",
   "type": "object",
   "required": ["receipt_version", "grade", "receipt_id", "item_id", "source", "rule", "input_sha256", "output",
                "output_sha256", "relay_checks", "cost_usd"],
   "properties": {
-    "receipt_version": {"const": "0.1"},
+    "receipt_version": {"const": "0.2"},
     "grade": {"enum": ["anchored", "declared"]},
     "receipt_id": {"$ref": "#/$defs/hex64"},
     "item_id": {"type": "string"},
@@ -31,18 +31,27 @@
                                            "properties": {"side": {"enum": ["L", "R"]}, "hash": {"$ref": "#/$defs/hex64"}}}}}},
         "nosana": {"type": "object",
                    "required": ["job", "market", "node", "job_definition_cid", "result_cid", "inputs_cid",
-                                "listed_at", "finished_at", "container_start", "container_end"],
+                                "post_tx", "finish_tx", "listed_at", "finished_at", "container_start", "container_end"],
                    "properties": {"job": {"$ref": "#/$defs/b58"}, "market": {"$ref": "#/$defs/b58"},
                                   "node": {"$ref": "#/$defs/b58"}, "job_definition_cid": {"$ref": "#/$defs/cidv0"},
                                   "result_cid": {"$ref": "#/$defs/cidv0"}, "inputs_cid": {"$ref": "#/$defs/cidv0"},
-                                  "listed_at": {"type": "integer", "description": "job account timeStart (listing time), unix s"},
-                                  "finished_at": {"type": "integer", "description": "job account timeEnd, unix s"},
+                                  "post_tx": {"$ref": "#/$defs/sig", "description": "signature of the job's list or assign transaction"},
+                                  "finish_tx": {"$ref": "#/$defs/sig", "description": "signature of the job's finish transaction (signed by the node)"},
+                                  "listed_at": {"type": "integer", "description": "block time of post_tx (listing time), unix s"},
+                                  "finished_at": {"type": "integer", "description": "block time of finish_tx, unix s"},
                                   "container_start": {"type": "integer", "description": "result opStates[0].startTime, unix ms"},
                                   "container_end": {"type": "integer", "description": "result opStates[0].endTime, unix ms"}}},
         "model": {"type": "object", "required": ["image", "weights"],
                   "properties": {"image": {"type": "string", "pattern": "@sha256:[0-9a-f]{64}$"},
                                  "weights": {"type": "string", "pattern": "^[^@]+@[^@]+$"}}},
-        "spot_check": {"type": "object", "required": ["rerun_job", "rerun_node", "agreed"]}
+        "spot_check": {"type": "object", "required": ["rerun_job", "rerun_node", "agreed", "action"],
+                       "properties": {"agreed": {"enum": [true, false, null]},
+                                      "action": {"enum": ["none", "human_review"]},
+                                      "reason": {"type": "string"},
+                                      "rerun_output_sha256": {"$ref": "#/$defs/hex64"}},
+                       "if": {"properties": {"agreed": {"const": false}}, "required": ["agreed"]},
+                       "then": {"properties": {"action": {"const": "human_review"}},
+                                "required": ["reason", "rerun_output_sha256"]}}
       },
       "required": ["merkle", "nosana", "model", "spot_check"],
       "not": {"required": ["provider"]}
@@ -64,6 +73,7 @@
   "$defs": {
     "hex64": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "cidv0": {"type": "string", "pattern": "^Qm[1-9A-HJ-NP-Za-km-z]{44}$"},
-    "b58": {"type": "string", "pattern": "^[1-9A-HJ-NP-Za-km-z]{32,44}$"}
+    "b58": {"type": "string", "pattern": "^[1-9A-HJ-NP-Za-km-z]{32,44}$"},
+    "sig": {"type": "string", "pattern": "^[1-9A-HJ-NP-Za-km-z]{64,90}$"}
   }
 }

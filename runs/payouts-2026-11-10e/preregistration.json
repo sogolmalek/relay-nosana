@@ -1,4 +1,38 @@
 {
+  "amendments": [
+    {
+      "baselines_added": {
+        "consequence": "rules_regex alone clears the bar: on these synthetic notes a 7B pass could not show judgment code lacks. The owner decides before posting whether to post run e as is or change the notes",
+        "measured_before_posting": {
+          "bar": "189/200",
+          "keywords_naive": "183/200",
+          "rules_only": "166/200",
+          "rules_regex": "200/200"
+        },
+        "rules_regex": "fourth no-model column: rules 1-5 plus a keyword/regex reading of the notes (data.truth_rules_regex), no credits. keywords_naive (no sender/order/invoice checks) is reported beside it"
+      },
+      "by": "owner's decisions of 2026-11-10, recorded before any run e job was posted (state.json has no batch or re-run)",
+      "fixed": "run_1b frontier selected compiled-arm lines by the substring '\"arm\": \"compiled\"', which compact JSON never contains: it would have run on 0 items. Now parsed per line and checked to be 200",
+      "frontier": {
+        "effort": "low (Phase 1's lane flag, unchanged)",
+        "lane": "headless Claude Code (claude_code.py), the owner's login, no API credits",
+        "model": "pinned --model claude-opus-5-5; each record keeps requested_model and the model the JSON output reports",
+        "prompt": "the compiled v2 system prompt (sha256 8a009618d7fef03a1a476de37370bdaa3bf32d1c250ffc7cef4f31ae43319a24) and user message verbatim, schema OUTPUT_SCHEMA_1E",
+        "receipts": "declared, one per answered item, under the rule its amount selects; over $500 the gate refuses them (payouts-need-proof requires anchored)",
+        "tools": "none (--tools \"\")"
+      },
+      "receipts": "v0.2: anchored receipts carry nosana.post_tx and nosana.finish_tx; relay-verify checks the job against those transactions and uses the job account only while it exists (docs/receipt-spec.md)",
+      "report_columns": [
+        "raw",
+        "compiled v2",
+        "rules only",
+        "rules + regex",
+        "frontier"
+      ],
+      "rerun_disagreement": "an item whose re-run output differs goes to human review: spot_check.action = human_review with the reason and the re-run's output hash in the receipt; the gate holds it; runs/<run>/review_queue.json lists it. Scores and the bar still come from the batch",
+      "written_at": "2026-11-10T14:33:17Z"
+    }
+  ],
   "arms": {
     "compiled": "Compiled v2: rules 1-3 (seller on an active hold, duplicate invoice, amount vs the sum of lines) resolved in code (task.resolved_facts) and written as facts; then Compiled context (run e): decisions naming this payout's seller or SKUs, plus the global rules\n    (refund approval and both note policies). Selected by reference, never by the answer. The payout and its support notes, unchanged. The model checks rules 4-6 and makes the final decision. Same system prompt as the raw arm.",
     "raw": "Raw arm (run e): every decision in the run-e ledger, for every payout. The payout and its support notes, unchanged."
@@ -119,6 +153,7 @@
     "raw",
     "compiled v2",
     "rules only",
+    "rules + regex",
     "frontier"
   ],
   "rerun": {

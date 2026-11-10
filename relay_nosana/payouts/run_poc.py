@@ -28,8 +28,9 @@ from relay_verify.jcs import canonical, sha256_hex
 from relay_verify.outputs import parse_outputs
 from relay_verify.solana import DEFAULT_RPC
 
+from .. import gate
 from .. import rules as rules_mod
-from ..lane import Budget, log, run_batch
+from ..lane import Budget, chain_for, log, run_batch
 from ..ledger import init_db, log_call, upsert
 from ..nosana import jobdef as jd_mod
 from ..nosana.jobs import Jobs, idle_nodes
@@ -281,9 +282,11 @@ def cmd_issue(a) -> None:
                     "frontier_ratio": "not measured in POC"}
 
     # spot checks from the re-run (compare parsed outputs by hash)
-    rr_job, rr_node = state["rerun"]["job"], state["rerun"]["account"]["node"]
-    spots = {pid: {"rerun_job": rr_job, "rerun_node": rr_node,
-                   "agreed": rerun_rows[pid]["output_sha256"] == open_rows[pid]["output_sha256"]}
+    chains = {k: chain_for(job=state[k]["job"], tag=k, fixtures=P["nosana"], rpc=a.rpc) for k in ("batch", "rerun")}
+    state["chains"] = chains
+    rr_job, rr_node = chains["rerun"]["job"], chains["rerun"]["node"]
+    spots = {pid: issue.spot_check(rerun_job=rr_job, rerun_node=rr_node, output_sha256=open_rows[pid]["output_sha256"],
+                                   rerun_output_sha256=rerun_rows[pid]["output_sha256"])
              for pid in state["rerun"]["items"]}
     state["rerun_agreement"] = {"n": len(spots), "agreed": sum(s["agreed"] for s in spots.values())}
 
@@ -298,7 +301,7 @@ def cmd_issue(a) -> None:
             c.append("spot_check_agreed")
         checks[pid] = c
     receipts = issue.anchored_from_result(
-        result=batch_res, account=state["batch"]["account"], job_definition_cid=state["batch"]["jobdef_cid"],
+        result=batch_res, chain=chains["batch"], job_definition_cid=state["batch"]["jobdef_cid"],
         inputs_cid=state["batch"]["inputs_cid"], image=jd_mod.IMAGE, weights=f"{jd_mod.MODEL}@{jd_mod.REVISION}",
         items={pid: by_id[pid] for pid in anchored_ids}, rule=proof, rule_sha256=rules_mod.snapshot_sha256(proof),
         work_type=task.TASK, relay_checks=checks, spot_checks=spots, cost_usd_per_item=per_item)
@@ -332,6 +335,7 @@ def cmd_issue(a) -> None:
     conn.commit()
     state["receipts"] = {"anchored": sum(r["grade"] == "anchored" for r in receipts.values()),
                          "declared": sum(r["grade"] == "declared" for r in receipts.values())}
+    state["review_queue"] = gate.write_queue(P["base"] / "review_queue.json", receipts, rules)
     save_state(a.run_id, state)
     log(f"accuracy: {json.dumps(acc)}")
     log(f"bar cleared: {cleared}; re-run agreement {state['rerun_agreement']}; receipts {state['receipts']}")

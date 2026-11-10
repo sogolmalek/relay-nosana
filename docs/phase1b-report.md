@@ -13,21 +13,34 @@ The report keeps two kinds of result apart:
   run b's batch and weren't pre-registered. They explain run b's failure, but they don't change its result
   and they aren't evidence for any routing decision.
 
-Run e is **pre-registered and not posted**. It waits for approval.
+Run e is **pre-registered and not posted**. It waits for approval, and section 4 gives a reason to change it first.
 
 ## Summary
+
+- **Same input, different answer, at temperature 0 (P-0128).** In run b's pre-registered re-run, P-0128 got
+  `hold/needs_approval` from the batch on node `5n72gKKf…` and `approve/ok` from the re-run on node
+  `2cwhCqyv…`: same input bytes, temperature 0, seed 0. The re-run was the correct one. Greedy decoding isn't
+  reproducible across GPUs on a borderline item, so re-run agreement measures stability, not correctness.
+  Such an item now goes to human review, and its receipt says why (section 4).
+- **The notes in run e are too easy for code.** Rules plus a 15-line keyword/regex reading of the notes, no
+  model, scores **200/200** on run e's items. The bar is 189/200. Even a naive keyword reading, with no check
+  of the sender, order or invoice, scores 183/200. So a 7B pass on run e would not show judgment that code
+  lacks. Run e is not posted; it needs your decision (section 4).
+- **Receipts verify again, from transactions.** Receipts now carry the job's post and finish transaction
+  signatures, and relay-verify checks those. Re-issued as v0.2: **Phase 1 30/30 and run b 42/42 verify** on
+  mainnet, with both job accounts closed.
 
 | Item | Result |
 |---|---|
 | Run b (pre-registered) | **Failed the bar.** Compiled 23/60 = 0.383, Wilson 95% CI [0.271, 0.510]; raw 8/60 = 0.133, CI [0.069, 0.242]. The bar is a CI lower bound ≥ 0.90 |
 | Compiled vs raw | Compiled is better: 16 payouts only compiled got right, 1 only raw got right, sign test p = 0.0003 |
 | Parse failures | Raw 0/60. Compiled 1/60 (1.7%): one output cut off at the 256-token limit |
-| Frontier accuracy | **Not measured** for run b, so no frontier-relative bar exists; the bar is the rule's absolute one. Run e pre-registers a frontier column (Claude Code, declared) |
-| Run b re-run | **14/15 agree** on a second node. One output flipped between nodes at temperature 0 (P-0128: batch `hold/needs_approval`, re-run `approve/ok`, which is the correct answer). Attempt 1 failed (slow download, $0.064); attempt 2 succeeded ($0.010) |
+| Frontier accuracy | **Not measured** for run b, so no frontier-relative bar exists; the bar is the rule's absolute one. Run e pre-registers a frontier column (Claude Code, compiled v2 prompt, no tools, `claude-opus-5-5` pinned, declared receipts) |
+| Run b re-run | **14/15 agree** on a second node. One output flipped between nodes at temperature 0 (P-0128: batch `hold/needs_approval`, re-run `approve/ok`, which is the correct answer). P-0128 is now in the human review queue, and its receipt records why. Attempt 1 failed (slow download, $0.064); attempt 2 succeeded ($0.010) |
 | Diagnosis (exploratory) | Mainly **model capability in reading the context**: the model applies rule 1 (seller hold) to sellers with no hold. Not output parsing, not the label taxonomy, not prompt rendering. Details below |
-| Run e | Pre-registered: compiler v2 **plus a judgment part** (free-text notes; 34/200 = 17% of answers depend on them), n = 200, same 7B, same bar. Pass needs ≥ 189/200. Columns: raw / compiled v2 / rules only (166/200 by construction) / frontier. Nosana cost expected $0.03–0.05, worst case $0.88. **Not posted** |
+| Run e | Pre-registered: compiler v2 **plus a judgment part** (free-text notes; 34/200 = 17% of answers depend on them), n = 200, same 7B, same bar. Pass needs ≥ 189/200. Columns: raw / compiled v2 / rules only (166/200) / **rules + regex (200/200)** / frontier. Nosana cost expected $0.03–0.05, worst case $0.88. **Not posted** |
 | Phase 1b spend | **$0.114 of the $2.00 cap** (settled 3.405 → 3.519), 6 jobs. Nothing queued or running at any check |
-| Receipt verification | **0/42 verify now**, because Nosana closed the batch's job account after it completed. Phase 1's receipts (21/21 this morning) now fail the same way. The verifier needs a transaction-history fallback (open decision 1) |
+| Receipt verification | **Fixed.** Receipts v0.2 anchor on the job's post and finish transactions. Re-issued and re-verified on mainnet: **Phase 1 30/30** (21 anchored, 9 declared), **run b 42/42**. Both job accounts are closed; every check 1 reads "checked from its transactions". Before the fix: 0/42 |
 
 ## 1. Run b: pre-registered, failed
 
@@ -110,9 +123,13 @@ For run b that was 15 compiled-arm items on a second node. Before this session, 
 - **What this means:** greedy decoding on different GPUs isn't bit-reproducible on a borderline item.
   "Re-run agreement" measures stability, not correctness: here the re-run, not the batch, was right.
 - Scores and the bar are unchanged: they're computed from the batch, as pre-registered.
+- **Routing (decided after this run):** a disagreement sends the item to human review. P-0128's v0.2 receipt
+  has `spot_check.action: human_review`, the reason and the re-run's output hash. The gate holds it, and
+  `runs/payouts-2026-11-10b/review_queue.json` lists it.
 
 Receipts were re-issued with the spot checks: 42 anchored receipts (one per compiled-arm payout over $500).
-**relay-verify: 0 of 42 pass, and the cause is the verifier's design, not the receipts.**
+**relay-verify: 0 of 42 passed at the time, and the cause was the verifier's design, not the receipts.** It is
+fixed in section 4; what follows is the state before the fix.
 
 - Batch job account `EXJJmLp4…` no longer exists on Solana: Nosana closed it after the job completed.
 - Checks 1 (job completed), 2 (job definition) and 6 (node and times) read the live job account. Check 5 gets
@@ -123,7 +140,7 @@ Receipts were re-issued with the spot checks: 42 anchored receipts (one per comp
 - So a receipt that reads live account state stops verifying once Nosana reclaims the account. The verifier
   needs to fall back to the job's transaction history. It already has decoders for the list and finish
   instructions (`relay_verify/solana.py`), and the receipt already carries the job address and result CID.
-  This isn't fixed in this report; it's the first open decision below.
+  It was fixed after this report was first written: section 4.1.
 
 ## 2. Exploratory runs (not pre-registered)
 
@@ -318,12 +335,135 @@ Nosana credits (USD), settled. The baseline is 3.405, the settled balance when P
 - Nothing was stopped, because nothing was running.
 - Run e is not posted. Its Nosana worst case ($0.88) fits in the $1.886 left.
 
+## 4. After the decisions (2026-11-10, evening)
+
+The owner's five decisions, in the order they were done. **Run e is still not posted.**
+
+### 4.1 Receipts anchor on transactions (receipt v0.2)
+
+**What the transactions carry**, read from real mainnet transactions of all five jobs behind our receipts
+(Phase 0's `list` job; Phase 1's and run b's batch and re-run, all `assign`):
+
+| Transaction | Instruction data | Accounts | Signer |
+|---|---|---|---|
+| post (`list` or `assign`) | job definition CID + timeout | [0] job, [1] market; `assign` also [3] node | the job keypair, with the poster |
+| `finish` | **result CID** only | [0] job, [2] market, [8] **node** | **the node, alone** |
+
+- The finish instruction's **data** carries the result CID. It does not carry the node. The node is the
+  instruction's account [8] and the transaction's only signer. That is stronger than a field in the data: only
+  the node's key could have sent it.
+- The market is in both transactions' accounts. The job definition CID is in the post's data.
+- About an hour after `finish`, a Nosana admin key sends `CleanAdmin` and the job account is gone. That is why
+  every receipt broke.
+- One second of drift: run b's batch account had `timeStart` 1794300984, but the post's block time is
+  1794300985. v0.2 defines `listed_at` and `finished_at` as the block times, the only times left once the
+  account is closed. 42 run b receipts moved by one second; nothing else changed.
+
+**What changed:**
+
+- Receipts carry `nosana.post_tx` and `nosana.finish_tx`.
+- relay-verify fetches both by signature and decodes the job definition CID, the result CID, the node and the
+  market (`relay_verify/solana.py`, `job_from_txs`).
+- It checks that both transactions succeeded, that the post is signed by the job keypair, and that the finish
+  is signed by the node it names. Post and finish must agree on the market, and on the node when the post is an
+  `assign`.
+- It reads the job account only if it still exists, as a cross-check.
+- The issuer uses the same decoder, and keeps the transactions as fixtures
+  (`runs/*/nosana/{batch,rerun}_{post,finish}_tx.json`).
+- **RPC:** `--rpc`, else `$RELAY_VERIFY_RPC`, else the public mainnet RPC. Verifying an old receipt needs an
+  **archival RPC**. Without one, check 1 says "could not check" and names the missing transaction; it never
+  passes.
+
+**Re-issued and re-verified on mainnet** (public RPC, IPFS by CID):
+
+| Run | Receipts | Verified | Failed | Couldn't check | Job account |
+|---|---|---|---|---|---|
+| Phase 1 `payouts-2026-11-10` | 21 anchored + 9 declared | **30** | 0 | 0 | closed |
+| Run b `payouts-2026-11-10b` | 42 anchored | **42** | 0 | 0 | closed |
+
+- Scores, the bar and routing come out the same as before: Phase 1 4/30 with 15/15 re-run agreement; run b
+  23/60 vs 8/60 with 14/15.
+- Live tamper check: P-0128's receipt with Phase 1's finish signature swapped in fails check 1 ("has no
+  Nosana finish instruction for job EXJJmLp4…").
+- New offline tests cover a closed account, an open account that disagrees, a missing transaction, another
+  job's post, an unsigned finish and a failed transaction. Tests also decode the four real transaction pairs
+  and compare them with the accounts saved at the time.
+
+### 4.2 Fourth no-model baseline: rules + keyword/regex on the notes
+
+- `data.truth_rules_regex`: rules 1–5 in code, plus two regex readings of the notes.
+  - A note from finance that names the refund's order and contains an approval word approves the refund.
+  - The latest note that names this payout's invoice decides disputes: a dispute word holds the payout, a
+    withdrawn/closed word releases it.
+- No model, no credits. It never reads the hidden intent; a test strips it and checks the answers don't change.
+
+| Column (no model) | Correct / 200 | Wilson 95% CI | Note-dependent (34) | The rest (166) |
+|---|---|---|---|---|
+| rules only | 166 | [0.772, 0.876] | 0/34 | 166/166 |
+| **rules + regex** | **200** | **[0.981, 1.000]** | **34/34** | 166/166 |
+| keywords, naive (no sender, order or invoice check) | 183 | [0.868, 0.946] | 34/34 | 149/166 |
+
+- **It reaches 189/200: it gets 200/200.** On these synthetic notes, the judgment part is decodable by a
+  template-aware regex. A 7B model passing run e would show it can do what 15 lines of code do; it would not
+  show judgment that code lacks.
+- The naive reading loses 17. Those are the distractors: a dispute on another invoice (12), a finance approval
+  of another order (3), and a seller claiming approval (2). So the distractors work against a careless reader,
+  but not against one that checks ids and senders.
+- The run e columns now include rules + regex (`run_1b._columns_1e`; the pre-registration amendment lists it).
+  **Run e is not posted.** Whether to post it as is or change the notes first is your call.
+
+### 4.3 Frontier column
+
+- Same input as compiled v2: the system prompt (sha256 `8a009618…`) and the user message, verbatim, with
+  the same schema.
+- No tools (`--tools ""`), headless Claude Code on the owner's login.
+- The model is pinned with `--model claude-opus-5-5`. Each record keeps the requested id, the id the JSON
+  output reports, and the system prompt's hash.
+- Effort is `low`, Phase 1's lane flag, unchanged. Say if you want it raised before run e.
+- Declared receipts: one per answered item, under the rule its amount selects
+  (`runs/<run>/receipts/frontier/`). Over $500 the gate refuses them, because `payouts-need-proof` requires an
+  anchored receipt. A test checks both cases.
+- **Bug found and fixed while wiring this:** `run_1b frontier` picked compiled-arm lines by a substring with a
+  space after the colon, which compact JSON never contains. It would have run on **0 items**. It now parses each
+  line and refuses to start unless it finds 200.
+
+### 4.4 Re-run disagreement goes to human review
+
+- `issue.spot_check` compares the parsed outputs.
+- On a mismatch the receipt's `spot_check` gets:
+  - `agreed: false`
+  - `action: human_review`
+  - `rerun_output_sha256`
+  - a `reason` naming the second node and job.
+- The schema rejects a disagreement whose action isn't `human_review`.
+- `relay_nosana/gate.py` decides pay / hold / human review / refuse from a receipt, relay-verify's verdict and
+  the rule. The issue step writes `runs/<run>/review_queue.json`.
+- Run b's queue: 42 items, all because the bar wasn't cleared. P-0128 carries the re-run reason as well.
+- Phase 1's queue: 21 items, none from a re-run.
+
+### 4.5 Pre-registration amendment
+
+`runs/payouts-2026-11-10e/preregistration.json` gains an `amendments` entry (written 2026-11-10T14:33:17Z).
+`state.json` had no batch or re-run, so nothing had been posted. The entry records:
+
+- receipts v0.2;
+- the rules + regex column and its pre-post scores;
+- the frontier column's prompt hash, tools, model and effort;
+- the disagreement routing;
+- the frontier bug fix.
+
+The original design is unchanged and stays in git history (`a9e0a19`).
+
 ## Open decisions
 
-1. **Receipt durability.** Make relay-verify fall back to transaction history (list and finish
-   instructions) when a job account has been closed. Until then, no anchored receipt verifies after Nosana
-   closes its job account, and that includes Phase 1's.
-2. **Approve run e** as pre-registered (7B, compiler v2, 200 items with notes, 2 shards + re-run, Nosana
-   expected $0.03–0.05, worst case $0.88), plus the frontier column via Claude Code on the owner's login.
-3. **Cross-node nondeterminism.** P-0128 flipped between nodes at temperature 0. For anchored receipts,
-   decide whether a disagreement sends the item to human review (the current receipt only records it).
+1. **Run e's notes.** Rules + regex scores 200/200, so as designed, run e can't show model judgment. The
+   options:
+   - post as is, with this caveat in the report;
+   - redesign the notes (paraphrase that no fixed template covers, indirect references, conflicting senders),
+     then pre-register again;
+   - drop the judgment part and treat run e as a capability test only.
+2. **Approve posting run e** once 1 is settled. Nosana expected $0.03–0.05, worst case $0.88; the frontier
+   column runs on the owner's Claude Code login.
+3. **Frontier effort.** `low`, as in Phase 1, or higher for run e.
+4. **Archival RPC.** The public RPC served every transaction today. For receipts that must verify months from
+   now, name an archival RPC provider for `RELAY_VERIFY_RPC`.

@@ -1,4 +1,11 @@
-# Relay receipt spec v0.1
+# Relay receipt spec v0.2
+
+> **v0.2 (2026-11-10).** Nosana closes a finished job account about an hour after the job (a `CleanAdmin`
+> transaction), so a v0.1 receipt, which the verifier checked against the live account, stopped verifying.
+> v0.2 anchors on the job's two **transactions**, which can't be closed: `nosana.post_tx` (the `list` or
+> `assign` that created the job) and `nosana.finish_tx` (the node's `finish`). The account is a cross-check
+> while it exists. A spot check that disagrees now sends the item to human review and says why. Phase 1's and
+> run b's receipts were re-issued as v0.2 and all verify (`docs/phase1b-report.md`).
 
 A receipt records one piece of AI work and what can be checked about it. **Anchored** receipts
 point to a Nosana job: the job definition (container image, model, inputs) on IPFS, and the job,
@@ -30,7 +37,7 @@ spot-checked", never "cryptographic proof".
 
 **inputs.jsonl** (one line per item):
 `{"item_id", "task", "messages": [...], "params": {"temperature": 0, "max_tokens", "seed"}}`.
-In v0.1 the inputs ride inside the job definition (`env.RELAY_INPUTS_GZ_B64` = base64 of gzip of the
+The inputs ride inside the job definition (`env.RELAY_INPUTS_GZ_B64` = base64 of gzip of the
 exact `inputs.jsonl` bytes), so the job definition's CID covers them. `inputs_cid` is the CIDv0 of
 the `inputs.jsonl` bytes and is named in the job definition's `meta.relay.inputs_cid`. The file is
 also pinned on its own.
@@ -48,7 +55,7 @@ Each result stays under 256 KiB (one IPFS block), so anyone can recompute its CI
 
 ```json
 {
-  "receipt_version": "0.1",
+  "receipt_version": "0.2",
   "grade": "anchored",
   "receipt_id": "<sha256 of the receipt without this field>",
   "item_id": "P-0117",
@@ -65,6 +72,8 @@ Each result stays under 256 KiB (one IPFS block), so anyone can recompute its CI
     "job_definition_cid": "Qm...",
     "result_cid": "Qm...",
     "inputs_cid": "Qm...",
+    "post_tx": "<signature of the job's list or assign transaction>",
+    "finish_tx": "<signature of the job's finish transaction>",
     "listed_at": 1794252052,
     "finished_at": 1794252248,
     "container_start": 1794252057815,
@@ -72,20 +81,42 @@ Each result stays under 256 KiB (one IPFS block), so anyone can recompute its CI
   },
   "model": {"image": "docker.io/vllm/vllm-openai@sha256:...", "weights": "Qwen/Qwen2.5-7B-Instruct@<commit>"},
   "relay_checks": ["output_schema", "work_type_cleared_bar", "spot_check_agreed"],
-  "spot_check": {"rerun_job": "<job address>", "rerun_node": "<node>", "agreed": true},
+  "spot_check": {"rerun_job": "<job address>", "rerun_node": "<node>", "agreed": true, "action": "none"},
   "cost_usd": 0.0012
 }
 ```
 
-Time fields (decided after Phase 0):
+What the two transactions carry (read from real mainnet transactions of every job in `runs/`; kept as
+`runs/*/nosana/*_{post,finish}_tx.json`):
+
+| Transaction | Instruction data | Accounts used | Signed by |
+|---|---|---|---|
+| `post_tx` | `list` or `assign` (`assign` when the job targets a node): job definition CID (`ipfsJob`, 32-byte digest) and timeout | [0] job, [1] market; `assign` also [3] node | the job keypair (and the poster) |
+| `finish_tx` | `finish`: result CID (`ipfsResult`) | [0] job, [2] market, [8] node | the node, alone |
+
+The finish instruction's data carries only the result CID. The node is the instruction's account [8] and
+the transaction's only signer, which is stronger than a field in the data: no one else could have sent it.
+
+Time fields:
 
 | Field | Source | Unit |
 |---|---|---|
-| `listed_at` | job account `timeStart`, which is the **listing** time | unix seconds |
-| `finished_at` | job account `timeEnd` | unix seconds |
+| `listed_at` | block time of `post_tx` (the **listing** time) | unix seconds |
+| `finished_at` | block time of `finish_tx` | unix seconds |
 | `container_start`, `container_end` | the result's `opStates[0].startTime` / `endTime` | unix **milliseconds**, as the node reports them |
 
-`spot_check` is `{"rerun_job": null, "rerun_node": null, "agreed": null}` for items not re-run.
+In v0.1 `listed_at` and `finished_at` were the account's `timeStart` and `timeEnd`. The program's clock can
+differ from the block time by a second (run b's batch: `timeStart` 1794300984, block time 1794300985), so v0.2
+uses the block times, which stay readable after the account is closed.
+
+`spot_check`:
+
+- not re-run: `{"rerun_job": null, "rerun_node": null, "agreed": null, "action": "none"}`
+- re-run agreed (same `output_sha256`): `{"rerun_job", "rerun_node", "agreed": true, "action": "none"}`
+- re-run disagreed: `{"rerun_job", "rerun_node", "agreed": false, "action": "human_review",
+  "rerun_output_sha256", "reason"}`. The schema rejects a disagreement whose action isn't `human_review`.
+  The gate (`relay_nosana/gate.py`) holds the payout, and `runs/<run>/review_queue.json` lists the item
+  with its reasons. Scores and the bar are still computed from the batch output.
 
 ## Declared receipt
 
@@ -104,18 +135,23 @@ who claims to have run the item; nothing in it can be checked against a public r
 
 | Check | Passes when |
 |---|---|
-| schema | the receipt has the v0.1 shape (`relay_verify/schema.py`) |
+| schema | the receipt has the v0.2 shape (`relay_verify/schema.py`) |
 | receipt_id | it equals the hash of the receipt |
-| 1 | the job account exists, is COMPLETED, has a result, and the result shows the container succeeded (status `success`, every exit code 0, no errors). Phase 0 showed COMPLETED alone isn't enough. |
-| 2 | the job definition fetched by CID hashes to `job_definition_cid`, and the account's `ipfsJob` equals it |
+| 1 | `post_tx` and `finish_tx` exist, succeeded, and are this job's: a `list`/`assign` signed by the job keypair, and a `finish` signed by the node it names; both name the same market (and node, for `assign`). The result named by the finish shows the container succeeded (status `success`, every exit code 0, no errors; Phase 0 showed COMPLETED alone isn't enough). If the job account still exists, it is COMPLETED and agrees with the transactions; if Nosana closed it, the check says so and passes on the transactions |
+| 2 | the job definition fetched by CID hashes to `job_definition_cid`, and the post transaction's `ipfsJob` equals it |
 | 3 | the job definition's image and `MODEL@REVISION` equal `model.image` and `model.weights` |
 | 4 | the job definition names `inputs_cid`, its embedded inputs hash to it, and the item's line hashes to `input_sha256` |
-| 5 | the account's `ipfsResult` equals `result_cid`; the result holds this item with this `output_sha256`; `output` hashes to it; the Merkle path reaches `merkle.root`; that root equals the result's summary root, its regex root, and the root recomputed from all outputs in the result |
-| 6 | `node`, `market`, `listed_at`, `finished_at` equal the chain; `container_start`/`end` equal the result |
+| 5 | the finish transaction's `ipfsResult` equals `result_cid`; the result holds this item with this `output_sha256`; `output` hashes to it; the Merkle path reaches `merkle.root`; that root equals the result's summary root, its regex root, and the root recomputed from all outputs in the result |
+| 6 | `node` (the finish signer), `market`, `listed_at`, `finished_at` equal the transactions; `container_start`/`end` equal the result |
 
 Every IPFS fetch is accepted only if the bytes hash back to the CID, so any gateway will do. The exit
 code is 0 when everything is verified, 1 when a check failed (the output names it), and 2 when a
-check couldn't run (network). A declared receipt gets the schema and `receipt_id` checks and the line
+check couldn't run (network, or an RPC with no record of the transactions).
+
+**RPC and old receipts.** The RPC is `--rpc URL`, else `$RELAY_VERIFY_RPC`, else the public mainnet RPC.
+`getTransaction` only works for slots the RPC still holds. Verifying an old receipt needs an **archival
+RPC**, one that serves transaction history back to the receipt's slots. Without one, check 1 reports
+"could not check" (exit 2) and names the missing transaction; it never reports a pass. A declared receipt gets the schema and `receipt_id` checks and the line
 "declared: not verifiable against a public record".
 
 Tamper cases, tested in `tests/test_receipts.py`:
@@ -127,3 +163,10 @@ Tamper cases, tested in `tests/test_receipts.py`:
 - changed node → 6
 - changed container time → 6 and `receipt_id`
 - a COMPLETED job with a failed result → no receipts are issued, and check 1 fails
+- `post_tx` pointed at another job's post → 1 (and 2, 5, 6 can't run)
+- a finish not signed by the node it names → 1
+- a failed transaction → 1
+- the job account closed → still verified, from the transactions
+- an open account that disagrees with the transactions → 1
+- the RPC has no record of a transaction → could not check, with the archival-RPC hint
+- a disagreeing spot check marked `action: none` → schema

@@ -64,6 +64,32 @@
     "result_file": "batch_a5_result.json"
   },
   "budget_baseline": 3.027,
+  "chains": {
+    "batch": {
+      "finish_tx": "5AixtbRkomsiQHfetxJtNH6g7xGU4R1q8c5jMdkJjQenB4GXHsvpvDFuySo4sdVdANSD8qM2jWmgcgDzASYLHdPd",
+      "finished_at": 1794296880,
+      "ipfs_job": "QmNYSM6RsUSbNSkLx9YBW8T2wSqVTmztQ9PcATaomBaeSw",
+      "ipfs_result": "QmXqgLZve8aGkboYsxgyAbmFD7fKbcvEABuiTc1iDBLw2W",
+      "job": "7f1Br2taJ8ywANS1MtuqX9pavgb3qzgMikSYaCjxvY4q",
+      "listed_at": 1794296707,
+      "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+      "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+      "post_ix": "assign",
+      "post_tx": "4GGW8ucFzvUubU6StM9V7nk9KBUd8UsFoQ25PQ93ictx5o7FJj3GusPh9YQxqkJzkdQ6ozezd8MKSfb1NPH8XEK4"
+    },
+    "rerun": {
+      "finish_tx": "2oU2TuJcuktVtuPja2kE9QJE4uwxqgqXB8kiUZ6xvc3RVdbdXCV5xnyvfnmzTYPTPQrsNvpDrZMrVKcf3qDoXymg",
+      "finished_at": 1794298550,
+      "ipfs_job": "QmfTesYRtZUiCyfzJoFeWCEQqc79NBGQYQVfdt9g3fD2Kf",
+      "ipfs_result": "Qmb9QFtsaSvFoSnSusVaLUn3m9KpcHTnyaMk1BeCPpgAmH",
+      "job": "5XvbtVDEkAkVcP127RbQuiExjixom6cYE9QvaWuQDbay",
+      "listed_at": 1794298228,
+      "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+      "node": "Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst",
+      "post_ix": "assign",
+      "post_tx": "YZLaCZrK8t3NxfEt2zxk37byfaLMbVvvLPsHDZAYRVYXMdNMzE6NXD5Hns1ZmC4fNCBFMuVu7FGnWWi5i39buwq"
+    }
+  },
   "lanes": {
     "P-0101": "payouts-need-proof",
     "P-0102": "payouts-default",
@@ -148,6 +174,10 @@
   "rerun_agreement": {
     "agreed": 15,
     "n": 15
+  },
+  "review_queue": {
+    "items": 21,
+    "re_run_disagreed": 0
   },
   "run_id": "payouts-2026-11-10",
   "verify": {

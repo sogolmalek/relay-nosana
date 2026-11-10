@@ -1,6 +1,11 @@
 """relay-verify receipt.json [more.json ...] [--rpc URL] [--ipfs-gateway URL ...] [--json]
 
-Exit 0: every receipt verified. 1: a check failed (named in the output). 2: couldn't check (network).
+Exit 0: every receipt verified. 1: a check failed (named in the output). 2: couldn't check (network, or an
+RPC with no record of the receipt's transactions).
+
+An anchored receipt is checked against its job's post and finish transactions. The RPC is --rpc, else
+$RELAY_VERIFY_RPC, else the public mainnet RPC. A receipt older than your RPC's transaction history needs an
+archival RPC (one that serves getTransaction for old slots).
 """
 
 from __future__ import annotations
@@ -9,15 +14,14 @@ import argparse
 import json
 import sys
 
-from .checks import DEFAULT_GATEWAYS, Fetcher, verdict, verify
-from .solana import DEFAULT_RPC
+from .checks import DEFAULT_GATEWAYS, RPC_ENV, Fetcher, verdict, verify
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="relay-verify", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("receipts", nargs="+")
-    p.add_argument("--rpc", default=DEFAULT_RPC)
+    p.add_argument("--rpc", default=None, help=f"Solana RPC URL (default: ${RPC_ENV}, else the public mainnet RPC)")
     p.add_argument("--ipfs-gateway", action="append", dest="gateways")
     p.add_argument("--json", action="store_true")
     a = p.parse_args(argv)

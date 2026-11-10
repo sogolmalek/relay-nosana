@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 import random
+import re
 
 RUN_DATE = "2026-11-09"
 SEED = 20261109
@@ -334,3 +335,43 @@ def truth_1e(payout: dict, paid_invoices: dict[str, list[str]]) -> dict:
 def truth_rules_only(payout: dict, paid_invoices: dict[str, list[str]]) -> dict:
     """The rules-only baseline: rules 1-5 in code over the structured fields; notes are free text, unread."""
     return truth(payout, paid_invoices)
+
+
+_APPROVE_RE = re.compile(r"\b(approv\w*|signed off|sign-off)\b", re.IGNORECASE)
+_DISPUTE_RE = re.compile(r"\b(disput\w*|chargeback\w*)\b", re.IGNORECASE)
+_CLOSED_RE = re.compile(r"\b(withdr\w*|closed|resolved)\b", re.IGNORECASE)
+
+
+def truth_rules_regex(payout: dict, paid_invoices: dict[str, list[str]]) -> dict:
+    """Rules + a simple keyword/regex reading of the notes, no model. A finance note that names the refund's
+    order_id and matches an approval keyword approves it; a note naming this invoice with a dispute keyword
+    holds it as disputed, unless a later note naming the invoice matches a withdrawn/closed keyword."""
+    notes = sorted(payout.get("notes", []), key=lambda x: x["date"])
+    base = dict(payout)
+    base["lines"] = [dict(x, approval_id="FA-REGEX") if x["type"] == "refund" and not x.get("approval_id") and any(
+        n["from"] == "finance" and x["order_id"] in n["text"] and _APPROVE_RE.search(n["text"]) for n in notes)
+        else x for x in payout["lines"]]
+    t = truth(base, paid_invoices)
+    if t["reason_code"] != "ok":
+        return t
+    open_ = False
+    for n in notes:
+        if payout["invoice_id"] in n["text"]:
+            if _CLOSED_RE.search(n["text"]):
+                open_ = False
+            elif _DISPUTE_RE.search(n["text"]):
+                open_ = True
+    return {"decision": "hold", "reason_code": "disputed"} if open_ else t
+
+
+def truth_keywords_naive(payout: dict, paid_invoices: dict[str, list[str]]) -> dict:
+    """The naive reading: any approval keyword approves every refund; any dispute keyword holds the payout
+    unless a closed keyword appears. No sender, order or invoice check."""
+    text = " ".join(n["text"] for n in payout.get("notes", []))
+    base = dict(payout)
+    if _APPROVE_RE.search(text):
+        base["lines"] = [dict(x, approval_id="FA-KW") if x["type"] == "refund" else x for x in payout["lines"]]
+    t = truth(base, paid_invoices)
+    if t["reason_code"] == "ok" and _DISPUTE_RE.search(text) and not _CLOSED_RE.search(text):
+        return {"decision": "hold", "reason_code": "disputed"}
+    return t

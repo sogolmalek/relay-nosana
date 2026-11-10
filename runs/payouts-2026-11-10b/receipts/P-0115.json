@@ -43,13 +43,15 @@
   "nosana": {
     "container_end": 1794301152610,
     "container_start": 1794300988170,
+    "finish_tx": "sAo9gVGkEx1vJFYq1gZunmtfMK2hzB5rPG86ZQk2tezeZkvSk6y125Vatwe8RZJkcQ2E8UqKsSeGtHkRiKP5Foe",
     "finished_at": 1794301162,
     "inputs_cid": "QmQYakJhc8JFDHqataz2mzrwp5i61mMuF4hVWDsV8ZGpW9",
     "job": "EXJJmLp4dFym6WicwAUQxykEQPqA1oC2gXx8UBLHLi3N",
     "job_definition_cid": "QmRFL7pxfmgc9Po1iH4GVoCFQVFwfTh8Ld7ZVCexCf4LKr",
-    "listed_at": 1794300984,
+    "listed_at": 1794300985,
     "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
     "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+    "post_tx": "3spYXcLto7zuczuuhBLtBKb3ksZG9zoVHU5PL4Za1MYMLSdssnt8DtQdmFcFe87xnTYJSPVpxh9CEdRAHqAGoSN6",
     "result_cid": "Qmf2qKekLaNWCLmfyxhYduAzh6Q7MyeA94t8HLJ1q4dRMK"
   },
   "output": {
@@ -57,8 +59,8 @@
     "reason_code": "stale_price"
   },
   "output_sha256": "acaa4ee825b878661fe310f23e478e9102f521e7b5aa68e36ef17a31a942ff03",
-  "receipt_id": "07cd1f6675f0648e7a8d3ea1f4a6bdb1c7f4914c3010aab2ddc6acd5fa2365bf",
-  "receipt_version": "0.1",
+  "receipt_id": "9d3d28d201ca2fe3dda328914084c85c444d913c89bfc2f2c8a3c668de6bf64e",
+  "receipt_version": "0.2",
   "relay_checks": [
     "output_schema",
     "spot_check_agreed"
@@ -73,6 +75,7 @@
     "work_type": "payout_check"
   },
   "spot_check": {
+    "action": "none",
     "agreed": true,
     "rerun_job": "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB",
     "rerun_node": "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot"
