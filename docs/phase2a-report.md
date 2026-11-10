@@ -17,7 +17,7 @@ The jobs, transactions, results and receipts are real, and the browser checks th
 | Held over $500 | "held: the open model missed the bar", with the measured numbers. Phase 1: 4/30 = 0.133, lower bound 0.053. Run b (compiled arm): 23/60 = 0.383, lower bound 0.271. The rule needs ≥ 0.90 |
 | Devnet payouts | **4 paid on devnet**, each memo = its `receipt_id`, all checked in the browser. Phase 1: 4 pay, 5 hold, 21 human review. Run b: 0 pay, 42 human review, 18 refused (no receipt) |
 | Browser RPC | **PublicNode** (`https://solana-rpc.publicnode.com`): no key, CORS `*`. The public mainnet RPC refuses browsers |
-| Replay journey test | Playwright, `tests/e2e_journey/`: **3 passed** (Phase 1, run b, phone width), live against mainnet, devnet and IPFS |
+| Replay journey test | Playwright, `tests/e2e_journey/`: **3 passed** (Phase 1, run b, phone width), both locally and on the deployed GitHub Pages app, live against mainnet, devnet and IPFS |
 | Not in 2a | Live "Run on Nosana" button (shown, disabled), Fly.io server, fresh-clone test, the 90-second video |
 
 ## 1. What was built
@@ -136,7 +136,7 @@ Chromium, as a reviewer would.
    - Each tamper on P-0128 fails as expected.
 3. **Phone width (375 px):** no horizontal scroll.
 
-**Result, local server, live network: 3 passed** (Phase 1 21 s, run b 13 s, phone 7 s). Screenshots, video and
+**Result, local server, live network: 3 passed** (Phase 1 21 s, run b 13 s, phone 7 s). **Against the deployed page** (`APP_URL=https://sogolmalek.github.io/relay-nosana/app/`, build `b6f7106`): **3 passed** (48 s). Screenshots, video and
 `summary.json` go to `out/e2e/replay/` (not committed).
 
 The first run failed the phone test, which was right to fail: at 375 px the page was 510 px wide. There were three
