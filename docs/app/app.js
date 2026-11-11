@@ -69,6 +69,7 @@ function renderAll() {
     "The jobs, transactions, results and receipts are real and checked live from your browser. The payout data is synthetic. ",
     "Running a new job on Nosana from this page comes in the next step.");
   $("#run-title").textContent = `${R.title}: ${R.design}`;
+  if (R.caveat) $("#banner").append(el("div", { class: "small", style: "margin-top:6px" }, el("b", {}, "Caveat: "), R.caveat));
   $("#decisions").replaceChildren(...R.decisions.map((d) => el("li", {}, el("b", {}, d.id), ` (${d.date}) ${d.text}`)));
   $("#rules").replaceChildren(...R.rules.map((r) => el("div", { class: "small", style: "margin-bottom:8px" },
     el("b", {}, r.id), r.when ? ` · when amount > $${r.when.amount_usd_gt}` : " · otherwise", ` · requires ${r.requires}`,
@@ -90,7 +91,7 @@ const stat = (num, lab) => el("div", {}, el("div", { class: "num" }, num), el("d
 function renderJobs() {
   const R = S.run;
   $("#jobs").replaceChildren(...R.jobs.map((j) => el("div", { class: "job" },
-    el("h3", {}, j.tag === "batch" ? "Batch job" : "Re-run on a second node", " ", pill(j.post_ix === "assign" ? "assigned to a node" : "listed on the market", "acc")),
+    el("h3", {}, j.tag === "rerun" ? "Re-run on a second node" : j.tag === "batch" ? "Batch job" : `Batch job, shard ${j.tag.slice(5)}`, " ", pill(j.post_ix === "assign" ? "assigned to a node" : "listed on the market", "acc")),
     el("ul", { class: "timeline" },
       li("job definition pinned", hash(j.job_definition_cid, links.ipfs(j.job_definition_cid))),
       li("posted on Solana", hash(j.post_tx, links.tx(j.post_tx)), ` · ${when(j.listed_at)}`),

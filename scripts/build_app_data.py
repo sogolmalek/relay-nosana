@@ -54,11 +54,15 @@ def build(run_id: str, meta: dict) -> dict:
     state = json.loads((src / "state.json").read_text())
     run = json.loads((src / "payout_run.json").read_text())
     nos = src / "nosana"
-    rows = parse_outputs(json.loads((nos / state["batch"]["result_file"]).read_text()))[0]
+    keys = [k for k in state if k == "batch" or (k.startswith("batch") and k[5:].isdigit())]
+    rows = {}
+    for k in sorted(keys):
+        rows.update(parse_outputs(json.loads((nos / state[k]["result_file"]).read_text()))[0])
     rerun_rows = parse_outputs(json.loads((nos / state["rerun"]["result_file"]).read_text()))[0]
     declared = {}
     if (src / "declared.jsonl").exists():
         declared = {r["item_id"]: r for r in map(json.loads, (src / "declared.jsonl").read_text().splitlines())}
+    keep = (dst / "payouts.json").read_bytes() if (dst / "payouts.json").exists() else None  # devnet record
     if dst.exists():
         shutil.rmtree(dst)
     (dst / "receipts").mkdir(parents=True)
@@ -78,7 +82,8 @@ def build(run_id: str, meta: dict) -> dict:
                "open_model_output": rows[iid]["output"],
                "rerun_output": rerun_rows[iid]["output"] if iid in rerun_rows else None,
                "declared_output": (declared.get(pid) or {}).get("output"),
-               "receipt": f"receipts/{pid}.json" if r else None, "grade": r["grade"] if r else None}
+               "receipt": f"receipts/{pid}.json" if r else None, "grade": r["grade"] if r else None,
+               "notes": [{k: v for k, v in n.items() if k != "intent"} for n in p.get("notes", [])]}
         if meta["arm"]:
             out["raw_output"] = rows[f"{pid}/raw"]["output"]
         payouts.append(out)
@@ -100,16 +105,19 @@ def build(run_id: str, meta: dict) -> dict:
         "run_id": run_id, **{k: v for k, v in meta.items() if k != "arm"}, "mode": "replay", "synthetic": True,
         "note": run.get("note"), "run_date": run["run_date"], "decisions": run["decisions"],
         "rules": rules, "model": receipts[next(k for k, v in receipts.items() if v["grade"] == "anchored")]["model"],
-        "jobs": [_job(state, "batch", costs.get(state["batch"]["job"])),
-                 _job(state, "rerun", costs.get(state["rerun"]["job"]))],
+        "jobs": [_job(state, k, costs.get(state[k]["job"])) for k in sorted(keys) + ["rerun"]],
         "nosana_spent_usd": state.get("nosana_spent_usd"),
         "bar": {"needed_ci_low": state["bar"]["needed_ci_low"], "metric": state["bar"]["metric"],
                 "cleared": state["bar"].get("cleared", state["bar"].get("compiled_cleared")), "measured": measured},
         "rerun_agreement": state["rerun_agreement"],
         "rerun_items": [x.split("/")[0] for x in state["rerun"]["items"]],
         "verify_cli": state.get("verify"),
+        "columns": state.get("columns"),  # run e design: raw / compiled v2 / rules only / rules + regex
+        "caveat": meta.get("caveat"),
         "payouts": payouts,
     }
+    if keep is not None:
+        (dst / "payouts.json").write_bytes(keep)
     (dst / "run.json").write_text(json.dumps(data, indent=1, sort_keys=True) + "\n")
     return {"run_id": run_id, "title": meta["title"], "date": meta["date"], "payouts": len(payouts),
             "receipts": len(receipts)}

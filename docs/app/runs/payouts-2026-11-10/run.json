@@ -27,6 +27,8 @@
   "metric": "accuracy_vs_ground_truth",
   "needed_ci_low": 0.9
  },
+ "caveat": null,
+ "columns": null,
  "date": "2026-11-10",
  "decisions": [
   {
@@ -111,6 +113,7 @@
    "grade": "anchored",
    "invoice_id": "INV-23607",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -136,6 +139,7 @@
    "grade": "declared",
    "invoice_id": "INV-62814",
    "lane": "payouts-default",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -155,6 +159,7 @@
    "grade": "anchored",
    "invoice_id": "INV-57132",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -177,6 +182,7 @@
    "grade": "anchored",
    "invoice_id": "INV-43007",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -199,6 +205,7 @@
    "grade": "anchored",
    "invoice_id": "INV-48929",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -221,6 +228,7 @@
    "grade": "anchored",
    "invoice_id": "INV-47831",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -243,6 +251,7 @@
    "grade": "anchored",
    "invoice_id": "INV-65722",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -265,6 +274,7 @@
    "grade": "anchored",
    "invoice_id": "INV-72142",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -290,6 +300,7 @@
    "grade": "declared",
    "invoice_id": "INV-79301",
    "lane": "payouts-default",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -309,6 +320,7 @@
    "grade": "anchored",
    "invoice_id": "INV-55905",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -328,6 +340,7 @@
    "grade": "anchored",
    "invoice_id": "INV-41755",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -347,6 +360,7 @@
    "grade": "anchored",
    "invoice_id": "INV-76646",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -369,6 +383,7 @@
    "grade": "declared",
    "invoice_id": "INV-91110",
    "lane": "payouts-default",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -391,6 +406,7 @@
    "grade": "declared",
    "invoice_id": "INV-71743",
    "lane": "payouts-default",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -410,6 +426,7 @@
    "grade": "anchored",
    "invoice_id": "INV-97485",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -435,6 +452,7 @@
    "grade": "declared",
    "invoice_id": "INV-99384",
    "lane": "payouts-default",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -457,6 +475,7 @@
    "grade": "declared",
    "invoice_id": "INV-10197",
    "lane": "payouts-default",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -476,6 +495,7 @@
    "grade": "anchored",
    "invoice_id": "INV-29261",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -498,6 +518,7 @@
    "grade": "anchored",
    "invoice_id": "INV-20790",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -520,6 +541,7 @@
    "grade": "anchored",
    "invoice_id": "INV-68227",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -542,6 +564,7 @@
    "grade": "declared",
    "invoice_id": "INV-25670",
    "lane": "payouts-default",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -561,6 +584,7 @@
    "grade": "anchored",
    "invoice_id": "INV-34924",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -583,6 +607,7 @@
    "grade": "anchored",
    "invoice_id": "INV-61283",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -605,6 +630,7 @@
    "grade": "declared",
    "invoice_id": "INV-75827",
    "lane": "payouts-default",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -624,6 +650,7 @@
    "grade": "anchored",
    "invoice_id": "INV-60643",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -646,6 +673,7 @@
    "grade": "anchored",
    "invoice_id": "INV-91885",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -665,6 +693,7 @@
    "grade": "anchored",
    "invoice_id": "INV-13743",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -687,6 +716,7 @@
    "grade": "anchored",
    "invoice_id": "INV-53370",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -712,6 +742,7 @@
    "grade": "declared",
    "invoice_id": "INV-39584",
    "lane": "payouts-default",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
@@ -731,6 +762,7 @@
    "grade": "anchored",
    "invoice_id": "INV-10372",
    "lane": "payouts-need-proof",
+   "notes": [],
    "open_model_output": {
     "decision": "hold",
     "reason_code": "seller_on_hold"
