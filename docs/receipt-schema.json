@@ -46,7 +46,7 @@
                                  "weights": {"type": "string", "pattern": "^[^@]+@[^@]+$"}}},
         "spot_check": {"type": "object", "required": ["rerun_job", "rerun_node", "agreed", "action"],
                        "properties": {"agreed": {"enum": [true, false, null]},
-                                      "action": {"enum": ["none", "human_review"]},
+                                      "action": {"enum": ["none", "human_review", "pending_rerun"]},
                                       "reason": {"type": "string"},
                                       "rerun_output_sha256": {"$ref": "#/$defs/hex64"}},
                        "if": {"properties": {"agreed": {"const": false}}, "required": ["agreed"]},

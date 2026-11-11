@@ -37,6 +37,8 @@ def decide(receipt: dict, verify_verdict: int | None, rule: dict) -> dict:
     sc = receipt.get("spot_check") or {}
     if sc.get("action") == "human_review":
         review.append(f"re-run disagreed: {sc.get('reason')}")
+    if sc.get("action") == "pending_rerun":
+        return {"action": "hold", "reasons": [f"held until the re-run: {sc.get('reason')}"]}
     if rule["requires"] == "anchored" and "work_type_cleared_bar" not in receipt.get("relay_checks", []):
         review.append(f"the open model has not cleared rule {rule['id']}'s bar "
                       f"(on_no_open_model: {rule.get('on_no_open_model', 'human_review')})")

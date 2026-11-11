@@ -22,6 +22,35 @@
       },
       "unchanged": "items, prompts, inputs (sha256 ae8582f4...), job definition CIDs, model, 45-min deadline, bar, cap",
       "written_at": "2026-11-11T04:20:11Z"
+    },
+    {
+      "arms": {
+        "from": [
+          "raw",
+          "compiled"
+        ],
+        "to": [
+          "compiled"
+        ]
+      },
+      "before_any_job_ran": "no run g job has run (one refused, two delisted while queued)",
+      "by": "owner, 2026-11-11: run g on NVIDIA 6000 Ada premium; drop the raw arm (run b already measured raw vs compiled); one batch job with the 200 compiled-v2 items",
+      "cap": "$2 for all of Phase 1c, from settled 3.536; $0.127 spent before this amendment",
+      "jobs": {
+        "batch": "one job, 200 compiled-v2 lines, job definition QmQkMk1BtzJCJtE8eX8AdetUBXP5YT1n9Ji9P7L72i2S1W (47910 bytes), inputs_cid QmbBa74dAXFrdPbk9PsTfLk7Ayhh49xwQHx7RtwqCZUqZg (805249 bytes)",
+        "result_size": "expected ~140 KB for 200 rows (run b: 82.8 KB for 120 rows); checked against 256 KiB after the run",
+        "shards": "none (the two shards existed only to keep 400 rows under one IPFS block)"
+      },
+      "market": {
+        "from": "F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB",
+        "name": "NVIDIA 6000 Ada PREMIUM (48 GB), $0.6364/h",
+        "to": "6eMivCx49anWFYwNgg8KNJQfSJYB5nBdif8CK6z52dem"
+      },
+      "queue_check": "before posting, read the market queue from Solana; post only to a node waiting there; if none, don't post and report the 48 GB+ premium markets with nodes waiting. At this amendment: nodes ['6LFK1kCexmMxfgYH7ebt2Ao76Eg2ajbHegR7L7Tc5J1h']",
+      "rerun": "35 items (unchanged sample) on a second node waiting in any 48 GB+ premium market (6000 Ada, A6000, A40, A100 40GB, A100 80GB). If none runs it within 30 min of the batch finishing, receipts are issued with spot_check.action = pending_rerun, and the gate holds those payouts until it runs",
+      "scoring": "compiled v2 only, 200 items; the bar is unchanged (189/200). Columns: compiled v2 / rules only / rules + regex; raw not posted",
+      "unchanged": "items, prompts (system prompt sha256 8a009618...), the compiled lines byte for byte, model 32B AWQ @5c7cb76a, 45-min deadline, bar, rule",
+      "written_at": "2026-11-11T04:43:45Z"
     }
   ],
   "arms": {
@@ -37,15 +66,16 @@
     "rules_only": "code alone, no model: rules 1-5 over the structured fields, notes unread (data.truth_rules_only). Scored on the same 200 items; by construction it is right on every item the notes don't change: 166/200",
     "rules_regex": "code alone, no model: rules 1-5 plus a keyword/regex reading of the notes (data.truth_rules_regex: a finance note naming the refund's order with an approval word approves it; the latest note naming this invoice with a dispute word holds it, a withdrawn/closed word releases it). keywords_naive, reported beside it, drops the sender, order and invoice checks"
   },
+  "batch_inputs_cid": "QmbBa74dAXFrdPbk9PsTfLk7Ayhh49xwQHx7RtwqCZUqZg",
   "cap_scope": "USD on Nosana, all of Phase 1c, from settled credits 3.536, including run e's stopped attempts ($0.107 settled before this pre-registration)",
   "cap_usd": 2.0,
   "compiler": "v2",
   "cost_estimate_usd": {
-    "bad_node": "a download that hits the 45-min deadline ~$0.44",
-    "basis": "market F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB at $0.5545/hour; each post reserves 1 hour. 32B AWQ is ~19 GB to download; no 32B job has run on Nosana before",
-    "expected": "0.42-0.75 (15-27 min per job)",
+    "bad_node": "a download that hits the 45-min deadline ~$0.51",
+    "basis": "6000 Ada PREMIUM at $0.6364/hour; each post reserves 1 hour; 32B AWQ ~19 GB download, not yet measured on Nosana",
+    "expected": "0.32-0.57 (15-27 min per job)",
     "frontier": "deferred: the owner's Claude Code limit resets Nov 14; no API key",
-    "jobs": "batch1 (200 lines), batch2 (200 lines), re-run (35 lines): 3 Nosana jobs, each downloads the model",
+    "jobs": "batch (200 compiled lines) + re-run (35 lines), possibly on another 48 GB+ premium market",
     "worst_case": "bounded by the cap: Budget.check refuses any post that could pass $2.00"
   },
   "data": "synthetic",
@@ -62,7 +92,7 @@
   "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
   "inputs_cid": "QmX7AstnDpJGApgqyCGNwTndeyeR7U6wncWUcBks496P5E",
   "inputs_sha256": "ae8582f414ffa67d1e0b389528a1680e9d944b50b4b0d03da4416cfb018b76d3",
-  "job_definition_cid": "QmTqULxA2RcGoEJXDjJ4t9MF3GgkaYLr2ihQFhZqTjZ49W",
+  "job_definition_cid": "QmQkMk1BtzJCJtE8eX8AdetUBXP5YT1n9Ji9P7L72i2S1W",
   "judgment": {
     "by_intent": {
       "chatter": 16,
@@ -90,7 +120,7 @@
     "what": "free-text support notes (from finance, support, sellers or buyers) and two policies, D-106 (which notes count as refund approval) and D-107 (open vs withdrawn disputes). The model must read who wrote a note, which order or invoice it names, and whether a dispute is still open"
   },
   "label_inputs": "data.truth_1e: seller_id vs seller-hold decisions; invoice_id vs the seller's paid invoices; amount vs the sum of line totals; each sale line's sku, sale_date and unit price vs the price-change decisions; each refund line's order_date (> 30 days before the payout date) and approval_id; the rule priority; and each support note's hidden intent (never shown to the model). Amount thresholds ($500, $5,000) set the lane and the re-run, never the label",
-  "market": "F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB",
+  "market": "6eMivCx49anWFYwNgg8KNJQfSJYB5nBdif8CK6z52dem",
   "market_choice": "48 GB class, checked for idle nodes on 2026-11-11: A6000 PREMIUM 1, A40 Community 3, A40 PREMIUM 0, A100 40GB Community 47 (fallback). A40 Community is the only 48 GB market with two or more idle nodes, which the batch + second-node re-run need. Amended: community markets refuse credit jobs; A6000 PREMIUM",
   "model": "Qwen/Qwen2.5-32B-Instruct-AWQ@5c7cb76a268fc6cfbb9c4777eb24ba6e27f9ee6c",
   "nodes": "known-good node list per market from measured outcomes (relay_nosana/nosana/nodes.py), open market as fallback; in-container deadline 45 min",
@@ -165,28 +195,6 @@
   "run_id": "payouts-2026-11-11g",
   "scoring": "exact match of {decision, reason_code} against data.truth(); per arm over all 200 payouts, Wilson 95% CI; also the > $500 subset; paired discordant counts with an exact two-sided binomial (sign) test",
   "seed": 20261112,
-  "shards": [
-    {
-      "inputs_cid": "QmTxHKxxSvSXSQA6pygJGVEAUj4ahWv2FDpHCvN5t4EqyY",
-      "job_definition_cid": "QmamihXvt2A2dVcWuo7XB5VJszGXboA1Yut1itY6o3Nm8o",
-      "lines": 200,
-      "payouts": [
-        "P-0101",
-        "P-0208"
-      ],
-      "tag": "batch1"
-    },
-    {
-      "inputs_cid": "QmP9tezZUZeGzj1Fdx3XibzUcxqMVSA5Bujo6Jw4tDiHdC",
-      "job_definition_cid": "QmbefTpt3UKpT5zVxbAKiFcgU3tdGMtp3PW4zmL8bJ9M3H",
-      "lines": 200,
-      "payouts": [
-        "P-0209",
-        "P-0310"
-      ],
-      "tag": "batch2"
-    }
-  ],
   "system_prompt_sha256": "8a009618d7fef03a1a476de37370bdaa3bf32d1c250ffc7cef4f31ae43319a24",
   "threshold": {
     "accuracy": 0.945,

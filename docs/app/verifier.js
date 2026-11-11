@@ -314,7 +314,8 @@ function spotCheckErrs(sc) {
   const errs = ["rerun_job", "rerun_node", "agreed", "action"].filter((k) => !(k in sc)).map((k) => `spot_check.${k} missing`);
   if (errs.length) return errs;
   if (![true, false, null].includes(sc.agreed)) errs.push("spot_check.agreed is not true, false or null");
-  if (!["none", "human_review"].includes(sc.action)) errs.push("spot_check.action is not one of ('none', 'human_review')");
+  if (!["none", "human_review", "pending_rerun"].includes(sc.action)) errs.push("spot_check.action is not one of ('none', 'human_review', 'pending_rerun')");
+  if (sc.action === "pending_rerun" && (sc.agreed !== null || !sc.reason)) errs.push("spot_check pending_rerun must have agreed null and a reason");
   if (sc.agreed === false) {
     if (sc.action !== "human_review") errs.push("spot_check disagreed but action is not human_review");
     if (typeof sc.reason !== "string" || !sc.reason) errs.push("spot_check disagreed but gives no reason");

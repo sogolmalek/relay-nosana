@@ -28,7 +28,7 @@ from relay_verify.solana import DEFAULT_RPC
 
 from .. import gate
 from .. import rules as rules_mod
-from ..lane import Budget, chain_for, log, run_batch
+from ..lane import Budget, BudgetExceeded, chain_for, log, run_batch
 from ..ledger import log_call, upsert
 from ..nosana import jobdef as jd_mod
 from ..nosana import nodes as nodes_mod
@@ -288,6 +288,56 @@ def _tried(conn, run_id: str) -> set[str]:
     return {r["node"] for r in conn.execute("SELECT node FROM jobs WHERE run_id=? AND node IS NOT NULL", (run_id,))}
 
 
+def _rerun_any_market(a, state, P, conn, jobs, budget, by_id, run, weights, model_key) -> None:
+    """Run g (amended): the re-run goes to a second node waiting in any 48 GB+ premium market. If none is free
+    within rerun_window_s of the batch finishing, the re-run is recorded as pending: receipts say so, and the gate
+    holds the payouts that need it until it runs."""
+    rule = next(r for r in rules_mod.load() if r["id"] == "payouts-need-proof")
+    amt = amounts(run)
+    anchored = [(pid, amt[pid]) for pid, lane in state["lanes"].items() if lane == rule["id"]]
+    sample = rules_mod.rerun_sample(rule, anchored, a.run_id)
+    sub = [by_id[f"{pid}/compiled"] for pid in sample]
+    first = {state[k]["account"]["node"] for k, _ in batches(state) if state[k].get("account")} | \
+        {state[k].get("node") for k, _ in batches(state)} - {None}
+    jd, _, inputs_cid = build_batch(sub, a.run_id, "rerun", model_key, state.get("design", "1b"))
+    finished = max(state[k].get("finished_wall") or time.time() for k, _ in batches(state))
+    until = finished + state["rerun_window_s"]
+    tried: set[str] = set(first)
+    rr = {"ok": False, "items": [f"{p}/compiled" for p in sample], "attempts": [], "window_until": until}
+    while time.time() < until:
+        pairs = nodes_mod.waiting_nodes(a.rpc, avoid=tried)
+        if not pairs:
+            log(f"re-run: no second node waiting in any 48 GB+ premium market; "
+                f"{int(until - time.time())} s left in the window")
+            time.sleep(60)
+            continue
+        market, node = pairs[0]
+        tried.add(node)
+        price = nodes_mod.PREMIUM_48GB_PLUS[market][1]
+        log(f"re-run: node {node} waiting on {nodes_mod.PREMIUM_48GB_PLUS[market][0]} ({market}, ${price}/h)")
+        n_prev = len(list(P["nosana"].glob("rerun_a*_post.json")))
+        try:
+            out = run_batch(conn=conn, run_id=a.run_id, tag="rerun", jobdef=jd, market=market, rpc=a.rpc, jobs=jobs,
+                            budget=budget, fixtures=P["nosana"], image=jd_mod.IMAGE, weights=weights,
+                            inputs_cid=inputs_cid, node_for_attempt=lambda i, n=node: n,
+                            estimate_usd=round(1.15 * price, 3), max_attempts=n_prev + 1,
+                            queue_wait_s=600, run_wait_s=deadline_for(model_key) + 300)
+        except BudgetExceeded as e:
+            log(f"re-run on {market} refused by the cap: {e}")
+            continue
+        rr["attempts"] += [r["job"] for r in out.attempts if r["job"] not in rr["attempts"]]
+        if out.ok:
+            rr.update(ok=True, job=out.job, jobdef_cid=out.jobdef_cid, inputs_cid=inputs_cid, account=out.account,
+                      result_file=out.result_file, market=market, node=node)
+            break
+    if not rr["ok"]:
+        rr.update(status="pending", why=f"no second node in a 48 GB+ premium market ran the re-run within "
+                                        f"{state['rerun_window_s'] // 60} min of the batch finishing")
+        log(f"re-run pending: {rr['why']}")
+    state["rerun"] = rr
+    save_state(a.run_id, state)
+
+
 def cmd_nosana(a) -> None:
     P, state = paths(a.run_id), load_state(a.run_id)
     if state.get("market") and a.market != state["market"]:
@@ -298,6 +348,8 @@ def cmd_nosana(a) -> None:
     run = json.loads(P["run"].read_text())
     lines = [json.loads(x) for x in P["inputs"].read_text().splitlines()]
     by_id = {x["item_id"]: x for x in lines}
+    if state.get("arms"):  # run g (amended): only these arms are posted
+        lines = [x for x in lines if x["arm"] in state["arms"]]
     conn = db(a.run_id)
     jobs = Jobs()
     budget = Budget(jobs, a.cap)
@@ -311,6 +363,15 @@ def cmd_nosana(a) -> None:
     model_key = state.get("model_key", "7b")
 
     def batch_node(attempt: int) -> str | None:
+        if state.get("queue_check"):  # run g: post only to a node that is waiting in the market queue on Solana
+            waiting = [n for m, n in nodes_mod.waiting_nodes(a.rpc, {a.market: nodes_mod.PREMIUM_48GB_PLUS[a.market]},
+                                                             _tried(conn, a.run_id))]
+            if not waiting:
+                elsewhere = nodes_mod.waiting_nodes(a.rpc)
+                sys.exit(f"no node waiting on {a.market}; not posting. 48 GB+ premium markets with nodes waiting: "
+                         f"{elsewhere or 'none'}")
+            log(f"batch attempt {attempt}: {waiting[0]} (waiting in the market queue on Solana)")
+            return waiting[0]
         node, why = nodes_mod.pick(a.market, idle_nodes(a.market, set()), _tried(conn, a.run_id))
         log(f"batch attempt {attempt}: {node or 'open market'} ({why})")
         return node
@@ -326,12 +387,15 @@ def cmd_nosana(a) -> None:
                         queue_wait_s=900, run_wait_s=deadline_for(model_key) + 300)
         state[key] = {"ok": out.ok, "job": out.job, "jobdef_cid": out.jobdef_cid, "inputs_cid": inputs_cid,
                       "account": out.account, "attempts": [r["job"] for r in out.attempts],
-                      "result_file": out.result_file, **({"payouts": pids} if pids else {})}
+                      "result_file": out.result_file, "finished_wall": time.time(),
+                      **({"payouts": pids} if pids else {})}
         save_state(a.run_id, state)
         if not out.ok:
             sys.exit(f"{key} failed after {len(out.attempts)} attempts; see runs/{a.run_id}/nosana/")
 
-    if not (state.get("rerun") or {}).get("ok") and not a.batch_only:
+    if state.get("rerun_window_s") and not (state.get("rerun") or {}).get("ok") and not a.batch_only:
+        _rerun_any_market(a, state, P, conn, jobs, budget, by_id, run, weights, model_key)
+    elif not (state.get("rerun") or {}).get("ok") and not a.batch_only:
         rule = next(r for r in rules_mod.load() if r["id"] == "payouts-need-proof")
         amt = amounts(run)
         anchored = [(pid, amt[pid]) for pid, lane in state["lanes"].items() if lane == rule["id"]]
@@ -403,7 +467,7 @@ def _columns_1e(P, run, arms, pids, truth) -> dict:
     paid = run["paid_invoices"]
     by_id = {p["payout_id"]: p for p in run["payouts"]}
     changed = {p for p in pids if truth[p] != truth_rules_only(by_id[p], paid)}
-    cols = {"raw": _score(arms["raw"]["_ok"], pids, changed),
+    cols = {"raw": _score(arms["raw"]["_ok"], pids, changed) if "raw" in arms else "not posted (run g amendment)",
             "compiled_v2": _score(arms["compiled"]["_ok"], pids, changed),
             "rules_only": _score({p: truth_rules_only(by_id[p], paid) == truth[p] for p in pids}, pids, changed),
             # fourth no-model baseline (Sogol, 2026-11-10): rules + a keyword/regex reading of the notes
@@ -502,7 +566,8 @@ def cmd_issue(a) -> None:
     model_id = f"nosana:{model}@{revision[:12]}"
 
     arms = {}
-    for arm in task.ARMS:
+    posted_arms = state.get("arms", task.ARMS)
+    for arm in posted_arms:
         ok = {}
         for pid in pids:
             r = rows[f"{pid}/{arm}"]
@@ -541,17 +606,20 @@ def cmd_issue(a) -> None:
     conn.commit()
     if state.get("design") == "1e":
         state["columns"] = _columns_1e(P, run, arms, pids, truth)
-    b = sum(arms["compiled"]["_ok"][p] and not arms["raw"]["_ok"][p] for p in pids)
-    c = sum(arms["raw"]["_ok"][p] and not arms["compiled"]["_ok"][p] for p in pids)
-    paired = {"compiled_right_raw_wrong": b, "raw_right_compiled_wrong": c, "sign_test_p": round(sign_test(b, c), 6)}
+    if "raw" in arms:
+        b = sum(arms["compiled"]["_ok"][p] and not arms["raw"]["_ok"][p] for p in pids)
+        c = sum(arms["raw"]["_ok"][p] and not arms["compiled"]["_ok"][p] for p in pids)
+        paired = {"compiled_right_raw_wrong": b, "raw_right_compiled_wrong": c, "sign_test_p": round(sign_test(b, c), 6)}
+    else:
+        paired = "raw arm not posted (run g amendment); run b measured raw vs compiled"
     for arm in arms.values():
         arm.pop("_ok")
     cleared = rules_mod.bar_cleared(proof, arms["compiled"]["ci_low"])
-    raw_cleared = rules_mod.bar_cleared(proof, arms["raw"]["ci_low"])
+    raw_cleared = rules_mod.bar_cleared(proof, arms["raw"]["ci_low"]) if "raw" in arms else None
     state["arms"], state["paired"] = arms, paired
     state["bar"] = {"rule": proof["id"], "metric": proof["bar"]["metric"], "needed_ci_low": proof["bar"]["ci_lower_gte"],
                     "compiled_ci_low": arms["compiled"]["ci_low"], "compiled_cleared": cleared,
-                    "raw_ci_low": arms["raw"]["ci_low"], "raw_cleared": raw_cleared,
+                    "raw_ci_low": arms["raw"]["ci_low"] if "raw" in arms else None, "raw_cleared": raw_cleared,
                     "frontier_ratio": "not measured in POC"}
     state["routing"] = ("compiled arm: payouts over $500 may be paid on a verified anchored receipt" if cleared
                         else "human review for payouts over $500 (on_no_open_model)")
@@ -565,8 +633,12 @@ def cmd_issue(a) -> None:
                                    output_sha256=rows[iid]["output_sha256"],
                                    rerun_output_sha256=rerun_rows[iid]["output_sha256"])
              for iid in rr.get("items", [])} if rr.get("ok") else {}
-    state["rerun_agreement"] = ({"n": len(spots), "agreed": sum(s["agreed"] for s in spots.values())} if spots
-                                else "not run (plan changed after the batch: see docs/phase1b-report.md)")
+    if rr.get("status") == "pending":  # run g: no second node within the window; the gate holds these items
+        spots = {iid: issue.pending_rerun(rr["why"]) for iid in rr["items"]}
+        state["rerun_agreement"] = f"pending for {len(spots)} items: {rr['why']}"
+    else:
+        state["rerun_agreement"] = ({"n": len(spots), "agreed": sum(s["agreed"] for s in spots.values())} if spots
+                                    else "not run (plan changed after the batch: see docs/phase1b-report.md)")
 
     items = {f"{pid}/compiled": by_id[f"{pid}/compiled"] for pid in anchored}
     checks = {}
@@ -606,7 +678,7 @@ def cmd_issue(a) -> None:
     by_item = {iid.split("/")[0]: r for iid, r in receipts.items()}
     state["review_queue"] = gate.write_queue(P["base"] / "review_queue.json", by_item, rules)
     save_state(a.run_id, state)
-    for arm in task.ARMS:
+    for arm in posted_arms:
         x = arms[arm]
         log(f"{arm}: {x['correct']}/{x['n']} = {x['accuracy']} CI [{x['ci_low']}, {x['ci_high']}]; "
             f"> $500 {x['anchored']['correct']}/{x['anchored']['n']}; predicted {x['predicted']}")

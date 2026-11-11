@@ -59,13 +59,15 @@ def test_browser_verifier_matches_python_cli(tmp_path):
     published = [n for n, _ in cases if not n.startswith(("tamper/", "v0.1/"))]
     assert len(published) == 72 and all(verdicts[n] == 0 for n in published)
     expect = {"decision": {"5"}, "output_only": {"receipt_id"}, "model": {"3"}, "job": {"1"}, "post_tx": {"1"},
-              "merkle": {"5"}, "node": {"6"}}
+              "merkle": {"5"}, "node": {"6"}, "pending_rerun": set()}
     for name, r in cases:
         if name.startswith("tamper/"):
             kind = name.split("/")[-1]
             failing = {c["id"] for c in js[name]["checks"] if c["ok"] is False}
             if kind == "unknown_finish":
                 assert verdicts[name] == 2
+            elif kind == "pending_rerun":
+                assert verdicts[name] == 0
             else:
                 assert expect[kind] <= failing, (name, failing)
     assert verdicts["v0.1/P-0101"] == 1

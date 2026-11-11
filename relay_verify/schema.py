@@ -12,7 +12,7 @@ _CID = re.compile(r"^Qm[1-9A-HJ-NP-Za-km-z]{44}$")
 _B58 = re.compile(r"^[1-9A-HJ-NP-Za-km-z]{32,44}$")
 _SIG = re.compile(r"^[1-9A-HJ-NP-Za-km-z]{64,90}$")  # a base58 Solana transaction signature (64 bytes)
 VERSION = "0.2"
-SPOT_ACTIONS = ("none", "human_review")
+SPOT_ACTIONS = ("none", "human_review", "pending_rerun")
 
 COMMON = {"receipt_version": str, "grade": str, "receipt_id": str, "item_id": str, "source": dict,
           "rule": dict, "input_sha256": str, "output": dict, "output_sha256": str,
@@ -95,6 +95,8 @@ def _spot_check(sc: dict) -> list[str]:
         errs.append("spot_check.agreed is not true, false or null")
     if sc["action"] not in SPOT_ACTIONS:
         errs.append(f"spot_check.action is not one of {SPOT_ACTIONS}")
+    if sc["action"] == "pending_rerun" and (sc["agreed"] is not None or not sc.get("reason")):
+        errs.append("spot_check pending_rerun must have agreed null and a reason")
     if sc["agreed"] is False:
         if sc["action"] != "human_review":
             errs.append("spot_check disagreed but action is not human_review")

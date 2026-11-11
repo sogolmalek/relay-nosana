@@ -90,3 +90,60 @@ def pick(market: str, idle: list[str], avoid: set[str], root: Path = ROOT) -> tu
         if n in idle and n not in avoid:
             return n, f"known-good node, idle (best load {k['table'][n]['best_load_s']} s)"
     return None, "no known-good node idle: open market"
+
+
+# ---------------------------------------------------------------- the market queue, read from Solana (Phase 1c)
+# A Nosana market account holds one queue: either nodes waiting for work or jobs waiting for a node. The indexer
+# heuristic above (recent completions, nothing running) proved wrong on 2026-11-11: two markets it called idle
+# had jobs queued and no node. The queue itself is the truth. Layout (jobs program): discriminator 8, authority
+# 32, jobExpiration 8, jobPrice 8, jobTimeout 8, jobType 1, nodeAccessKey 32, nodeXnosMinimum 16, queueType 1,
+# vault 32, vaultBump 1, queue Vec<Pubkey>. Entries are classified by owner: a job account is owned by the jobs
+# program, a node is a wallet (system program).
+
+_QUEUE_OFFSET = 8 + 32 + 8 + 8 + 8 + 1 + 32 + 16 + 1 + 32 + 1
+SYSTEM_PROGRAM = "11111111111111111111111111111111"
+
+# 48 GB+ premium markets with vLLM v0.10.2 cached (Phase 0 discover), USD per hour. Credit jobs: premium only.
+PREMIUM_48GB_PLUS = {
+    "6eMivCx49anWFYwNgg8KNJQfSJYB5nBdif8CK6z52dem": ("NVIDIA 6000 Ada", 0.6364),
+    "EjryZ6XEthz3z7nnLfjXBYafyn7VyHgChfbfM47LfAao": ("NVIDIA A6000", 0.3636),
+    "BLqSzPzcXMX5gseNXE4Ma45f31Eo6tNFVYoRmPG7kxP2": ("NVIDIA A40", 0.3636),
+    "F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB": ("NVIDIA A100 40GB", 0.5545),
+    "GLJHzqRN9fKGBsvsFzmGnaQGknUtLN1dqaFR8n3YdM22": ("NVIDIA A100 80GB", 0.8181),
+}
+
+
+def market_queue(rpc: str, market: str) -> dict:
+    """{"kind": "nodes" | "jobs" | "empty", "entries": [address, ...]} from the market account on Solana."""
+    import base64
+    import struct
+
+    from relay_verify.b58 import b58encode
+    from relay_verify.solana import NOSANA_JOBS_PROGRAM, rpc_call
+
+    v = rpc_call(rpc, "getAccountInfo", [market, {"encoding": "base64"}])["result"]["value"]
+    d = base64.b64decode(v["data"][0])
+    (n,) = struct.unpack_from("<I", d, _QUEUE_OFFSET)
+    keys = [b58encode(d[_QUEUE_OFFSET + 4 + 32 * i:_QUEUE_OFFSET + 36 + 32 * i]) for i in range(n)]
+    if not keys:
+        return {"kind": "empty", "entries": []}
+    owners = [(x or {}).get("owner") for x in rpc_call(rpc, "getMultipleAccounts", [keys[:100], {
+        "encoding": "base64", "dataSlice": {"offset": 0, "length": 0}}])["result"]["value"]]
+    if all(o == NOSANA_JOBS_PROGRAM for o in owners):
+        return {"kind": "jobs", "entries": keys}
+    if all(o in (SYSTEM_PROGRAM, None) for o in owners):
+        return {"kind": "nodes", "entries": keys}
+    return {"kind": "mixed", "entries": keys, "owners": owners}
+
+
+def waiting_nodes(rpc: str, markets: dict = PREMIUM_48GB_PLUS, avoid: set[str] = frozenset(),
+                  root: Path = ROOT) -> list[tuple[str, str]]:
+    """(market, node) pairs with a node waiting in the queue, cheapest market first, known-bad nodes left out."""
+    out = []
+    for m in sorted(markets, key=lambda m: markets[m][1]):
+        q = market_queue(rpc, m)
+        if q["kind"] != "nodes":
+            continue
+        bad = set(known_nodes(m, root)["bad"])
+        out += [(m, n) for n in q["entries"] if n not in avoid and n not in bad]
+    return out

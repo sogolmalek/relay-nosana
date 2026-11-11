@@ -588,3 +588,19 @@ def test_gate_refuses_declared_over_threshold_and_unverified():
     assert gate.decide(ok, 0, dflt)["action"] == "pay"
     assert gate.decide(ok, 1, dflt)["action"] == "refuse"
     assert gate.decide(dict(ok, output={"decision": "hold", "reason_code": "disputed"}), 0, dflt)["action"] == "hold"
+
+
+def test_pending_rerun_is_valid_and_the_gate_holds_it(issued):
+    from relay_nosana import gate
+    f, recs, _, _ = issued
+    rule = rules_mod.load()[0]
+    r = copy.deepcopy(next(iter(recs.values())))
+    r["spot_check"] = issue.pending_rerun("no second node within 30 min")
+    r["relay_checks"] = ["output_schema", "work_type_cleared_bar"]
+    r["output"] = {"decision": "approve", "reason_code": "ok"}
+    assert validate(r) == []
+    d = gate.decide(r, 0, rule)
+    assert d["action"] == "hold" and "held until the re-run" in d["reasons"][0]
+    bad = copy.deepcopy(r)
+    bad["spot_check"]["agreed"] = True
+    assert "spot_check pending_rerun must have agreed null and a reason" in validate(bad)

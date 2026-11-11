@@ -50,6 +50,9 @@ def tamper(r: dict, kind: str, other: dict | None = None) -> dict:
         r["merkle"]["path"][0]["hash"] = "ab" * 32
     elif kind == "node":
         r["nosana"]["node"] = other["spot_check"]["rerun_node"] or other["nosana"]["node"]
+    elif kind == "pending_rerun":  # not a forgery: the shape of a receipt whose required re-run hasn't run
+        r["spot_check"] = {"rerun_job": None, "rerun_node": None, "agreed": None, "action": "pending_rerun",
+                           "reason": "re-run required by the rule and not run yet"}
     elif kind == "unknown_finish":
         r["nosana"]["finish_tx"] = "1" * 88
     else:
@@ -57,7 +60,7 @@ def tamper(r: dict, kind: str, other: dict | None = None) -> dict:
     return _rid(r)
 
 
-TAMPERS = ["decision", "output_only", "model", "job", "post_tx", "merkle", "node", "unknown_finish"]
+TAMPERS = ["decision", "output_only", "model", "job", "post_tx", "merkle", "node", "unknown_finish", "pending_rerun"]
 
 
 def all_cases() -> list[tuple[str, dict]]:

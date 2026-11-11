@@ -38,6 +38,12 @@ def spot_check(*, rerun_job: str, rerun_node: str, output_sha256: str, rerun_out
                       f"input; the gate holds the payout for human review"}
 
 
+def pending_rerun(why: str) -> dict:
+    """The rule requires a re-run of this item and none has run yet: the gate holds the payout until it does."""
+    return {"rerun_job": None, "rerun_node": None, "agreed": None, "action": "pending_rerun",
+            "reason": f"re-run required by the rule and not run yet ({why}); the gate holds the payout until it runs"}
+
+
 def anchored_from_result(*, result: dict, chain: dict, job_definition_cid: str, inputs_cid: str,
                          image: str, weights: str, items: dict[str, dict], rule: dict, rule_sha256: str,
                          work_type: str, relay_checks: dict[str, list[str]], spot_checks: dict[str, dict],

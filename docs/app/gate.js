@@ -17,6 +17,7 @@ export function decide(receipt, verdict, rule, bar = null) {
   const review = [];
   const sc = receipt.spot_check || {};
   if (sc.action === "human_review") review.push(`re-run disagreed: ${sc.reason}`);
+  if (sc.action === "pending_rerun") return { action: "hold", reasons: [`held until the re-run: ${sc.reason}`] };
   if (rule.requires === "anchored" && !(receipt.relay_checks || []).includes("work_type_cleared_bar")) {
     review.push(bar ? `held: the open model missed the bar (${bar.measured.model}: ${bar.measured.correct}/${bar.measured.n}`
       + ` = ${bar.measured.accuracy.toFixed(3)}, Wilson 95% lower bound ${bar.measured.ci_low.toFixed(3)};`
