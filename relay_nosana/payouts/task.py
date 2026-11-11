@@ -273,3 +273,78 @@ def input_line_1e(payout: dict, paid_invoices: dict[str, list[str]], arm: str, s
     return {"item_id": f"{payout['payout_id']}/{arm}", "task": TASK, "arm": arm,
             "messages": [{"role": "system", "content": SYSTEM_1E}, {"role": "user", "content": content}],
             "params": {"temperature": 0, "max_tokens": MAX_TOKENS_1B, "seed": seed}}
+
+
+# ---------------------------------------------------------------- compiler v3 (run h): rules 4-5 in code too
+# Rules 4 and 5 are lookups and date arithmetic like rules 1-3, so code resolves them as facts. Rule 5 is
+# resolved as far as code can: an old refund with no approval_id on the line is a fact; whether a support note
+# from finance approves it (D-106) is the model's to read. Rule 6 (disputes) is read from the notes. Every fact
+# comes from the payout and the decisions in force (prices from the SKU catalogue the price-change decisions
+# describe), never from truth(). Same system prompt as runs e and g.
+from .data import SKUS  # noqa: E402
+
+REFUND_APPROVAL_DAYS = 30
+
+
+def price_changes_in_force(payout_date: str) -> dict[str, dict]:
+    """sku -> {"id", "date", "old", "new"} for price-change decisions dated on or before the payout date."""
+    return {d["sku"]: {"id": d["id"], "date": d["date"], "old": SKUS[d["sku"]]["old_price"],
+                       "new": SKUS[d["sku"]]["price"]}
+            for d in DECISIONS_1E if d["kind"] == "price_change" and d["date"] <= payout_date}
+
+
+def fact_stale_price(payout: dict) -> tuple[bool, str]:
+    changes = price_changes_in_force(payout["payout_date"])
+    for x in payout["lines"]:
+        c = changes.get(x.get("sku", ""))
+        if x["type"] == "sale" and c and x["sale_date"] >= c["date"] and x["unit_price_cents"] == c["old"]:
+            return True, (f"the {SKUS[x['sku']]['name']} line sold on {x['sale_date']} uses the old unit price "
+                          f"${usd(c['old'])}; decision {c['id']} set ${usd(c['new'])} from {c['date']}")
+    checked = sorted({x["sku"] for x in payout["lines"] if x["type"] == "sale" and x["sku"] in changes})
+    return False, ("no sale line uses an old price on or after its price change"
+                   + (f" (checked {', '.join(checked)})" if checked else " (no repriced product on this payout)"))
+
+
+def old_unapproved_refunds(payout: dict) -> list[tuple[str, int]]:
+    """(order_id, days before the payout) for refund lines older than 30 days with no approval_id on the line."""
+    pd = __import__("datetime").date.fromisoformat(payout["payout_date"])
+    out = []
+    for x in payout["lines"]:
+        if x["type"] != "refund" or x.get("approval_id"):
+            continue
+        days = (pd - __import__("datetime").date.fromisoformat(x["order_date"])).days
+        if days > REFUND_APPROVAL_DAYS:
+            out.append((x["order_id"], days))
+    return out
+
+
+def facts_header_v3(payout: dict, paid_invoices: dict[str, list[str]]) -> str:
+    facts = resolved_facts(payout, paid_invoices)
+    facts["stale_price"] = fact_stale_price(payout)
+    lines = [f"- rule {i} {name}: {'APPLIES' if hit else 'does not apply'} ({why})"
+             for i, (name, (hit, why)) in enumerate(facts.items(), start=1)]
+    old = old_unapproved_refunds(payout)
+    if not old:
+        refunds = [x for x in payout["lines"] if x["type"] == "refund"]
+        lines.append("- rule 5 needs_approval: does not apply ("
+                     + ("no refund line" if not refunds else
+                        "every refund line is either within 30 days of the payout date or carries an approval_id")
+                     + ")")
+    else:
+        orders = "; ".join(f"order {o}, placed {d} days before the payout date" for o, d in old)
+        lines.append(f"- rule 5 needs_approval: APPLIES unless a support note approves it ({orders}; no approval_id "
+                     "on the line). Under D-106 only a note from the finance team that names this order_id and "
+                     "gives an approval id counts")
+    return ("Resolved facts (computed by code from this payout, the decisions in force and the paid invoices; "
+            "use them as given):\n" + "\n".join(lines)
+            + "\nStill to read from the support notes: whether a note approves the refund in rule 5 (only if rule 5 "
+              "says so), and rule 6 disputed.\n\n")
+
+
+def input_line_1h(payout: dict, paid_invoices: dict[str, list[str]], seed: int = 0) -> dict:
+    """Compiler v3, compiled arm only (run h): resolved facts for rules 1-5, then the compiled context and notes."""
+    content = facts_header_v3(payout, paid_invoices) + user_message_1e(payout, paid_invoices,
+                                                                        decisions_compiled_1e(payout))
+    return {"item_id": f"{payout['payout_id']}/compiled", "task": TASK, "arm": "compiled",
+            "messages": [{"role": "system", "content": SYSTEM_1E}, {"role": "user", "content": content}],
+            "params": {"temperature": 0, "max_tokens": MAX_TOKENS_1B, "seed": seed}}

@@ -1,0 +1,161 @@
+{
+  "arms": {
+    "compiled": "Compiler v3: rules 1-5 resolved in code and written as facts (task.facts_header_v3): rules 1-3 as in v2; rule 4 stale_price from the price-change decisions in force; rule 5 needs_approval resolved to 'does not apply' or 'applies unless a support note approves it' (old refund, no approval_id on the line). The model reads only the support notes: whether a finance note approves that refund (D-106) and whether a dispute on this invoice is open (D-107). Same system prompt as runs e and g (8a009618...)."
+  },
+  "arms_posted": [
+    "compiled"
+  ],
+  "bar": {
+    "ci_lower_gte": 0.9,
+    "metric": "accuracy_vs_ground_truth"
+  },
+  "baselines": {
+    "frontier": "declared lane, not anchored: headless Claude Code (relay_nosana/payouts/claude_code.py, Phase 1's lane, the owner's login, no API credits) on the compiled-arm input of each of the 200 items, same schema; run_1b frontier. Its score is the frontier column; the bar stays absolute",
+    "rules_only": "code alone, no model: rules 1-5 over the structured fields, notes unread (data.truth_rules_only). Scored on the same 200 items; by construction it is right on every item the notes don't change: 164/200",
+    "rules_regex": "code alone, no model: rules 1-5 plus a keyword/regex reading of the notes (data.truth_rules_regex: a finance note naming the refund's order with an approval word approves it; the latest note naming this invoice with a dispute word holds it, a withdrawn/closed word releases it). keywords_naive, reported beside it, drops the sender, order and invoice checks"
+  },
+  "baselines_before_posting": {
+    "keywords_naive": "183/200",
+    "rules_only": "164/200",
+    "rules_regex": "200/200"
+  },
+  "cap_scope": "USD on Nosana, all of Phase 1c from settled credits 3.536; $0.203 spent before this run",
+  "cap_usd": 2.0,
+  "caveat": "synthetic notes from our own templates: rules + a regex reading of the notes scores 200/200 on these items with no model. A pass shows the model can do what template-aware code does on the notes, not judgment code lacks",
+  "compiler": "v3",
+  "cost_estimate_usd": {
+    "basis": "run g's batch on 6000 Ada: 427 s listed to finished, $0.076 (32B AWQ, 200 lines). Markets cost $0.36-0.82/h; a post reserves 1 hour",
+    "expected": "0.08-0.25 for the batch and the re-run",
+    "worst_case": "bounded by the cap: Budget.check refuses any post that could pass $2.00"
+  },
+  "data": "synthetic",
+  "expectation": "compiled v3 >= 189/200 clears the bar; below that, stop and report.",
+  "generation_key_order": [
+    "reasoning",
+    "decision",
+    "reason_code"
+  ],
+  "hashed_output_keys": [
+    "decision",
+    "reason_code"
+  ],
+  "if_it_misses": "stop and report",
+  "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+  "inputs_cid": "QmebG21Nke4nDVicEaQnXDdGZXnFV5on7NxyXpUyqeM97D",
+  "inputs_sha256": "e590826b1683200c6842a6705187b422acef5874c11050ca2a2a64cb7ae09fc1",
+  "job_definition_cid": "QmWgXy2PGXSXwLGijdUsCMkLxoa4uPv2BhoS4nFs8FQHcb",
+  "jobs": "one batch (200 compiled-v3 lines), then a re-run (33 lines) on a second node",
+  "judgment": {
+    "by_intent": {
+      "chatter": 14,
+      "dispute_open": 26,
+      "dispute_other_invoice": 12,
+      "dispute_withdrawn": 12,
+      "finance_approval": 10,
+      "finance_approval_other_order": 3,
+      "seller_claims_approval": 4
+    },
+    "caveat": "synthetic: the notes come from our own templates, so a parser written against them could decode them. They stand in for text a code-only rule set does not read",
+    "changes": "finance_approval, dispute_open: approve an old refund finance approved in a note; hold a payout with an open dispute on its invoice (reason disputed)",
+    "items_whose_answer_the_notes_change": 36,
+    "items_with_notes": 81,
+    "notes_plan_pool_210": {
+      "chatter": 20,
+      "dispute_open": 30,
+      "dispute_other_invoice": 12,
+      "dispute_withdrawn": 12,
+      "finance_approval": 10,
+      "finance_approval_other_order": 3,
+      "seller_claims_approval": 4
+    },
+    "share_answer_depends_on_notes": 0.18,
+    "what": "free-text support notes (from finance, support, sellers or buyers) and two policies, D-106 (which notes count as refund approval) and D-107 (open vs withdrawn disputes). The model must read who wrote a note, which order or invoice it names, and whether a dispute is still open"
+  },
+  "label_inputs": "data.truth_1e: seller_id vs seller-hold decisions; invoice_id vs the seller's paid invoices; amount vs the sum of line totals; each sale line's sku, sale_date and unit price vs the price-change decisions; each refund line's order_date (> 30 days before the payout date) and approval_id; the rule priority; and each support note's hidden intent (never shown to the model). Amount thresholds ($500, $5,000) set the lane and the re-run, never the label",
+  "market": "chosen at post time: the cheapest 48 GB+ premium market (6000 Ada, A6000, A40, A100 40GB, A100 80GB) whose queue on Solana has a node waiting; the batch is posted to that node. Recorded in state.market_chosen. If no node is waiting anywhere, nothing is posted",
+  "model": "Qwen/Qwen2.5-32B-Instruct-AWQ@5c7cb76a268fc6cfbb9c4777eb24ba6e27f9ee6c",
+  "no_tuning": "compiler v3 was written from the rules; it was tested on run h's fresh pool and hand-built cases, never run on run g's items",
+  "nodes": "known-good node list per market from measured outcomes (relay_nosana/nosana/nodes.py), open market as fallback; in-container deadline 45 min",
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "decision": {
+        "enum": [
+          "approve",
+          "hold"
+        ],
+        "type": "string"
+      },
+      "reason_code": {
+        "enum": [
+          "ok",
+          "seller_on_hold",
+          "duplicate",
+          "amount_mismatch",
+          "stale_price",
+          "needs_approval",
+          "disputed"
+        ],
+        "type": "string"
+      },
+      "reasoning": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "decision",
+      "reason_code"
+    ],
+    "type": "object"
+  },
+  "params": {
+    "guided_json": true,
+    "max_tokens": 256,
+    "seed": 0,
+    "temperature": 0
+  },
+  "payouts": 200,
+  "phase": "1c",
+  "plan": "run e's plan (Phase 1 label mix x7, 210-payout pool, NOTE_PLAN_1E) on a fresh seed; 200 drawn; payouts identical to run b's or run e's excluded",
+  "pool": {
+    "drawn": 200,
+    "excluded": 0,
+    "size": 210
+  },
+  "posting": "not posted; requires the owner's explicit approval",
+  "raw": "not posted (run b measured raw vs compiled)",
+  "report_columns": [
+    "compiled v3",
+    "rules only",
+    "rules + regex"
+  ],
+  "rerun": {
+    "always_if": {
+      "amount_usd_gt": 5000
+    },
+    "sample_min": 15,
+    "sample_rate": 0.1
+  },
+  "rerun_arm": "compiled",
+  "rerun_items": 33,
+  "rerun_policy": "a second node waiting in any 48 GB+ premium market; if none runs it within 30 min of the batch finishing, receipts carry spot_check.action = pending_rerun and the gate holds those payouts until it runs",
+  "result_size": "each shard's result ~140 KB (run b: 82.8 KB for 120 rows), under one 256 KiB IPFS block",
+  "routing": "compiled arm if its CI lower bound >= 0.90, else human review for payouts > $500",
+  "rule_snapshot_sha256": "2b8892f58c3b81ba3d061d2cb830d289e77a254166ae8584a354aa27f9489f16",
+  "run_id": "payouts-2026-11-11h",
+  "scoring": "exact match of {decision, reason_code} against data.truth(); per arm over all 200 payouts, Wilson 95% CI; also the > $500 subset; paired discordant counts with an exact two-sided binomial (sign) test",
+  "seed": 20261113,
+  "seed_fresh": "20261113 was never used (20261109 P1, 20261110 b, 20261111 c, 20261112 e/g); payouts identical to run b's or run e's are excluded",
+  "system_prompt_sha256": "8a009618d7fef03a1a476de37370bdaa3bf32d1c250ffc7cef4f31ae43319a24",
+  "threshold": {
+    "accuracy": 0.945,
+    "max_errors": 11,
+    "min_correct": 189,
+    "n": 200,
+    "wilson_low_at_min": 0.9042,
+    "wilson_low_one_fewer": 0.8981
+  },
+  "why": "Run g (32B, compiler v2) missed the bar 185/200; 11 of 15 errors were rules 4-5, which are code-checkable. Run h moves rules 4-5 into code (compiler v3) so the model only reads the notes, on a fresh seed, same model and bar.",
+  "written_at": "2026-11-11T05:10:26Z"
+}

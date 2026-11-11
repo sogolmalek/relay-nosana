@@ -61,6 +61,7 @@ PLAN_1B = PLAN * 2
 # never used before, excluding any payout identical in content to one of run b's. The bar (Wilson 95% lower
 # bound >= 0.90) needs >= 189/200.
 SEED_1E = 20261112
+SEED_1H = 20261113  # run h (Phase 1c): fresh, never used (runs: 20261109 P1, 20261110 b, 20261111 c, 20261112 e/g)
 PLAN_1E_POOL = PLAN * 7
 N_1E = 200
 

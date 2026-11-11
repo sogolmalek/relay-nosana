@@ -35,7 +35,7 @@ from ..nosana import nodes as nodes_mod
 from ..nosana.jobs import Jobs, idle_nodes
 from ..receipts import issue
 from . import task
-from .data import (N_1E, NOTE_CHANGES, NOTE_PLAN_1E, PLAN_1B, PLAN_1E_POOL, SEED_1B, SEED_1E, add_notes,
+from .data import (N_1E, NOTE_CHANGES, NOTE_PLAN_1E, PLAN_1B, PLAN_1E_POOL, SEED_1B, SEED_1E, SEED_1H, add_notes,
                    content_key, draw, generate, truth_keywords_naive, truth_rules_only,
                    truth_rules_regex)
 from .run_poc import ROOT, amounts, db, load_state, paths, save_state
@@ -185,6 +185,48 @@ def _phase1c(a, rerun_items: int) -> dict:
     }
 
 
+def _run_h(a, run: dict, rerun_items: int) -> dict:
+    """Run h (Phase 1c, Sogol 2026-11-11): compiler v3, compiled arm only, fresh seed, one job, same model and bar."""
+    paid = run["paid_invoices"]
+    truth = run["truth"]
+    base = {name: sum(f(p, paid) == truth[p["payout_id"]] for p in run["payouts"])
+            for name, f in (("rules_only", truth_rules_only), ("rules_regex", truth_rules_regex),
+                            ("keywords_naive", truth_keywords_naive))}
+    return {
+        "phase": "1c", "compiler": "v3", "seed_fresh": "20261113 was never used (20261109 P1, 20261110 b, "
+                                                        "20261111 c, 20261112 e/g); payouts identical to run b's "
+                                                        "or run e's are excluded",
+        "arms": {"compiled": "Compiler v3: rules 1-5 resolved in code and written as facts (task.facts_header_v3): "
+                             "rules 1-3 as in v2; rule 4 stale_price from the price-change decisions in force; rule 5 "
+                             "needs_approval resolved to 'does not apply' or 'applies unless a support note approves "
+                             "it' (old refund, no approval_id on the line). The model reads only the support notes: "
+                             "whether a finance note approves that refund (D-106) and whether a dispute on this "
+                             "invoice is open (D-107). Same system prompt as runs e and g (8a009618...)."},
+        "arms_posted": ["compiled"], "raw": "not posted (run b measured raw vs compiled)",
+        "report_columns": ["compiled v3", "rules only", "rules + regex"],
+        "baselines_before_posting": {k: f"{v}/{len(run['payouts'])}" for k, v in base.items()},
+        "caveat": "synthetic notes from our own templates: rules + a regex reading of the notes scores "
+                  f"{base['rules_regex']}/{len(run['payouts'])} on these items with no model. A pass shows the model "
+                  "can do what template-aware code does on the notes, not judgment code lacks",
+        "no_tuning": "compiler v3 was written from the rules; it was tested on run h's fresh pool and hand-built "
+                     "cases, never run on run g's items",
+        "market": "chosen at post time: the cheapest 48 GB+ premium market (6000 Ada, A6000, A40, A100 40GB, "
+                  "A100 80GB) whose queue on Solana has a node waiting; the batch is posted to that node. "
+                  "Recorded in state.market_chosen. If no node is waiting anywhere, nothing is posted",
+        "jobs": f"one batch (200 compiled-v3 lines), then a re-run ({rerun_items} lines) on a second node",
+        "rerun_policy": "a second node waiting in any 48 GB+ premium market; if none runs it within 30 min of the "
+                        "batch finishing, receipts carry spot_check.action = pending_rerun and the gate holds "
+                        "those payouts until it runs",
+        "cost_estimate_usd": {"basis": "run g's batch on 6000 Ada: 427 s listed to finished, $0.076 (32B AWQ, 200 "
+                                       "lines). Markets cost $0.36-0.82/h; a post reserves 1 hour",
+                              "expected": "0.08-0.25 for the batch and the re-run",
+                              "worst_case": "bounded by the cap: Budget.check refuses any post that could pass $2.00"},
+        "cap_usd": 2.0,
+        "cap_scope": "USD on Nosana, all of Phase 1c from settled credits 3.536; $0.203 spent before this run",
+        "if_it_misses": "stop and report",
+    }
+
+
 def cmd_prepare(a) -> None:
     P = paths(a.run_id)
     if (P["base"] / "preregistration.json").exists():
@@ -192,6 +234,16 @@ def cmd_prepare(a) -> None:
     P["base"].mkdir(parents=True, exist_ok=True)
     if a.sample == "1b":
         run, seed, plan_note = generate(SEED_1B, PLAN_1B), SEED_1B, "Phase 1 label mix x2"
+    elif a.sample == "1h":  # run h: run e's design on a fresh seed; none identical to a run-b or run-e payout
+        if a.compiler != "v3":
+            sys.exit("run h's design uses compiler v3")
+        seen = set()
+        for r in ("payouts-2026-11-10b", "payouts-2026-11-10e"):
+            seen |= {content_key(p) for p in json.loads((ROOT_RUNS / r / "payout_run.json").read_text())["payouts"]}
+        pool = add_notes(generate(SEED_1H, PLAN_1E_POOL), SEED_1H)
+        run = draw(pool, N_1E, SEED_1H, seen)
+        seed, plan_note = SEED_1H, ("run e's plan (Phase 1 label mix x7, 210-payout pool, NOTE_PLAN_1E) on a fresh "
+                                    "seed; 200 drawn; payouts identical to run b's or run e's excluded")
     else:  # 1e: 200 of a 210-payout pool with support notes, none identical to a run-b payout
         if a.compiler != "v2":
             sys.exit("run e's design uses compiler v2")
@@ -200,14 +252,18 @@ def cmd_prepare(a) -> None:
         run = draw(pool, N_1E, SEED_1E, {content_key(p) for p in b["payouts"]})
         seed, plan_note = SEED_1E, ("Phase 1 label mix x7 (210-payout pool) with support notes (NOTE_PLAN_1E), "
                                     "200 drawn, run b's payouts excluded")
-    design = a.sample
+    design = "1e" if a.sample == "1h" else a.sample  # run h: run e's prompt and schema
     P["run"].write_text(json.dumps(run, indent=2, sort_keys=True) + "\n")
-    build_line = ((lambda p, arm: task.input_line_1b(p, run["paid_invoices"], arm, compiler=a.compiler))
-                  if design == "1b" else (lambda p, arm: task.input_line_1e(p, run["paid_invoices"], arm)))
-    lines = [build_line(p, arm) for p in run["payouts"] for arm in task.ARMS]
     pids = [p["payout_id"] for p in run["payouts"]]
-    shards = ([pids[i:i + SHARD_PAYOUTS] for i in range(0, len(pids), SHARD_PAYOUTS)]
-              if len(pids) > SHARD_PAYOUTS else None)
+    if a.sample == "1h":  # compiled arm only, one job
+        lines = [task.input_line_1h(p, run["paid_invoices"]) for p in run["payouts"]]
+        shards = None
+    else:
+        build_line = ((lambda p, arm: task.input_line_1b(p, run["paid_invoices"], arm, compiler=a.compiler))
+                      if design == "1b" else (lambda p, arm: task.input_line_1e(p, run["paid_invoices"], arm)))
+        lines = [build_line(p, arm) for p in run["payouts"] for arm in task.ARMS]
+        shards = ([pids[i:i + SHARD_PAYOUTS] for i in range(0, len(pids), SHARD_PAYOUTS)]
+                  if len(pids) > SHARD_PAYOUTS else None)
     P["inputs"].write_bytes(jd_mod.inputs_bytes(lines))
     rules = rules_mod.load()
     conn = db(a.run_id)
@@ -262,13 +318,17 @@ def cmd_prepare(a) -> None:
         "nodes": "known-good node list per market from measured outcomes (relay_nosana/nosana/nodes.py), "
                  f"open market as fallback; in-container deadline {deadline_for(a.model) // 60} min",
         "cap_usd": PHASE1B_CAP_USD,
-        **(_phase1c(a, _ops_1e(lanes, amt, a.run_id)["rerun_items"]) if a.model == "32b" else {}),
+        **(_phase1c(a, _ops_1e(lanes, amt, a.run_id)["rerun_items"]) if a.model == "32b" and a.sample != "1h"
+           else {}),
+        **(_run_h(a, run, _ops_1e(lanes, amt, a.run_id)["rerun_items"]) if a.sample == "1h" else {}),
         "expectation": a.expectation or "compiled > raw (Phase 1: raw-style context, no reasoning, 4/30)",
         **({"why": a.why} if a.why else {}),
     }
     (P["base"] / "preregistration.json").write_text(json.dumps(prereg, indent=2, sort_keys=True) + "\n")
     save_state(a.run_id, {"run_id": a.run_id, "phase": "1b", "model_key": a.model, "compiler": a.compiler,
-                          "design": design, "market": a.market,
+                          "design": design, "market": a.market if a.sample != "1h" else None,
+                          **({"arms": ["compiled"], "queue_check": True, "rerun_window_s": 1800,
+                              "market_policy": "waiting_48gb_plus", "sample": "1h"} if a.sample == "1h" else {}),
                           "lanes": lanes, **({"shards": shards} if shards else {}), "prepared_at": time.time()})
     n_anch = sum(1 for v in lanes.values() if v == "payouts-need-proof")
     log(f"prepared {len(run['payouts'])} payouts x {len(task.ARMS)} arms = {len(lines)} lines; {n_anch} over $500; "
@@ -344,6 +404,17 @@ def cmd_nosana(a) -> None:
         if a.market != jd_mod.MARKET_3090:
             sys.exit(f"--market {a.market} differs from the pre-registered market {state['market']}")
         a.market = state["market"]  # the default flag value: use the run's own market
+    if state.get("market_policy") == "waiting_48gb_plus" and not (state.get("batch") or {}).get("ok"):
+        # run h: the cheapest 48 GB+ premium market whose queue on Solana has a node waiting, chosen now
+        pairs = nodes_mod.waiting_nodes(a.rpc)
+        if not pairs:
+            sys.exit("no node waiting in any 48 GB+ premium market; not posting")
+        a.market = pairs[0][0]
+        state["market"] = a.market
+        state.setdefault("market_chosen", []).append({"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                                      "market": a.market, "node": pairs[0][1],
+                                                      "waiting": [list(x) for x in pairs]})
+        log(f"market: {nodes_mod.PREMIUM_48GB_PLUS[a.market][0]} ({a.market}), node {pairs[0][1]} waiting")
     estimate = round(1.15 * MARKET_USD_PER_HOUR.get(a.market, 0.4), 3)
     run = json.loads(P["run"].read_text())
     lines = [json.loads(x) for x in P["inputs"].read_text().splitlines()]
@@ -700,8 +771,8 @@ def main(argv=None) -> None:
     p.add_argument("--model", choices=sorted(MODELS), default="7b", help="prepare only: the pinned model")
     p.add_argument("--why", default="", help="prepare only: why this run exists (goes in the pre-registration)")
     p.add_argument("--expectation", default="", help="prepare only: the stated expectation")
-    p.add_argument("--sample", choices=["1b", "1e"], default="1b", help="prepare only: run b's 60 or run e's 200")
-    p.add_argument("--compiler", choices=["v1", "v2"], default="v1", help="prepare only: the compiled arm's compiler")
+    p.add_argument("--sample", choices=["1b", "1e", "1h"], default="1b", help="prepare only: run b's 60 or run e's 200")
+    p.add_argument("--compiler", choices=["v1", "v2", "v3"], default="v1", help="prepare only: the compiled arm's compiler")
     a = p.parse_args(argv)
     {"prepare": cmd_prepare, "nosana": cmd_nosana, "issue": cmd_issue, "frontier": cmd_frontier}[a.cmd](a)
 

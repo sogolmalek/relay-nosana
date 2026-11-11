@@ -246,3 +246,87 @@ def test_frontier_column_issues_declared_receipts_the_gate_refuses_over_500(tmp_
         assert r["grade"] == "declared" and r["output"] == {"decision": "approve", "reason_code": "ok"}
         assert verdict(verify(r, None)) == 0
         assert gate.decide(r, 0, rules[r["rule"]["id"]])["action"] == want
+
+
+# ---------------------------------------------------------------- compiler v3 (run h): rules 4-5 as facts
+
+from relay_nosana.payouts.data import SEED_1H  # noqa: E402
+
+
+def _pool_1h():
+    return add_notes(generate(SEED_1H, PLAN_1E_POOL), SEED_1H)
+
+
+def _first_rule_v3(p, paid):
+    f = task.resolved_facts(p, paid)
+    order = [("seller_on_hold", f["seller_on_hold"][0]), ("duplicate", f["duplicate"][0]),
+             ("amount_mismatch", f["amount_mismatch"][0]), ("stale_price", task.fact_stale_price(p)[0]),
+             ("needs_approval", bool(task.old_unapproved_refunds(p)))]
+    return next((r for r, hit in order if hit), "ok")
+
+
+def test_v3_facts_agree_with_the_code_rules_over_run_h_pool():
+    """Rules 1-5 resolved by v3 give exactly what the notes-blind rules give, on every payout of the fresh pool."""
+    pool = _pool_1h()
+    for p in pool["payouts"]:
+        assert _first_rule_v3(p, pool["paid_invoices"]) == truth_rules_only(p, pool["paid_invoices"])["reason_code"]
+
+
+def _sale(sku, date, cents):
+    return {"type": "sale", "sku": sku, "qty": 1, "sale_date": date, "unit_price_cents": cents}
+
+
+@pytest.mark.parametrize("line,hit", [
+    (_sale("PRO", "2026-11-05", 4500), True),    # old price after the change
+    (_sale("PRO", "2026-11-03", 4500), True),    # on the effective date
+    (_sale("PRO", "2026-11-02", 4500), False),   # before the change
+    (_sale("PRO", "2026-11-05", 4200), False),   # new price
+    (_sale("TEAM", "2026-11-05", 12900), False),  # never repriced
+])
+def test_v3_stale_price_fact(line, hit):
+    p = _payout(lines=[line])
+    assert task.fact_stale_price(p)[0] is hit
+
+
+@pytest.mark.parametrize("order_date,approval,hit", [
+    ("2026-10-09", None, True),        # 31 days before the 2026-11-09 payout: more than 30
+    ("2026-10-10", None, False),       # exactly 30 days: not more than 30
+    ("2026-10-25", None, False),       # recent
+    ("2026-10-01", "FA-1234", False),  # old but approved on the line
+])
+def test_v3_refund_fact(order_date, approval, hit):
+    line = {"type": "refund", "order_id": "O-1", "order_date": order_date, "refund_cents": 1000}
+    if approval:
+        line["approval_id"] = approval
+    p = _payout(lines=[_sale("TEAM", "2026-11-05", 12900), line])
+    assert bool(task.old_unapproved_refunds(p)) is hit
+    assert ("APPLIES unless a support note approves it" in task.facts_header_v3(p, {})) is hit
+
+
+def test_v3_message_states_rules_1_to_5_and_hides_the_intent():
+    pool = _pool_1h()
+    for p in pool["payouts"][:80]:
+        line = task.input_line_1h(p, pool["paid_invoices"])
+        user = line["messages"][1]["content"]
+        for i in range(1, 6):
+            assert f"- rule {i} " in user
+        assert "intent" not in user and not any(n["intent"] in user for n in p.get("notes", []))
+        assert line["messages"][0]["content"] == task.SYSTEM_1E
+
+
+def test_run_h_seed_is_fresh_and_excludes_earlier_payouts():
+    from relay_nosana.payouts.data import SEED, SEED_1B, SEED_1E
+    from relay_nosana.payouts.run_fresh import SEED_FRESH
+    assert SEED_1H not in {SEED, SEED_1B, SEED_1E, SEED_FRESH}
+    seen = set()
+    for r in ("payouts-2026-11-10b", "payouts-2026-11-10e"):
+        seen |= {content_key(p) for p in json.loads((ROOT / "runs" / r / "payout_run.json").read_text())["payouts"]}
+    h = draw(_pool_1h(), N_1E, SEED_1H, seen)
+    assert len(h["payouts"]) == 200 and not ({content_key(p) for p in h["payouts"]} & seen)
+
+
+def test_run_e_and_g_inputs_unchanged_by_v3():
+    e = json.loads((ROOT / "runs" / "payouts-2026-11-10e" / "payout_run.json").read_text())
+    want = (ROOT / "runs" / "payouts-2026-11-10e" / "inputs.jsonl").read_bytes()
+    lines = [task.input_line_1e(p, e["paid_invoices"], arm) for p in e["payouts"] for arm in task.ARMS]
+    assert jd_mod.inputs_bytes(lines) == want
