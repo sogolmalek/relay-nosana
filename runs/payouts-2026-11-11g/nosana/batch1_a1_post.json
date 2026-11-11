@@ -1,0 +1,16 @@
+{
+  "balance_before": {
+    "assignedCredits": 10,
+    "reservedCredits": 0,
+    "settledCredits": 3.643
+  },
+  "body": {
+    "message": "Credit-based jobs are only allowed on premium markets. Community and other market types are not supported for credit payments."
+  },
+  "http_status": 403,
+  "request": {
+    "ipfsHash": "QmamihXvt2A2dVcWuo7XB5VJszGXboA1Yut1itY6o3Nm8o",
+    "market": "8kGjraXnXirSQcgjxTbFBK7QTBVz9fm9ufSRVr3DqBTV",
+    "timeout": 3600
+  }
+}

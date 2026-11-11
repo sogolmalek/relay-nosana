@@ -1,6 +1,11 @@
 {
+  "budget_baseline": 3.536,
   "compiler": "v2",
   "design": "1e",
+  "known_nodes": {
+    "bad": [],
+    "good": []
+  },
   "lanes": {
     "P-0101": "payouts-need-proof",
     "P-0102": "payouts-need-proof",
@@ -203,7 +208,7 @@
     "P-0309": "payouts-need-proof",
     "P-0310": "payouts-default"
   },
-  "market": "8kGjraXnXirSQcgjxTbFBK7QTBVz9fm9ufSRVr3DqBTV",
+  "market": "EjryZ6XEthz3z7nnLfjXBYafyn7VyHgChfbfM47LfAao",
   "model_key": "32b",
   "phase": "1b",
   "prepared_at": 1794369864.704545,

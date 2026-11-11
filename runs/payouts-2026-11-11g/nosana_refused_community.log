@@ -1,0 +1,16 @@
+[07:35:00] batch1: job definition QmamihXvt2A2dVcWuo7XB5VJszGXboA1Yut1itY6o3Nm8o pinned to Nosana's and our Pinata accounts (38132 bytes)
+[07:35:02] batch attempt 1: open market (no known-good node idle: open market)
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 635, in <module>
+    main()
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 631, in main
+    {"prepare": cmd_prepare, "nosana": cmd_nosana, "issue": cmd_issue, "frontier": cmd_frontier}[a.cmd](a)
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 320, in cmd_nosana
+    out = run_batch(conn=conn, run_id=a.run_id, tag=key, jobdef=jd, market=a.market, rpc=a.rpc, jobs=jobs,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/lane.py", line 162, in run_batch
+    raise RuntimeError(f"POST /jobs/list: HTTP {s} {resp}")
+RuntimeError: POST /jobs/list: HTTP 403 {'message': 'Credit-based jobs are only allowed on premium markets. Community and other market types are not supported for credit payments.'}
+exit 1
