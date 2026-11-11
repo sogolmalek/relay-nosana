@@ -1,0 +1,10 @@
+{
+  "http_status": 200,
+  "body": {
+    "tx": "3HQsbyNq4tKzgYeT9cFgpaJ1pioZ8p3LnZuTKLY1QnHZXBEN6yrcnGRJVQbqbRaThXpmoAKCmNHWsZyYraqrS8nT",
+    "job": "7G9XC3pGBzHNHytfsPrx9h8Udo3gmkLMNoUVpbHqmwdY",
+    "delisted": true,
+    "outcome": "delisted"
+  },
+  "stopped_by": "manual: runner terminated, job stopped via the Jobs API"
+}

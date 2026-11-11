@@ -1,5 +1,29 @@
 {
-  "budget_baseline": 3.536,
+  "attempts_not_picked_up": [
+    {
+      "cost_usd": 0.0,
+      "files": "refused_community/",
+      "market": "8kGjraXn (A40 Community)",
+      "outcome": "refused HTTP 403: credit jobs only on premium markets"
+    },
+    {
+      "cost_usd": 0.01,
+      "files": "stopped_a6000/",
+      "job": "5ZeYEydJnWtqFwCohqztzJmTiH2xvBf895fZJfhefRfX",
+      "market": "EjryZ6XE (A6000 PREMIUM)",
+      "outcome": "delisted",
+      "queued_min": 13
+    },
+    {
+      "cost_usd": 0.01,
+      "files": "stopped_a100_40/",
+      "job": "7G9XC3pGBzHNHytfsPrx9h8Udo3gmkLMNoUVpbHqmwdY",
+      "market": "F3aGGSMb (A100 40GB PREMIUM)",
+      "outcome": "delisted",
+      "queue_onchain": "4 jobs waiting, ours 4th, no nodes",
+      "queued_min": 14
+    }
+  ],
   "compiler": "v2",
   "design": "1e",
   "lanes": {
@@ -205,6 +229,14 @@
     "P-0310": "payouts-default"
   },
   "market": "F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB",
+  "market_queues_2026-11-11T04:33Z": {
+    "A100 40GB PREMIUM": "4 jobs waiting",
+    "A100 80GB PREMIUM": "14 jobs waiting",
+    "A40 PREMIUM": "empty",
+    "A6000 PREMIUM": "empty",
+    "NVIDIA 3090 PREMIUM (24 GB)": "9 nodes waiting",
+    "NVIDIA 6000 Ada PREMIUM (48 GB)": "1 node waiting"
+  },
   "model_key": "32b",
   "phase": "1b",
   "prepared_at": 1794369864.704545,
@@ -414,5 +446,6 @@
       "P-0309",
       "P-0310"
     ]
-  ]
+  ],
+  "status": "pre-registered; no job has run; waiting for the owner's market decision"
 }
