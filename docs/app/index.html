@@ -25,24 +25,98 @@
 
   <div class="banner" id="banner" data-testid="replay-banner"></div>
 
-  <section class="step" id="s1">
+  <div id="tabs-top"></div>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Steps of the demo">
+    <button role="tab" id="tab-guide" data-tab="guide" data-testid="tab-guide" aria-controls="p-guide">Start here</button>
+    <button role="tab" id="tab-run" data-tab="run" data-testid="tab-run" aria-controls="s1"><span class="k">1</span>The run</button>
+    <button role="tab" id="tab-route" data-tab="route" data-testid="tab-route" aria-controls="s2"><span class="k">2</span>Route</button>
+    <button role="tab" id="tab-job" data-tab="job" data-testid="tab-job" aria-controls="s3"><span class="k">3</span>Nosana job</button>
+    <button role="tab" id="tab-receipts" data-tab="receipts" data-testid="tab-receipts" aria-controls="s5"><span class="k">4</span>Receipts</button>
+    <button role="tab" id="tab-verify" data-tab="verify" data-testid="tab-verify" aria-controls="p-verify"><span class="k">5</span>Verify &amp; tamper</button>
+    <button role="tab" id="tab-review" data-tab="review" data-testid="tab-review" aria-controls="s7"><span class="k">6</span>Human review</button>
+    <button role="tab" id="tab-pay" data-tab="pay" data-testid="tab-pay" aria-controls="s8"><span class="k">7</span>Pay</button>
+  </nav>
+
+  <section class="step guide" id="p-guide" data-panel="guide" role="tabpanel" aria-labelledby="tab-guide" data-testid="guide">
+    <div class="n">Start here</div>
+    <h2>What this page shows, in two minutes</h2>
+    <p class="lead">A marketplace pays its sellers every night, and an AI prepares the list of payments. This demo shows a way to stop a wrong payment before it goes out: every AI decision about a large payout comes with a receipt that anyone can check, and the money moves only if the receipt checks out.</p>
+
+    <div class="grid2">
+      <div class="box">
+        <h3>The story</h3>
+        <ol class="plain">
+          <li>Tonight's payout run arrives. Some payouts in it are wrong: a price that changed last week, a seller on a fraud hold, an invoice that was already paid.</li>
+          <li>The team has one rule: <b>a payout over $500 needs proof.</b></li>
+          <li>For those payouts, Relay runs the check on an open AI model on <b>Nosana</b>, a network of GPUs. Nosana keeps a public record of each job: what ran is stored on IPFS, and which machine ran it and when is on the Solana blockchain.</li>
+          <li>Relay writes one <b>receipt</b> per payout. The receipt points at that public record.</li>
+          <li>A <b>gate</b> pays a payout only when its receipt checks out and the decision is "approve". Everything else is held or sent to a person.</li>
+        </ol>
+      </div>
+      <div class="box">
+        <h3>Why it matters</h3>
+        <p class="tight">An ordinary AI service leaves no public record of what it ran, so you have to take its word. Here you don't have to trust Relay, the AI or this page. Your own browser fetches the records from Solana and IPFS and does the checking.</p>
+        <h3>What is real on this page</h3>
+        <ul class="plain">
+          <li><b>Real:</b> the Nosana jobs, the Solana transactions, the receipts, and every check your browser runs.</li>
+          <li><b>Test money:</b> the payments are on Solana's test network (devnet).</li>
+          <li><b>Sample data:</b> the sellers, payouts and team decisions are made up.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Take the tour</h3>
+    <ol class="tour">
+      <li><button class="link" data-goto="run">The run</button><span>Read tonight's payouts and the team's rules.</span></li>
+      <li><button class="link" data-goto="route">Route</button><span>See which payouts need proof and which don't.</span></li>
+      <li><button class="link" data-goto="job">Nosana job</button><span>Follow the job from posting to result. Every link opens the public record.</span></li>
+      <li><button class="link" data-goto="receipts">Receipts</button><span>Press "Verify every receipt in your browser". This is the main event.</span></li>
+      <li><button class="link" data-goto="verify">Verify &amp; tamper</button><span>Open one receipt, watch the six checks, then try to forge it.</span></li>
+      <li><button class="link" data-goto="review">Human review</button><span>See what the gate won't decide alone, and why.</span></li>
+      <li><button class="link" data-goto="pay">Pay</button><span>See which payouts were paid, each tied to its receipt.</span></li>
+    </ol>
+
+    <div class="note"><b>What you'll see in the first two runs.</b> The small open model that was tested made too many mistakes. So Relay did not let it approve any payout over $500, and those all went to a person. Four small payouts were paid, in the first run. That is the system doing its job: it measured the model and kept it away from the money.</div>
+
+    <details class="gloss">
+      <summary>Words used on this page</summary>
+      <dl>
+        <dt>Receipt</dt><dd>A small file that says what was decided for one payout and where the public record of that work is.</dd>
+        <dt>Anchored</dt><dd>The receipt points at a Nosana job on Solana and IPFS, so anyone can check it.</dd>
+        <dt>Declared</dt><dd>The receipt only repeats what an AI provider says it ran. There is no public record to check it against.</dd>
+        <dt>Node</dt><dd>One computer with a GPU on the Nosana network.</dd>
+        <dt>Re-run</dt><dd>The same work run again on a second node, to see whether the answers agree.</dd>
+        <dt>The bar</dt><dd>How accurate a model must be, measured against known answers, before it may decide on payouts.</dd>
+        <dt>Gate</dt><dd>The last step before money moves. It pays, holds, sends to a person, or refuses.</dd>
+        <dt>Tamper</dt><dd>To change a receipt after the fact, as a forger would.</dd>
+      </dl>
+    </details>
+
+    <p class="muted small">One limit, stated plainly: a receipt proves which job ran, on which node, and when. It does not prove the node computed honestly. Re-runs on a second node cover that.</p>
+    <div class="actions"><button class="primary" data-goto="run" data-testid="start-tour">Start the tour</button></div>
+  </section>
+
+  <section class="step" id="s1" data-panel="run" role="tabpanel" aria-labelledby="tab-run">
     <div class="n">1 · The run</div>
     <h2 id="run-title">Loading…</h2>
+    <p class="hint"><b>What this shows.</b> Tonight's payout run, the team decisions that apply to it, and the rules that say which payouts need proof. Nothing to press here: read it, then go on.</p>
     <div class="grid2">
       <div class="box"><h3>Decisions in force</h3><ul id="decisions" class="plain"></ul></div>
       <div class="box"><h3>Proof rules (the real config)</h3><div id="rules"></div></div>
     </div>
   </section>
 
-  <section class="step" id="s2">
+  <section class="step" id="s2" data-panel="route" role="tabpanel" aria-labelledby="tab-route">
     <div class="n">2 · Route</div>
     <h2>Which payouts need proof</h2>
+    <p class="hint"><b>What this shows.</b> Relay sorts the payouts by the rule. Payouts over $500 need an anchored receipt, so their check runs on Nosana. The rest can be checked by any AI and get a declared receipt.</p>
     <div class="big" id="route"></div>
   </section>
 
-  <section class="step" id="s3">
+  <section class="step" id="s3" data-panel="job" role="tabpanel" aria-labelledby="tab-job">
     <div class="n">3 · Run on Nosana</div>
     <h2>One batch job, and a re-run on a second node</h2>
+    <p class="hint"><b>What this shows.</b> The payouts that need proof ran together as one job on a Nosana GPU node. A sample ran again on a second node. <b>Try it:</b> press any link to open the public record on Solana or IPFS.</p>
     <div class="actions">
       <button class="primary" disabled title="next step: needs the Relay server" data-testid="run-live">Run live on Nosana (next step)</button>
       <span class="muted">Showing a replay of a real job. No credits are spent on this page.</span>
@@ -50,9 +124,10 @@
     <div id="jobs" class="jobs"></div>
   </section>
 
-  <section class="step" id="s5">
+  <section class="step" id="s5" data-panel="receipts" role="tabpanel" aria-labelledby="tab-receipts">
     <div class="n">4 · Receipts</div>
     <h2>One receipt per payout</h2>
+    <p class="hint"><b>What this shows.</b> Every payout and its receipt. <b>Try it:</b> press the blue button. Your browser fetches the records from Solana and IPFS and checks every receipt, without asking Relay. Then press <b>open</b> at the end of any row to look inside one.</p>
     <div class="actions">
       <button class="primary" id="verify-all" data-testid="verify-all">Verify every receipt in your browser</button>
       <span class="muted" id="verify-all-status" data-testid="verify-all-status"></span>
@@ -62,37 +137,48 @@
     </tr></thead><tbody></tbody></table></div>
   </section>
 
-  <section class="step" id="s6" hidden>
-    <div class="n">5 · Verify in your browser</div>
-    <h2 id="detail-title"></h2>
-    <div class="grid2">
-      <div>
-        <div class="actions">
-          <button class="primary" id="verify-one" data-testid="verify-one">Verify</button>
-          <a id="receipt-json" target="_blank" rel="noopener">receipt JSON</a>
+  <div id="p-verify" data-panel="verify" role="tabpanel" aria-labelledby="tab-verify">
+    <section class="step" id="s6" hidden>
+      <div class="n">5 · Verify &amp; tamper</div>
+      <h2 id="detail-title"></h2>
+      <p class="hint"><b>What this shows.</b> Six checks compare this receipt with the public record. <b>Try it:</b> press Verify. Then press a tamper button: each one edits a copy of the receipt the way a forger would, and you can watch which check catches it.</p>
+      <div class="grid2">
+        <div>
+          <div class="actions">
+            <button class="primary" id="verify-one" data-testid="verify-one">Verify</button>
+            <a id="receipt-json" target="_blank" rel="noopener">receipt JSON</a>
+          </div>
+          <ul class="checks" id="checks" data-testid="checks"></ul>
+          <div class="evidence" id="evidence"></div>
         </div>
-        <ul class="checks" id="checks" data-testid="checks"></ul>
-        <div class="evidence" id="evidence"></div>
+        <div>
+          <div class="n">Tamper</div>
+          <p class="muted small">Each button edits a copy of this receipt the way a forger would (and recomputes its <code>receipt_id</code>), then runs the same verifier and the gate.</p>
+          <div class="tampers" id="tampers"></div>
+          <div id="tamper-out" data-testid="tamper-out"></div>
+        </div>
       </div>
-      <div>
-        <div class="n">6 · Tamper</div>
-        <p class="muted small">Each button edits a copy of this receipt the way a forger would (and recomputes its <code>receipt_id</code>), then runs the same verifier and the gate.</p>
-        <div class="tampers" id="tampers"></div>
-        <div id="tamper-out" data-testid="tamper-out"></div>
-      </div>
-    </div>
-  </section>
+    </section>
+    <section class="step" id="verify-empty" data-testid="verify-empty">
+      <div class="n">5 · Verify &amp; tamper</div>
+      <h2>Pick a receipt first</h2>
+      <p>Go to Receipts and press <b>open</b> at the end of any row. Its six checks and the tamper buttons appear here.</p>
+      <div class="actions"><button class="primary" data-goto="receipts">Go to Receipts</button></div>
+    </section>
+  </div>
 
-  <section class="step" id="s7">
-    <div class="n">7 · Human review queue</div>
+  <section class="step" id="s7" data-panel="review" role="tabpanel" aria-labelledby="tab-review">
+    <div class="n">6 · Human review queue</div>
     <h2>What the gate won't decide alone</h2>
+    <p class="hint"><b>What this shows.</b> The payouts the gate won't pay by itself, each with its reason. A person decides these. A red outline marks a payout where two nodes gave different answers to the same input.</p>
     <div id="bar-note" class="note" data-testid="bar-note"></div>
     <div id="queue" data-testid="review-queue"></div>
   </section>
 
-  <section class="step" id="s8">
-    <div class="n">8 · Pay</div>
+  <section class="step" id="s8" data-panel="pay" role="tabpanel" aria-labelledby="tab-pay">
+    <div class="n">7 · Pay</div>
     <h2>The gate pays only verified approvals, on Solana devnet</h2>
+    <p class="hint"><b>What this shows.</b> What the gate did with each payout. It paid only receipts that verified and said "approve". Each payment carries its receipt's id as a memo. <b>Try it:</b> press the blue button to re-check those payments on Solana's test network.</p>
     <div class="actions">
       <button class="primary" id="check-payouts" data-testid="check-payouts">Check the devnet payouts in your browser</button>
       <span class="muted" id="payouts-status" data-testid="payouts-status"></span>
@@ -102,6 +188,12 @@
       <th>Payout</th><th class="r">Amount</th><th>Gate</th><th>Why</th><th>Devnet tx (memo = receipt_id)</th>
     </tr></thead><tbody></tbody></table></div>
   </section>
+
+  <div class="pager" id="pager">
+    <button id="tab-prev" data-testid="tab-prev">Back</button>
+    <span class="muted small" id="pager-pos" data-testid="pager-pos"></span>
+    <button class="primary" id="tab-next" data-testid="tab-next">Next</button>
+  </div>
 
   <footer class="foot">
     <div><b>Verify it yourself:</b> <code>pip install ./relay_verify</code> from the repo, then <code>relay-verify runs/&lt;run&gt;/receipts/P-0101.json</code>.
@@ -113,5 +205,6 @@
   </footer>
 </div>
 <script type="module" src="app.js"></script>
+<script type="module" src="tabs.js"></script>
 </body>
 </html>

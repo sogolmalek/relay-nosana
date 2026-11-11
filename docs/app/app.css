@@ -81,3 +81,42 @@ ul.checks .why{color:var(--muted);font-size:12.5px;word-break:break-word}
   .top h1{font-size:19px}
 }
 .step,.q,.note,.banner,.foot{overflow-wrap:anywhere}
+
+/* tabs: one step per tab (tabs.js). Without the script, .tabbed is never set and every panel shows. */
+.tabs{position:sticky;top:0;z-index:5;display:flex;gap:4px;min-width:0;overflow-x:auto;background:var(--paper);
+  padding:8px 0;border-bottom:1px solid var(--rule);scrollbar-width:thin}
+.tabs button{flex:0 0 auto;white-space:nowrap;border:1px solid transparent;background:none;color:var(--muted);padding:8px 12px}
+.tabs button:hover{color:var(--ink);background:var(--panel)}
+.tabs button[aria-selected="true"]{color:var(--ink);background:var(--panel);border-color:var(--rule);box-shadow:inset 0 -2px 0 var(--accent)}
+.tabs button:focus-visible,.pager button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.tabs .k{font:500 12px var(--mono);color:var(--accent);margin-right:7px}
+.app:not(.tabbed) .tabs,.app:not(.tabbed) .pager,.app:not(.tabbed) #verify-empty{display:none}
+.tabbed [data-panel].off{display:none}
+#s6:not([hidden]) + #verify-empty{display:none}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pager[hidden]{display:none}
+.pager #tab-next{margin-left:auto}
+.hint{margin:0 0 14px;padding:10px 12px;border-radius:8px;background:var(--accent-tint);font-size:14px;max-width:86ch}
+.lead{font-size:16px;margin:0 0 16px;max-width:76ch}
+.guide h3{font:600 14px/1.2 var(--body);margin:18px 0 8px}
+.guide .box h3{margin-top:0}
+.guide .box h3 + .tight{margin-top:0}
+.guide .box p + h3{margin-top:14px}
+ol.plain{margin:0;padding-left:20px;font-size:14px}
+ol.plain li{margin:5px 0}
+ol.tour{list-style:none;margin:0 0 16px;padding:0;counter-reset:tour;display:grid;gap:6px;font-size:14px}
+ol.tour li{counter-increment:tour;display:grid;grid-template-columns:22px 150px minmax(0,1fr);gap:8px;align-items:baseline}
+ol.tour li::before{content:counter(tour);font:500 12px var(--mono);color:var(--accent)}
+ol.tour button{text-align:left;font-weight:500}
+ol.tour span{color:var(--muted)}
+.gloss{margin:0 0 14px;font-size:14px}
+.gloss summary{cursor:pointer;font-weight:600}
+.gloss dl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:6px 12px;margin:10px 0 0}
+.gloss dt{font-weight:600}
+.gloss dd{margin:0;color:var(--muted)}
+@media (max-width:720px){
+  ol.tour li{grid-template-columns:22px minmax(0,1fr)}
+  ol.tour span{grid-column:2}
+  .gloss dl{grid-template-columns:minmax(0,1fr);gap:0}
+  .gloss dd{margin-bottom:8px}
+}
