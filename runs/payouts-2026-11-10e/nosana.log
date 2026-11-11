@@ -1,0 +1,89 @@
+[23:15:02] batch1: job definition QmUrMQER3B7mHUEMqZipuos2rddXdTAW7bFjS6Dei9pgMr pinned to Nosana's and our Pinata accounts (38127 bytes)
+[23:15:07] batch attempt 1: open market (no known-good node idle: open market)
+[23:15:11] batch1_a1: posted 2HsP4E4CdhKcmrScFVwURerReKERhEY7vHiPP5gusxFY (node any), reserved $0.175
+[23:15:14] batch1_a1: running on 6YDndB2aWPEK5vDdvJCVHPe9hs7Lf7ZXyQbHADY2FmKC (picked up 4s after posting)
+[23:43:38] batch1_a1: FAILED node=6YDndB2aWPEK5vDdvJCVHPe9hs7Lf7ZXyQbHADY2FmKC status=failed cost=$0.062 error=result status is 'failed', not 'success'; op 'relay-batch1' exit code 3; op 'relay-batch1' status 'failed'; deadline stage=load elapsed_s=1260
+[23:43:49] batch attempt 2: Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst (known-good node, idle (best load 262.0 s))
+[23:43:53] batch1_a2: posted 8Q6HMS8ErRfv3JMQ51pGACbjRg1U1oeAMSbLfdF44jzr (node Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst), reserved $0.175
+[23:43:57] batch1_a2: running on Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst (picked up 4s after posting)
+[00:49:39] batch1_a2: OK node=Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst status=success cost=$0.019 error=None
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 596, in <module>
+    p.add_argument("--expectation", default="", help="prepare only: the stated expectation")
+    ^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 592, in main
+    p.add_argument("--max-attempts", type=int, default=4)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 281, in cmd_nosana
+    log(f"batch attempt {attempt}: {node or 'open market'} ({why})")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/lane.py", line 127, in run_batch
+    pins = pin_both(jd_bytes, f"relay-{run_id}-{tag}.json")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/nosana/ipfs.py", line 80, in pin_both
+    s, resp = _pin_file(data, name, jwt)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/nosana/ipfs.py", line 67, in _pin_file
+    with urllib.request.urlopen(req, timeout=120) as r:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/urllib/request.py", line 215, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/urllib/request.py", line 515, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/urllib/request.py", line 532, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/urllib/request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/urllib/request.py", line 1405, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/urllib/request.py", line 1361, in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 1478, in getresponse
+    response.begin()
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 343, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/http/client.py", line 304, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/socket.py", line 720, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/ssl.py", line 1264, in recv_into
+    return self.read(nbytes, buffer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.16/Frameworks/Python.framework/Versions/3.12/lib/python3.12/ssl.py", line 1116, in read
+    return self._sslobj.read(len, buffer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: The read operation timed out
+exit 1
+[07:22:18] batch2: job definition QmY6NTAmBhkSWByHiDuEFbDBXibsQoSjaTzsqincdE5xFU pinned to Nosana's and our Pinata accounts (37643 bytes)
+[07:22:20] batch attempt 1: 3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV (known-good node, idle (best load 1233.3 s))
+[07:22:25] batch2_a1: posted 6xmauynhZxqxjD4bzkuzPLz3bKeXHF3fnS9yEDCyWm5h (node 3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV), reserved $0.175
+[07:22:28] batch2_a1: running on 3hcXmBj7BoQpnrxYJpKqrf1cqD85JKeS7d2bZpTbUqrV (picked up 5s after posting)
+[07:31:14] batch2_a1: stopped 6xmauynhZxqxjD4bzkuzPLz3bKeXHF3fnS9yEDCyWm5h: HTTP 200 ended
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 604, in <module>
+    main()
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 600, in main
+    {"prepare": cmd_prepare, "nosana": cmd_nosana, "issue": cmd_issue, "frontier": cmd_frontier}[a.cmd](a)
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 289, in cmd_nosana
+    out = run_batch(conn=conn, run_id=a.run_id, tag=key, jobdef=jd, market=a.market, rpc=a.rpc, jobs=jobs,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/lane.py", line 165, in run_batch
+    row = _watch_and_record(conn=conn, run_id=run_id, tag=tag, attempt=n, saved=saved, t_post=t_post,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/lane.py", line 217, in _watch_and_record
+    time.sleep(20)
+KeyboardInterrupt
+exit 130

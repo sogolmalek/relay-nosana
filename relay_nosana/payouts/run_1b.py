@@ -45,12 +45,20 @@ ROOT_RUNS = ROOT / "runs"
 PHASE1B_CAP_USD = 2.0
 PHASE1B_BASELINE = 3.405   # settled credits when Phase 1b started: the cap counts every Phase 1b job from here
 SHARD_PAYOUTS = 100        # payouts per job when sharded: 200 result rows (~140 KB) stay in one 256 KiB block
-DEADLINE_S = 1200          # in-container deadline: 20 minutes
-RUN_WAIT_S = DEADLINE_S + 300
+DEADLINE_S = 1200          # in-container deadline: 20 minutes (7B, 14B)
+DEADLINES_S = {"32b": 2700}  # 32B AWQ (~19 GB download): 45 minutes (Sogol, 2026-11-11)
+
+
+def deadline_for(model_key: str) -> int:
+    return DEADLINES_S.get(model_key, DEADLINE_S)
 MODELS = {  # pinned by commit; a run's model is fixed in its pre-registration
     "7b": (jd_mod.MODEL, jd_mod.REVISION),
     "14b": ("Qwen/Qwen2.5-14B-Instruct-AWQ", "539535859b135b0244c91f3e59816150c8056698"),
+    "32b": ("Qwen/Qwen2.5-32B-Instruct-AWQ", "5c7cb76a268fc6cfbb9c4777eb24ba6e27f9ee6c"),  # run g, A6000 (48 GB)
 }
+MARKET_A6000 = "EjryZ6XEthz3z7nnLfjXBYafyn7VyHgChfbfM47LfAao"  # NVIDIA A6000 PREMIUM, vLLM v0.10.2 cached
+MARKET_A40_COMMUNITY = "8kGjraXnXirSQcgjxTbFBK7QTBVz9fm9ufSRVr3DqBTV"  # NVIDIA A40 Community (48 GB), v0.10.2 cached
+MARKET_USD_PER_HOUR = {jd_mod.MARKET_3090: 0.1745, MARKET_A6000: 0.3636, MARKET_A40_COMMUNITY: 0.27273}  # Phase 0 discover; a post reserves 1 h
 
 
 def _model(state: dict) -> tuple[str, str]:
@@ -66,7 +74,7 @@ DESIGNS = {  # design -> (system prompt, output schema). 1b: run b. 1e: run e, w
 def build_batch(lines: list[dict], run_id: str, tag: str, model_key: str = "7b", design: str = "1b"):
     model, revision = MODELS[model_key]
     return jd_mod.build(lines, DESIGNS[design][1], run_id, tag, task.TASK, model=model, revision=revision,
-                        phase="1b", keep_schema_order=True, output_keys=task.OUTPUT_KEYS_1B, deadline_s=DEADLINE_S)
+                        phase="1b", keep_schema_order=True, output_keys=task.OUTPUT_KEYS_1B, deadline_s=deadline_for(model_key))
 
 
 # ---------------------------------------------------------------- prepare + pre-registration
@@ -149,6 +157,31 @@ def _threshold(n: int, ci_low: float) -> dict:
             "wilson_low_one_fewer": round(task.wilson(k - 1, n)[0], 4)}
 
 
+def _phase1c(a, rerun_items: int) -> dict:
+    """Phase 1c (Sogol, 2026-11-11): skip the smaller models; 32B AWQ on a 48 GB market; $2 for all of Phase 1c."""
+    hourly = MARKET_USD_PER_HOUR.get(a.market)
+    return {
+        "phase": "1c",
+        "cost_estimate_usd": {
+            "basis": f"market {a.market} at ${hourly}/hour; each post reserves 1 hour. 32B AWQ is ~19 GB to "
+                     "download; no 32B job has run on Nosana before, so the time is not measured yet",
+            "jobs": f"batch1 (200 lines), batch2 (200 lines), re-run ({rerun_items} lines): 3 Nosana jobs, "
+                    "each downloads the model",
+            "expected": f"{round(3 * hourly * 0.25, 2)}-{round(3 * hourly * 0.45, 2)} (15-27 min per job)",
+            "bad_node": f"a download that hits the 45-min deadline ~${round(hourly * 0.8, 2)}",
+            "worst_case": "bounded by the cap: Budget.check refuses any post that could pass $2.00",
+            "frontier": "deferred: the owner's Claude Code limit resets Nov 14; no API key",
+        },
+        "cap_usd": 2.0,
+        "cap_scope": "USD on Nosana, all of Phase 1c, from settled credits 3.536, including run e's stopped "
+                     "attempts ($0.107 settled before this pre-registration)",
+        "run_e": "stopped by the owner, partial, not counted; its partial results are not used for any decision",
+        "market_choice": "48 GB class, checked for idle nodes on 2026-11-11: A6000 PREMIUM 1, A40 Community 3, "
+                         "A40 PREMIUM 0, A100 40GB Community 47 (fallback). A40 Community is the only 48 GB market "
+                         "with two or more idle nodes, which the batch + second-node re-run need",
+    }
+
+
 def cmd_prepare(a) -> None:
     P = paths(a.run_id)
     if (P["base"] / "preregistration.json").exists():
@@ -224,14 +257,15 @@ def cmd_prepare(a) -> None:
         "routing": "compiled arm if its CI lower bound >= 0.90, else human review for payouts > $500",
         "rerun": proof["rerun"], "rerun_arm": "compiled",
         "nodes": "known-good node list per market from measured outcomes (relay_nosana/nosana/nodes.py), "
-                 "open market as fallback; in-container deadline 20 min",
+                 f"open market as fallback; in-container deadline {deadline_for(a.model) // 60} min",
         "cap_usd": PHASE1B_CAP_USD,
+        **(_phase1c(a, _ops_1e(lanes, amt, a.run_id)["rerun_items"]) if a.model == "32b" else {}),
         "expectation": a.expectation or "compiled > raw (Phase 1: raw-style context, no reasoning, 4/30)",
         **({"why": a.why} if a.why else {}),
     }
     (P["base"] / "preregistration.json").write_text(json.dumps(prereg, indent=2, sort_keys=True) + "\n")
     save_state(a.run_id, {"run_id": a.run_id, "phase": "1b", "model_key": a.model, "compiler": a.compiler,
-                          "design": design,
+                          "design": design, "market": a.market,
                           "lanes": lanes, **({"shards": shards} if shards else {}), "prepared_at": time.time()})
     n_anch = sum(1 for v in lanes.values() if v == "payouts-need-proof")
     log(f"prepared {len(run['payouts'])} payouts x {len(task.ARMS)} arms = {len(lines)} lines; {n_anch} over $500; "
@@ -253,6 +287,11 @@ def _tried(conn, run_id: str) -> set[str]:
 
 def cmd_nosana(a) -> None:
     P, state = paths(a.run_id), load_state(a.run_id)
+    if state.get("market") and a.market != state["market"]:
+        if a.market != jd_mod.MARKET_3090:
+            sys.exit(f"--market {a.market} differs from the pre-registered market {state['market']}")
+        a.market = state["market"]  # the default flag value: use the run's own market
+    estimate = round(1.15 * MARKET_USD_PER_HOUR.get(a.market, 0.4), 3)
     run = json.loads(P["run"].read_text())
     lines = [json.loads(x) for x in P["inputs"].read_text().splitlines()]
     by_id = {x["item_id"]: x for x in lines}
@@ -280,8 +319,8 @@ def cmd_nosana(a) -> None:
         jd, _, inputs_cid = build_batch(sub, a.run_id, key, model_key, state.get("design", "1b"))
         out = run_batch(conn=conn, run_id=a.run_id, tag=key, jobdef=jd, market=a.market, rpc=a.rpc, jobs=jobs,
                         budget=budget, fixtures=P["nosana"], image=jd_mod.IMAGE, weights=weights,
-                        inputs_cid=inputs_cid, node_for_attempt=batch_node, max_attempts=a.max_attempts,
-                        queue_wait_s=900, run_wait_s=RUN_WAIT_S)
+                        inputs_cid=inputs_cid, node_for_attempt=batch_node, estimate_usd=estimate, max_attempts=a.max_attempts,
+                        queue_wait_s=900, run_wait_s=deadline_for(model_key) + 300)
         state[key] = {"ok": out.ok, "job": out.job, "jobdef_cid": out.jobdef_cid, "inputs_cid": inputs_cid,
                       "account": out.account, "attempts": [r["job"] for r in out.attempts],
                       "result_file": out.result_file, **({"payouts": pids} if pids else {})}
@@ -313,8 +352,8 @@ def cmd_nosana(a) -> None:
         jd, _, inputs_cid = build_batch(sub, a.run_id, "rerun", model_key, state.get("design", "1b"))
         out = run_batch(conn=conn, run_id=a.run_id, tag="rerun", jobdef=jd, market=a.market, rpc=a.rpc, jobs=jobs,
                         budget=budget, fixtures=P["nosana"], image=jd_mod.IMAGE, weights=weights,
-                        inputs_cid=inputs_cid, node_for_attempt=rerun_node, max_attempts=a.max_attempts,
-                        queue_wait_s=900, run_wait_s=RUN_WAIT_S)
+                        inputs_cid=inputs_cid, node_for_attempt=rerun_node, estimate_usd=estimate, max_attempts=a.max_attempts,
+                        queue_wait_s=900, run_wait_s=deadline_for(model_key) + 300)
         state["rerun"] = {"ok": out.ok, "job": out.job, "jobdef_cid": out.jobdef_cid, "inputs_cid": inputs_cid,
                           "account": out.account, "items": [f"{p}/compiled" for p in sample],
                           "attempts": [r["job"] for r in out.attempts], "result_file": out.result_file}

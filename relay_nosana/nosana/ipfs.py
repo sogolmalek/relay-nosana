@@ -9,6 +9,7 @@ never logged or committed), and to ours (PINATA_JWT) for durability. Both must r
 from __future__ import annotations
 
 import json
+import time
 import os
 import re
 import urllib.error
@@ -63,11 +64,17 @@ def _pin_file(data: bytes, name: str, jwt: str) -> tuple[int, dict]:
     req = urllib.request.Request(f"{PINATA_API}/pinning/pinFileToIPFS", data=body, method="POST", headers={
         "Authorization": f"Bearer {jwt}", "Content-Type": f"multipart/form-data; boundary={boundary}",
         "User-Agent": "relay-nosana/0.2"})
-    try:
-        with urllib.request.urlopen(req, timeout=120) as r:
-            return r.status, json.loads(r.read())
-    except urllib.error.HTTPError as e:
-        return e.code, {"error": e.read().decode(errors="replace")[:500]}
+    for attempt in range(4):  # a pin is idempotent (same bytes, same CID): retry timeouts and 5xx
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                return r.status, json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            if e.code < 500 or attempt == 3:
+                return e.code, {"error": e.read().decode(errors="replace")[:500]}
+        except (urllib.error.URLError, TimeoutError, OSError):
+            if attempt == 3:
+                raise
+        time.sleep(10 * (attempt + 1))
 
 
 def pin_both(data: bytes, name: str) -> dict:

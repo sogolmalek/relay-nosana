@@ -1,0 +1,176 @@
+{
+  "arms": {
+    "compiled": "Compiled v2: rules 1-3 (seller on an active hold, duplicate invoice, amount vs the sum of lines) resolved in code (task.resolved_facts) and written as facts; then Compiled context (run e): decisions naming this payout's seller or SKUs, plus the global rules\n    (refund approval and both note policies). Selected by reference, never by the answer. The payout and its support notes, unchanged. The model checks rules 4-6 and makes the final decision. Same system prompt as the raw arm.",
+    "raw": "Raw arm (run e): every decision in the run-e ledger, for every payout. The payout and its support notes, unchanged."
+  },
+  "bar": {
+    "ci_lower_gte": 0.9,
+    "metric": "accuracy_vs_ground_truth"
+  },
+  "baselines": {
+    "frontier": "declared lane, not anchored: headless Claude Code (relay_nosana/payouts/claude_code.py, Phase 1's lane, the owner's login, no API credits) on the compiled-arm input of each of the 200 items, same schema; run_1b frontier. Its score is the frontier column; the bar stays absolute",
+    "rules_only": "code alone, no model: rules 1-5 over the structured fields, notes unread (data.truth_rules_only). Scored on the same 200 items; by construction it is right on every item the notes don't change: 166/200",
+    "rules_regex": "code alone, no model: rules 1-5 plus a keyword/regex reading of the notes (data.truth_rules_regex: a finance note naming the refund's order with an approval word approves it; the latest note naming this invoice with a dispute word holds it, a withdrawn/closed word releases it). keywords_naive, reported beside it, drops the sender, order and invoice checks"
+  },
+  "cap_scope": "USD on Nosana, all of Phase 1c, from settled credits 3.536, including run e's stopped attempts ($0.107 settled before this pre-registration)",
+  "cap_usd": 2.0,
+  "compiler": "v2",
+  "cost_estimate_usd": {
+    "bad_node": "a download that hits the 45-min deadline ~$0.22",
+    "basis": "market 8kGjraXnXirSQcgjxTbFBK7QTBVz9fm9ufSRVr3DqBTV at $0.27273/hour; each post reserves 1 hour. 32B AWQ is ~19 GB to download; no 32B job has run on Nosana before, so the time is not measured yet",
+    "expected": "0.2-0.37 (15-27 min per job)",
+    "frontier": "deferred: the owner's Claude Code limit resets Nov 14; no API key",
+    "jobs": "batch1 (200 lines), batch2 (200 lines), re-run (35 lines): 3 Nosana jobs, each downloads the model",
+    "worst_case": "bounded by the cap: Budget.check refuses any post that could pass $2.00"
+  },
+  "data": "synthetic",
+  "expectation": "compiled v2 >= 189/200 (Wilson 95% lower bound >= 0.90) clears the bar; below that, stop and report, no other model without the owner. Caveat kept: rules + a regex reading of the notes scores 200/200 on these items, so a pass shows the model can do what template-aware code does, not judgment code lacks.",
+  "generation_key_order": [
+    "reasoning",
+    "decision",
+    "reason_code"
+  ],
+  "hashed_output_keys": [
+    "decision",
+    "reason_code"
+  ],
+  "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+  "inputs_cid": "QmX7AstnDpJGApgqyCGNwTndeyeR7U6wncWUcBks496P5E",
+  "inputs_sha256": "ae8582f414ffa67d1e0b389528a1680e9d944b50b4b0d03da4416cfb018b76d3",
+  "job_definition_cid": "QmTqULxA2RcGoEJXDjJ4t9MF3GgkaYLr2ihQFhZqTjZ49W",
+  "judgment": {
+    "by_intent": {
+      "chatter": 16,
+      "dispute_open": 24,
+      "dispute_other_invoice": 12,
+      "dispute_withdrawn": 12,
+      "finance_approval": 10,
+      "finance_approval_other_order": 3,
+      "seller_claims_approval": 4
+    },
+    "caveat": "synthetic: the notes come from our own templates, so a parser written against them could decode them. They stand in for text a code-only rule set does not read",
+    "changes": "finance_approval, dispute_open: approve an old refund finance approved in a note; hold a payout with an open dispute on its invoice (reason disputed)",
+    "items_whose_answer_the_notes_change": 34,
+    "items_with_notes": 81,
+    "notes_plan_pool_210": {
+      "chatter": 20,
+      "dispute_open": 30,
+      "dispute_other_invoice": 12,
+      "dispute_withdrawn": 12,
+      "finance_approval": 10,
+      "finance_approval_other_order": 3,
+      "seller_claims_approval": 4
+    },
+    "share_answer_depends_on_notes": 0.17,
+    "what": "free-text support notes (from finance, support, sellers or buyers) and two policies, D-106 (which notes count as refund approval) and D-107 (open vs withdrawn disputes). The model must read who wrote a note, which order or invoice it names, and whether a dispute is still open"
+  },
+  "label_inputs": "data.truth_1e: seller_id vs seller-hold decisions; invoice_id vs the seller's paid invoices; amount vs the sum of line totals; each sale line's sku, sale_date and unit price vs the price-change decisions; each refund line's order_date (> 30 days before the payout date) and approval_id; the rule priority; and each support note's hidden intent (never shown to the model). Amount thresholds ($500, $5,000) set the lane and the re-run, never the label",
+  "market": "8kGjraXnXirSQcgjxTbFBK7QTBVz9fm9ufSRVr3DqBTV",
+  "market_choice": "48 GB class, checked for idle nodes on 2026-11-11: A6000 PREMIUM 1, A40 Community 3, A40 PREMIUM 0, A100 40GB Community 47 (fallback). A40 Community is the only 48 GB market with two or more idle nodes, which the batch + second-node re-run need",
+  "model": "Qwen/Qwen2.5-32B-Instruct-AWQ@5c7cb76a268fc6cfbb9c4777eb24ba6e27f9ee6c",
+  "nodes": "known-good node list per market from measured outcomes (relay_nosana/nosana/nodes.py), open market as fallback; in-container deadline 45 min",
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "decision": {
+        "enum": [
+          "approve",
+          "hold"
+        ],
+        "type": "string"
+      },
+      "reason_code": {
+        "enum": [
+          "ok",
+          "seller_on_hold",
+          "duplicate",
+          "amount_mismatch",
+          "stale_price",
+          "needs_approval",
+          "disputed"
+        ],
+        "type": "string"
+      },
+      "reasoning": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "decision",
+      "reason_code"
+    ],
+    "type": "object"
+  },
+  "params": {
+    "guided_json": true,
+    "max_tokens": 256,
+    "seed": 0,
+    "temperature": 0
+  },
+  "payouts": 200,
+  "phase": "1c",
+  "plan": "Phase 1 label mix x7 (210-payout pool) with support notes (NOTE_PLAN_1E), 200 drawn, run b's payouts excluded",
+  "pool": {
+    "drawn": 200,
+    "excluded": 0,
+    "size": 210
+  },
+  "posting": "not posted; requires the owner's explicit approval",
+  "report_columns": [
+    "raw",
+    "compiled v2",
+    "rules only",
+    "rules + regex",
+    "frontier"
+  ],
+  "rerun": {
+    "always_if": {
+      "amount_usd_gt": 5000
+    },
+    "sample_min": 15,
+    "sample_rate": 0.1
+  },
+  "rerun_arm": "compiled",
+  "rerun_items": 35,
+  "result_size": "each shard's result ~140 KB (run b: 82.8 KB for 120 rows), under one 256 KiB IPFS block",
+  "routing": "compiled arm if its CI lower bound >= 0.90, else human review for payouts > $500",
+  "rule_snapshot_sha256": "2b8892f58c3b81ba3d061d2cb830d289e77a254166ae8584a354aa27f9489f16",
+  "run_e": "stopped by the owner, partial, not counted; its partial results are not used for any decision",
+  "run_id": "payouts-2026-11-11g",
+  "scoring": "exact match of {decision, reason_code} against data.truth(); per arm over all 200 payouts, Wilson 95% CI; also the > $500 subset; paired discordant counts with an exact two-sided binomial (sign) test",
+  "seed": 20261112,
+  "shards": [
+    {
+      "inputs_cid": "QmTxHKxxSvSXSQA6pygJGVEAUj4ahWv2FDpHCvN5t4EqyY",
+      "job_definition_cid": "QmamihXvt2A2dVcWuo7XB5VJszGXboA1Yut1itY6o3Nm8o",
+      "lines": 200,
+      "payouts": [
+        "P-0101",
+        "P-0208"
+      ],
+      "tag": "batch1"
+    },
+    {
+      "inputs_cid": "QmP9tezZUZeGzj1Fdx3XibzUcxqMVSA5Bujo6Jw4tDiHdC",
+      "job_definition_cid": "QmbefTpt3UKpT5zVxbAKiFcgU3tdGMtp3PW4zmL8bJ9M3H",
+      "lines": 200,
+      "payouts": [
+        "P-0209",
+        "P-0310"
+      ],
+      "tag": "batch2"
+    }
+  ],
+  "system_prompt_sha256": "8a009618d7fef03a1a476de37370bdaa3bf32d1c250ffc7cef4f31ae43319a24",
+  "threshold": {
+    "accuracy": 0.945,
+    "max_errors": 11,
+    "min_correct": 189,
+    "n": 200,
+    "wilson_low_at_min": 0.9042,
+    "wilson_low_one_fewer": 0.8981
+  },
+  "why": "Find an open model that clears payouts-need-proof on run e's 200 items. The owner skipped the 7B and 14B (2026-11-11): run e was stopped, partial and not counted. 32B AWQ is the largest Qwen2.5 that fits one 48 GB GPU.",
+  "written_at": "2026-11-11T04:04:24Z"
+}
