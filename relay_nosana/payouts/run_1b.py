@@ -638,7 +638,7 @@ def cmd_issue(a) -> None:
         state["rerun_agreement"] = f"pending for {len(spots)} items: {rr['why']}"
     else:
         state["rerun_agreement"] = ({"n": len(spots), "agreed": sum(s["agreed"] for s in spots.values())} if spots
-                                    else "not run (plan changed after the batch: see docs/phase1b-report.md)")
+                                    else rr.get("why") or "not run (plan changed after the batch: see docs/phase1b-report.md)")
 
     items = {f"{pid}/compiled": by_id[f"{pid}/compiled"] for pid in anchored}
     checks = {}

@@ -1,7 +1,45 @@
 {
-  "arms": [
-    "compiled"
-  ],
+  "arms": {
+    "compiled": {
+      "accuracy": 0.925,
+      "anchored": {
+        "accuracy": 0.9353,
+        "ci_high": 0.9656,
+        "ci_low": 0.8815,
+        "correct": 130,
+        "n": 139
+      },
+      "by_true_reason": {
+        "amount_mismatch": "21/21",
+        "disputed": "22/24",
+        "duplicate": "20/20",
+        "needs_approval": "9/11",
+        "ok": "65/71",
+        "seller_on_hold": "28/28",
+        "stale_price": "20/25"
+      },
+      "ci_high": 0.954,
+      "ci_low": 0.88,
+      "correct": 185,
+      "finish_length": 1,
+      "n": 200,
+      "parse_errors": 1,
+      "predicted": {
+        "approve/ok": 72,
+        "hold/amount_mismatch": 21,
+        "hold/disputed": 24,
+        "hold/duplicate": 20,
+        "hold/needs_approval": 13,
+        "hold/seller_on_hold": 28,
+        "hold/stale_price": 21,
+        "parse_error": 1
+      },
+      "reasoning_words_max": 42,
+      "reasoning_words_median": 20,
+      "tokens_in_mean": 1118.6,
+      "tokens_out_mean": 59.1
+    }
+  },
   "attempts_not_picked_up": [
     {
       "cost_usd": 0.0,
@@ -27,8 +65,103 @@
       "queued_min": 14
     }
   ],
+  "bar": {
+    "compiled_ci_low": 0.88,
+    "compiled_cleared": false,
+    "frontier_ratio": "not measured in POC",
+    "metric": "accuracy_vs_ground_truth",
+    "needed_ci_low": 0.9,
+    "raw_ci_low": null,
+    "raw_cleared": null,
+    "rule": "payouts-need-proof"
+  },
+  "batch": {
+    "account": {
+      "address": "54LFBEpZZdeMiPAzmBmYmWnxK622Z1RhHesWkdZ6fKfK",
+      "ipfs_job": "QmQkMk1BtzJCJtE8eX8AdetUBXP5YT1n9Ji9P7L72i2S1W",
+      "ipfs_result": "QmTUG9SqrZ9ddB8RmLQr65NqLuMiDFp5crAg38BtjNv3TZ",
+      "market": "6eMivCx49anWFYwNgg8KNJQfSJYB5nBdif8CK6z52dem",
+      "node": "6LFK1kCexmMxfgYH7ebt2Ao76Eg2ajbHegR7L7Tc5J1h",
+      "payer": "credFgXCGH3JFUT6WEKF6tJitxrXhSCM2VEqF7GE6pt",
+      "price": 446,
+      "project": "BgvjVh4dxEWMkk3cNaznZ7zY9wbx1U8FycehRmEjwipo",
+      "state": 2,
+      "state_name": "COMPLETED",
+      "time_end": 1794372678,
+      "time_start": 1794372251,
+      "timeout": 3600
+    },
+    "attempts": [
+      "54LFBEpZZdeMiPAzmBmYmWnxK622Z1RhHesWkdZ6fKfK"
+    ],
+    "finished_wall": 1794373274.6667478,
+    "inputs_cid": "QmbBa74dAXFrdPbk9PsTfLk7Ayhh49xwQHx7RtwqCZUqZg",
+    "job": "54LFBEpZZdeMiPAzmBmYmWnxK622Z1RhHesWkdZ6fKfK",
+    "jobdef_cid": "QmQkMk1BtzJCJtE8eX8AdetUBXP5YT1n9Ji9P7L72i2S1W",
+    "ok": true,
+    "result_file": "batch_a1_result.json"
+  },
+  "budget_baseline": 3.536,
+  "chains": {
+    "batch": {
+      "finish_tx": "2eDUVcr9CpJatXu81f6xtDUDiEokFQh5KP4TZF1rFqToyoZh943fRNuvnBbuWxAxy5uemddWHrPP6zawPDBuqvjF",
+      "finished_at": 1794372678,
+      "ipfs_job": "QmQkMk1BtzJCJtE8eX8AdetUBXP5YT1n9Ji9P7L72i2S1W",
+      "ipfs_result": "QmTUG9SqrZ9ddB8RmLQr65NqLuMiDFp5crAg38BtjNv3TZ",
+      "job": "54LFBEpZZdeMiPAzmBmYmWnxK622Z1RhHesWkdZ6fKfK",
+      "listed_at": 1794372251,
+      "market": "6eMivCx49anWFYwNgg8KNJQfSJYB5nBdif8CK6z52dem",
+      "node": "6LFK1kCexmMxfgYH7ebt2Ao76Eg2ajbHegR7L7Tc5J1h",
+      "post_ix": "assign",
+      "post_tx": "128pwS3D5jwD59HJ9wszdF2MCbE5MdNJbPbUrXKRK6Q2v9PeS72EBbhVgHpGqy7me3A7mNPTogKb5ua3HWex5EHb"
+    }
+  },
+  "columns": {
+    "compiled_v2": {
+      "accuracy": 0.925,
+      "ci_high": 0.954,
+      "ci_low": 0.88,
+      "correct": 185,
+      "n": 200,
+      "on_note_dependent": "32/34",
+      "on_the_rest": "153/166"
+    },
+    "frontier": "not run",
+    "keywords_naive": {
+      "accuracy": 0.915,
+      "ci_high": 0.9463,
+      "ci_low": 0.8681,
+      "correct": 183,
+      "n": 200,
+      "on_note_dependent": "34/34",
+      "on_the_rest": "149/166"
+    },
+    "raw": "not posted (run g amendment)",
+    "rules_only": {
+      "accuracy": 0.83,
+      "ci_high": 0.8757,
+      "ci_low": 0.7718,
+      "correct": 166,
+      "n": 200,
+      "on_note_dependent": "0/34",
+      "on_the_rest": "166/166"
+    },
+    "rules_regex": {
+      "accuracy": 1.0,
+      "ci_high": 1.0,
+      "ci_low": 0.9812,
+      "correct": 200,
+      "n": 200,
+      "on_note_dependent": "34/34",
+      "on_the_rest": "166/166"
+    }
+  },
   "compiler": "v2",
   "design": "1e",
+  "known_nodes": {
+    "bad": [],
+    "good": []
+  },
   "lanes": {
     "P-0101": "payouts-need-proof",
     "P-0102": "payouts-need-proof",
@@ -241,10 +374,32 @@
     "NVIDIA 6000 Ada PREMIUM (48 GB)": "1 node waiting"
   },
   "model_key": "32b",
+  "paired": "raw arm not posted (run g amendment); run b measured raw vs compiled",
   "phase": "1b",
   "prepared_at": 1794369864.704545,
   "queue_check": true,
+  "receipts": {
+    "anchored": 139,
+    "declared": 0
+  },
+  "rerun": {
+    "ok": false,
+    "posted": false,
+    "status": "not run",
+    "why": "stopped: the batch missed the bar (185/200 < 189), owner's rule: if compiled v2 misses, stop and report"
+  },
+  "rerun_agreement": "stopped: the batch missed the bar (185/200 < 189), owner's rule: if compiled v2 misses, stop and report",
   "rerun_window_s": 1800,
+  "review_queue": {
+    "items": 139,
+    "re_run_disagreed": 0
+  },
+  "routing": "human review for payouts over $500 (on_no_open_model)",
   "run_id": "payouts-2026-11-11g",
-  "status": "amended: one compiled-only batch on 6000 Ada; not posted yet"
+  "status": "batch done; missed the bar 185/200; stopped and reported; no re-run posted",
+  "verify": {
+    "could_not_check": 0,
+    "failed": 0,
+    "verified": 139
+  }
 }

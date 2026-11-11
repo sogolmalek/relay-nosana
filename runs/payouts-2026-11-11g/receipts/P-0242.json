@@ -1,0 +1,86 @@
+{
+  "cost_usd": 0.00019,
+  "grade": "anchored",
+  "input_sha256": "ac70133b27160e1669b7fcda2708678cb219913e4083167bc5f0568b2033da78",
+  "item_id": "P-0242/compiled",
+  "merkle": {
+    "path": [
+      {
+        "hash": "c3a6b43a45447e753a9e5a96478f0bb568d6a714224be5717e6f8c8e1533bf49",
+        "side": "L"
+      },
+      {
+        "hash": "523f280a584354b0a08e7f722d929d33c1fff0858fa3738a38241cb70d71f933",
+        "side": "R"
+      },
+      {
+        "hash": "3bc8cdc04e571c0a30ef64c1075024388258e34301bb0d199bce55c995b7a7cc",
+        "side": "L"
+      },
+      {
+        "hash": "0592a009ade807105e077c0bb4fbe3f14bf5c0c4ff4c8ba1c99ea0cebd196d49",
+        "side": "R"
+      },
+      {
+        "hash": "6bb9a478b0afae0cd3a97a1f6511ef4d862fa9c746137d95114791ba820a04a8",
+        "side": "R"
+      },
+      {
+        "hash": "b709753bee1c23ed76537f221f737f5bd4d4002c6dd5d5ba5e4923fdd5de5dd1",
+        "side": "R"
+      },
+      {
+        "hash": "844c8d74635140048fad002c72d49e1d1d22acaa8e7f1befff48d10275700357",
+        "side": "R"
+      },
+      {
+        "hash": "0f8e8a8381702ef746885c96f9293d5abe1c20ef8bed6febbbe49a052baf9c35",
+        "side": "L"
+      }
+    ],
+    "root": "36f7dadf1073e29b0a500761958de66135bcfe6943499cee6ee74355d3674b71"
+  },
+  "model": {
+    "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+    "weights": "Qwen/Qwen2.5-32B-Instruct-AWQ@5c7cb76a268fc6cfbb9c4777eb24ba6e27f9ee6c"
+  },
+  "nosana": {
+    "container_end": 1794372669099,
+    "container_start": 1794372268082,
+    "finish_tx": "2eDUVcr9CpJatXu81f6xtDUDiEokFQh5KP4TZF1rFqToyoZh943fRNuvnBbuWxAxy5uemddWHrPP6zawPDBuqvjF",
+    "finished_at": 1794372678,
+    "inputs_cid": "QmbBa74dAXFrdPbk9PsTfLk7Ayhh49xwQHx7RtwqCZUqZg",
+    "job": "54LFBEpZZdeMiPAzmBmYmWnxK622Z1RhHesWkdZ6fKfK",
+    "job_definition_cid": "QmQkMk1BtzJCJtE8eX8AdetUBXP5YT1n9Ji9P7L72i2S1W",
+    "listed_at": 1794372251,
+    "market": "6eMivCx49anWFYwNgg8KNJQfSJYB5nBdif8CK6z52dem",
+    "node": "6LFK1kCexmMxfgYH7ebt2Ao76Eg2ajbHegR7L7Tc5J1h",
+    "post_tx": "128pwS3D5jwD59HJ9wszdF2MCbE5MdNJbPbUrXKRK6Q2v9PeS72EBbhVgHpGqy7me3A7mNPTogKb5ua3HWex5EHb",
+    "result_cid": "QmTUG9SqrZ9ddB8RmLQr65NqLuMiDFp5crAg38BtjNv3TZ"
+  },
+  "output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+  },
+  "output_sha256": "1d16737a724cc9055322249daa2610ccfb866ff92c9bceec25fe060723828b05",
+  "receipt_id": "f68f9f0a027fe620b9e1c5163213d4f43c8d939637751162b06314724bdf6e51",
+  "receipt_version": "0.2",
+  "relay_checks": [
+    "output_schema"
+  ],
+  "rule": {
+    "id": "payouts-need-proof",
+    "requires": "anchored",
+    "snapshot_sha256": "2b8892f58c3b81ba3d061d2cb830d289e77a254166ae8584a354aa27f9489f16"
+  },
+  "source": {
+    "vendor": "relay-batch",
+    "work_type": "payout_check"
+  },
+  "spot_check": {
+    "action": "none",
+    "agreed": null,
+    "rerun_job": null,
+    "rerun_node": null
+  }
+}

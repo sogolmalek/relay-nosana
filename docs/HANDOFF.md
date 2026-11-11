@@ -1,3 +1,8 @@
+> **2026-11-11: Phase 1c stopped at run g, as instructed.** Qwen2.5-32B-AWQ (compiled v2, run e's 200 items, 6000 Ada)
+> scored **185/200 (CI [0.880, 0.954]): it misses the bar of 189**. 11 of its 15 errors are on rules 4–5 (dates and
+> prices). Rules + regex still scores 200/200. The 139 receipts verify; all are held for review. Run e was stopped,
+> partial, not counted. Phase 1c spend $0.203 of $2. No other model without the owner. See `docs/phase1c-report.md`.
+
 > **2026-11-10 (night): Phase 2a done, in replay mode.** The app is at https://sogolmalek.github.io/relay-nosana/app/:
 > the browser verifier (parity with the CLI on every receipt and tamper), the review queue (P-0128), the gate, and
 > 4 devnet payouts with `receipt_id` memos. The browser RPC is PublicNode. Run e is **paused**: one batch was posted and

@@ -1,0 +1,19 @@
+[08:14:06] batch: job definition QmQkMk1BtzJCJtE8eX8AdetUBXP5YT1n9Ji9P7L72i2S1W pinned to Nosana's and our Pinata accounts (47910 bytes)
+[08:14:07] batch attempt 1: 6LFK1kCexmMxfgYH7ebt2Ao76Eg2ajbHegR7L7Tc5J1h (waiting in the market queue on Solana)
+[08:14:10] batch_a1: posted 54LFBEpZZdeMiPAzmBmYmWnxK622Z1RhHesWkdZ6fKfK (node 6LFK1kCexmMxfgYH7ebt2Ao76Eg2ajbHegR7L7Tc5J1h), reserved $0.637
+[08:14:12] batch_a1: running on 6LFK1kCexmMxfgYH7ebt2Ao76Eg2ajbHegR7L7Tc5J1h (picked up 3s after posting)
+[08:31:14] batch_a1: OK node=6LFK1kCexmMxfgYH7ebt2Ao76Eg2ajbHegR7L7Tc5J1h status=success cost=$0.076 error=None
+[08:31:26] re-run: no second node waiting in any 48 GB+ premium market; 1788 s left in the window
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 710, in <module>
+    main()
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 706, in main
+    {"prepare": cmd_prepare, "nosana": cmd_nosana, "issue": cmd_issue, "frontier": cmd_frontier}[a.cmd](a)
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 397, in cmd_nosana
+    _rerun_any_market(a, state, P, conn, jobs, budget, by_id, run, weights, model_key)
+  File "/Users/sogolmalek/relay-nosana/relay_nosana/payouts/run_1b.py", line 312, in _rerun_any_market
+    time.sleep(60)
+KeyboardInterrupt
+exit 130
