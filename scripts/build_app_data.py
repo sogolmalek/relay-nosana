@@ -29,6 +29,14 @@ RUNS = {
     "payouts-2026-11-10b": {"title": "Phase 1b, run b: raw vs compiled context (pre-registered)", "date": "2026-11-10",
                             "design": "60 payouts, two arms in one job; receipts for the compiled arm",
                             "arm": "compiled", "report": "docs/phase1b-report.md"},
+    "payouts-2026-11-11g": {"title": "Phase 1c, run g: Qwen2.5-32B-AWQ, compiled v2 (pre-registered, missed the bar)",
+                            "date": "2026-11-11",
+                            "design": "run e's 200 payouts with support notes; one batch, compiled arm only; "
+                                      "185/200 against a bar of 189",
+                            "arm": "compiled", "report": "docs/phase1c-report.md",
+                            "model_label": "Qwen2.5-32B-Instruct-AWQ (compiled v2)",
+                            "caveat": "rules plus a 15-line regex reading of the notes, with no model, scores 200/200 "
+                                      "on these items. The re-run was not posted: the batch missed the bar"},
 }
 
 
@@ -58,7 +66,8 @@ def build(run_id: str, meta: dict) -> dict:
     rows = {}
     for k in sorted(keys):
         rows.update(parse_outputs(json.loads((nos / state[k]["result_file"]).read_text()))[0])
-    rerun_rows = parse_outputs(json.loads((nos / state["rerun"]["result_file"]).read_text()))[0]
+    rr = state.get("rerun") or {}
+    rerun_rows = parse_outputs(json.loads((nos / rr["result_file"]).read_text()))[0] if rr.get("result_file") else {}
     declared = {}
     if (src / "declared.jsonl").exists():
         declared = {r["item_id"]: r for r in map(json.loads, (src / "declared.jsonl").read_text().splitlines())}
@@ -84,7 +93,7 @@ def build(run_id: str, meta: dict) -> dict:
                "declared_output": (declared.get(pid) or {}).get("output"),
                "receipt": f"receipts/{pid}.json" if r else None, "grade": r["grade"] if r else None,
                "notes": [{k: v for k, v in n.items() if k != "intent"} for n in p.get("notes", [])]}
-        if meta["arm"]:
+        if meta["arm"] and f"{pid}/raw" in rows:
             out["raw_output"] = rows[f"{pid}/raw"]["output"]
         payouts.append(out)
     costs = _costs(src)
@@ -93,7 +102,10 @@ def build(run_id: str, meta: dict) -> dict:
         measured = {"model": "Qwen2.5-7B-Instruct (compiled arm)", "correct": acc["correct"], "n": acc["n"],
                     "accuracy": acc["accuracy"], "ci_low": acc["ci_low"], "ci_high": acc["ci_high"],
                     "over_500": acc["anchored"], "raw": {k: state["arms"]["raw"][k] for k in
-                                                         ("correct", "n", "accuracy", "ci_low", "ci_high")}}
+                                                         ("correct", "n", "accuracy", "ci_low", "ci_high")}
+                    if "raw" in state["arms"] else None}
+        if meta.get("model_label"):
+            measured["model"] = meta["model_label"]
     else:
         key = next(k for k in state["accuracy"] if k.startswith("nosana:") and "anchored" not in k)
         acc = state["accuracy"][key]
@@ -102,15 +114,18 @@ def build(run_id: str, meta: dict) -> dict:
                     "over_500": state["accuracy"][key + " (anchored lane, > $500)"],
                     "declared_lane": state["accuracy"].get("claude-code:claude-opus-5-5")}
     data = {
-        "run_id": run_id, **{k: v for k, v in meta.items() if k != "arm"}, "mode": "replay", "synthetic": True,
+        "run_id": run_id, **{k: v for k, v in meta.items() if k not in ("arm", "caveat", "model_label")}, "mode": "replay", "synthetic": True,
         "note": run.get("note"), "run_date": run["run_date"], "decisions": run["decisions"],
         "rules": rules, "model": receipts[next(k for k, v in receipts.items() if v["grade"] == "anchored")]["model"],
-        "jobs": [_job(state, k, costs.get(state[k]["job"])) for k in sorted(keys) + ["rerun"]],
+        "jobs": [_job(state, k, costs.get(state[k]["job"])) for k in sorted(keys) + ["rerun"] if k in state["chains"]],
+        # a real other job for the tamper buttons: this run's re-run, else Phase 1's batch
+        "tamper_other": (_job(state, "rerun", None) if "rerun" in state["chains"] else
+                         _job(json.loads((ROOT / "runs" / "payouts-2026-11-10" / "state.json").read_text()), "batch", None)),
         "nosana_spent_usd": state.get("nosana_spent_usd"),
         "bar": {"needed_ci_low": state["bar"]["needed_ci_low"], "metric": state["bar"]["metric"],
                 "cleared": state["bar"].get("cleared", state["bar"].get("compiled_cleared")), "measured": measured},
         "rerun_agreement": state["rerun_agreement"],
-        "rerun_items": [x.split("/")[0] for x in state["rerun"]["items"]],
+        "rerun_items": [x.split("/")[0] for x in rr.get("items", [])],
         "verify_cli": state.get("verify"),
         "columns": state.get("columns"),  # run e design: raw / compiled v2 / rules only / rules + regex
         "caveat": meta.get("caveat"),

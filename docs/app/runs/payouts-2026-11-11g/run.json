@@ -1,0 +1,4741 @@
+{
+ "bar": {
+  "cleared": false,
+  "measured": {
+   "accuracy": 0.925,
+   "ci_high": 0.954,
+   "ci_low": 0.88,
+   "correct": 185,
+   "model": "Qwen2.5-32B-Instruct-AWQ (compiled v2)",
+   "n": 200,
+   "over_500": {
+    "accuracy": 0.9353,
+    "ci_high": 0.9656,
+    "ci_low": 0.8815,
+    "correct": 130,
+    "n": 139
+   },
+   "raw": null
+  },
+  "metric": "accuracy_vs_ground_truth",
+  "needed_ci_low": 0.9
+ },
+ "caveat": "rules plus a 15-line regex reading of the notes, with no model, scores 200/200 on these items. The re-run was not posted: the batch missed the bar",
+ "columns": {
+  "compiled_v2": {
+   "accuracy": 0.925,
+   "ci_high": 0.954,
+   "ci_low": 0.88,
+   "correct": 185,
+   "n": 200,
+   "on_note_dependent": "32/34",
+   "on_the_rest": "153/166"
+  },
+  "frontier": "not run",
+  "keywords_naive": {
+   "accuracy": 0.915,
+   "ci_high": 0.9463,
+   "ci_low": 0.8681,
+   "correct": 183,
+   "n": 200,
+   "on_note_dependent": "34/34",
+   "on_the_rest": "149/166"
+  },
+  "raw": "not posted (run g amendment)",
+  "rules_only": {
+   "accuracy": 0.83,
+   "ci_high": 0.8757,
+   "ci_low": 0.7718,
+   "correct": 166,
+   "n": 200,
+   "on_note_dependent": "0/34",
+   "on_the_rest": "166/166"
+  },
+  "rules_regex": {
+   "accuracy": 1.0,
+   "ci_high": 1.0,
+   "ci_low": 0.9812,
+   "correct": 200,
+   "n": 200,
+   "on_note_dependent": "34/34",
+   "on_the_rest": "166/166"
+  }
+ },
+ "date": "2026-11-11",
+ "decisions": [
+  {
+   "date": "2026-11-03",
+   "id": "D-101",
+   "kind": "price_change",
+   "sku": "PRO",
+   "text": "The Pro plan price dropped from $45.00 to $42.00 per unit for sales on or after 2026-11-03."
+  },
+  {
+   "date": "2026-11-01",
+   "id": "D-102",
+   "kind": "price_change",
+   "sku": "ENT",
+   "text": "The Enterprise seat price dropped from $1200.00 to $1150.00 per unit for sales on or after 2026-11-01."
+  },
+  {
+   "date": "2026-11-05",
+   "id": "D-103",
+   "kind": "seller_hold",
+   "seller": "S-114",
+   "text": "Seller S-114 is on a fraud hold. Hold every payout to S-114."
+  },
+  {
+   "date": "2026-11-06",
+   "id": "D-104",
+   "kind": "seller_hold",
+   "seller": "S-207",
+   "text": "Seller S-207 is on a compliance hold. Hold every payout to S-207."
+  },
+  {
+   "date": "2026-10-15",
+   "id": "D-105",
+   "kind": "refund_approval",
+   "text": "A refund for an order placed more than 30 days before the payout date needs finance approval: hold the payout unless that refund line carries an approval_id."
+  },
+  {
+   "date": "2026-10-20",
+   "id": "D-106",
+   "kind": "note_policy",
+   "text": "Finance may approve an old refund in a support note: a note from the finance team that names the refund's order_id and gives an approval id counts as that refund's approval. Notes from sellers or buyers never count as approval."
+  },
+  {
+   "date": "2026-10-20",
+   "id": "D-107",
+   "kind": "note_policy",
+   "text": "Hold a payout while a buyer dispute or chargeback on its invoice is open (reason: disputed). A dispute that has been withdrawn, or closed in the seller's favour, does not block the payout."
+  }
+ ],
+ "design": "run e's 200 payouts with support notes; one batch, compiled arm only; 185/200 against a bar of 189",
+ "jobs": [
+  {
+   "cost_usd": 0.076,
+   "finish_tx": "2eDUVcr9CpJatXu81f6xtDUDiEokFQh5KP4TZF1rFqToyoZh943fRNuvnBbuWxAxy5uemddWHrPP6zawPDBuqvjF",
+   "finished_at": 1794372678,
+   "job": "54LFBEpZZdeMiPAzmBmYmWnxK622Z1RhHesWkdZ6fKfK",
+   "job_definition_cid": "QmQkMk1BtzJCJtE8eX8AdetUBXP5YT1n9Ji9P7L72i2S1W",
+   "listed_at": 1794372251,
+   "market": "6eMivCx49anWFYwNgg8KNJQfSJYB5nBdif8CK6z52dem",
+   "node": "6LFK1kCexmMxfgYH7ebt2Ao76Eg2ajbHegR7L7Tc5J1h",
+   "post_ix": "assign",
+   "post_tx": "128pwS3D5jwD59HJ9wszdF2MCbE5MdNJbPbUrXKRK6Q2v9PeS72EBbhVgHpGqy7me3A7mNPTogKb5ua3HWex5EHb",
+   "price_per_s": 446,
+   "result_cid": "QmTUG9SqrZ9ddB8RmLQr65NqLuMiDFp5crAg38BtjNv3TZ",
+   "tag": "batch"
+  }
+ ],
+ "mode": "replay",
+ "model": {
+  "image": "docker.io/vllm/vllm-openai@sha256:607442e407b0fea97f8a132a78b787c121a996dd4de181fa08e8da06e71ec2db",
+  "weights": "Qwen/Qwen2.5-32B-Instruct-AWQ@5c7cb76a268fc6cfbb9c4777eb24ba6e27f9ee6c"
+ },
+ "nosana_spent_usd": null,
+ "note": "Synthetic data generated for the Relay x Nosana POC. Not real sellers, payouts or money.",
+ "payouts": [
+  {
+   "amount_usd": 8824.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-77267",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0101",
+   "receipt": "receipts/P-0101.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 1980.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-97341",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "seller",
+     "text": "Thanks for the fast payouts this month. Please send the remittance PDF to accounts."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0102",
+   "receipt": "receipts/P-0102.json",
+   "rerun_output": null,
+   "seller_id": "S-217",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 7545.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-38202",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-82570; case CB-62140 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0103",
+   "receipt": "receipts/P-0103.json",
+   "rerun_output": null,
+   "seller_id": "S-292",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 7158.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-11562",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-11562; case CB-63790 is open."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Update on INV-11562: the buyer withdrew chargeback CB-63790. Case closed in the seller's favour."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0104",
+   "receipt": "receipts/P-0104.json",
+   "rerun_output": null,
+   "seller_id": "S-105",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3348.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-52743",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0105",
+   "receipt": "receipts/P-0105.json",
+   "rerun_output": null,
+   "seller_id": "S-307",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3435.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-34608",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "buyer",
+     "text": "Disputing INV-34608, we never got access. Case CB-94379."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Case CB-94379 on INV-34608 is resolved: access was confirmed and the buyer closed the dispute."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0106",
+   "receipt": "receipts/P-0106.json",
+   "rerun_output": null,
+   "seller_id": "S-233",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 358.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-54732",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0107",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-134",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 1539.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-61305",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "buyer",
+     "text": "I am disputing INV-61305. We cancelled before the renewal and were charged anyway. Opened case CB-66623 with my bank."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0108",
+   "receipt": "receipts/P-0108.json",
+   "rerun_output": null,
+   "seller_id": "S-246",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1590.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-72821",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0111",
+   "receipt": "receipts/P-0111.json",
+   "rerun_output": null,
+   "seller_id": "S-115",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1071.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-21491",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0113",
+   "receipt": "receipts/P-0113.json",
+   "rerun_output": null,
+   "seller_id": "S-290",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1245.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-23947",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "seller",
+     "text": "We cleared the O-664177 refund with your finance team last week (ref FA-4048), so this is fine."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0114",
+   "receipt": "receipts/P-0114.json",
+   "rerun_output": null,
+   "seller_id": "S-275",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 242.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-63790",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0115",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-304",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 120.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-95151",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "The buyer filed a chargeback with their card issuer for INV-95151; case CB-57342 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0116",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-140",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 135.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-23830",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0117",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-169",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1218.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-63984",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0118",
+   "receipt": "receipts/P-0118.json",
+   "rerun_output": null,
+   "seller_id": "S-211",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 8566.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-99680",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0119",
+   "receipt": "receipts/P-0119.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 2412.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-85823",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0120",
+   "receipt": "receipts/P-0120.json",
+   "rerun_output": null,
+   "seller_id": "S-172",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 2544.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-80527",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "Dispute opened on invoice INV-91880 (a different payout); case CB-56946."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0121",
+   "receipt": "receipts/P-0121.json",
+   "rerun_output": null,
+   "seller_id": "S-129",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3264.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-83457",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "Dispute opened on invoice INV-59226 (a different payout); case CB-62356."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0122",
+   "receipt": "receipts/P-0122.json",
+   "rerun_output": null,
+   "seller_id": "S-155",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2445.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-19712",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "The buyer filed a chargeback with their card issuer for INV-19712; case CB-89734 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0123",
+   "receipt": "receipts/P-0123.json",
+   "rerun_output": null,
+   "seller_id": "S-138",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 8437.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-15415",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0124",
+   "receipt": "receipts/P-0124.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 7416.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-51542",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-51542: they say the seats were never delivered. Case CB-13572, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0125",
+   "receipt": "receipts/P-0125.json",
+   "rerun_output": null,
+   "seller_id": "S-206",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 162.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-43216",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0126",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-188",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3567.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-78576",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-78576: they say the seats were never delivered. Case CB-29961, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0127",
+   "receipt": "receipts/P-0127.json",
+   "rerun_output": null,
+   "seller_id": "S-177",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1974.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-27377",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0128",
+   "receipt": "receipts/P-0128.json",
+   "rerun_output": null,
+   "seller_id": "S-176",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2235.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-73424",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0129",
+   "receipt": "receipts/P-0129.json",
+   "rerun_output": null,
+   "seller_id": "S-294",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 1542.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-70524",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0130",
+   "receipt": "receipts/P-0130.json",
+   "rerun_output": null,
+   "seller_id": "S-238",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2403.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-88510",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0131",
+   "receipt": "receipts/P-0131.json",
+   "rerun_output": null,
+   "seller_id": "S-267",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1290.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-80898",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0132",
+   "receipt": "receipts/P-0132.json",
+   "rerun_output": null,
+   "seller_id": "S-247",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2274.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-28523",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0133",
+   "receipt": "receipts/P-0133.json",
+   "rerun_output": null,
+   "seller_id": "S-273",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 1683.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-13054",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0134",
+   "receipt": "receipts/P-0134.json",
+   "rerun_output": null,
+   "seller_id": "S-265",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 9845.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-76751",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-76751: they say the seats were never delivered. Case CB-62249, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0135",
+   "receipt": "receipts/P-0135.json",
+   "rerun_output": null,
+   "seller_id": "S-232",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 8916.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-54494",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0137",
+   "receipt": "receipts/P-0137.json",
+   "rerun_output": null,
+   "seller_id": "S-293",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 84.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-35302",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-35302: they say the seats were never delivered. Case CB-51337, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0138",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-104",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1242.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-60616",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "seller",
+     "text": "Thanks for the fast payouts this month. Please send the remittance PDF to accounts."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0139",
+   "receipt": "receipts/P-0139.json",
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 3258.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-94604",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-94604; case CB-38821 is open."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Update on INV-94604: the buyer withdrew chargeback CB-38821. Case closed in the seller's favour."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0140",
+   "receipt": "receipts/P-0140.json",
+   "rerun_output": null,
+   "seller_id": "S-214",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 11445.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-13879",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "seller",
+     "text": "Thanks for the fast payouts this month. Please send the remittance PDF to accounts."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0141",
+   "receipt": "receipts/P-0141.json",
+   "rerun_output": null,
+   "seller_id": "S-319",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 7416.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-21123",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0142",
+   "receipt": "receipts/P-0142.json",
+   "rerun_output": null,
+   "seller_id": "S-125",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 1980.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-61392",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0143",
+   "receipt": "receipts/P-0143.json",
+   "rerun_output": null,
+   "seller_id": "S-243",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 63.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-45846",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0144",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-286",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1929.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-42382",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0145",
+   "receipt": "receipts/P-0145.json",
+   "rerun_output": null,
+   "seller_id": "S-202",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 74.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-36424",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0146",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-289",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 2670.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-71081",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "seller",
+     "text": "Thanks for the fast payouts this month. Please send the remittance PDF to accounts."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0147",
+   "receipt": "receipts/P-0147.json",
+   "rerun_output": null,
+   "seller_id": "S-119",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 3345.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-11637",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0148",
+   "receipt": "receipts/P-0148.json",
+   "rerun_output": null,
+   "seller_id": "S-283",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 126.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-95008",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0149",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-101",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 2922.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-31720",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-31720: they say the seats were never delivered. Case CB-10843, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0150",
+   "receipt": "receipts/P-0150.json",
+   "rerun_output": null,
+   "seller_id": "S-303",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 939.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-39549",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "seller",
+     "text": "Can you confirm when this payout lands? Our bank details have not changed."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0151",
+   "receipt": "receipts/P-0151.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 2184.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-99303",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0152",
+   "receipt": "receipts/P-0152.json",
+   "rerun_output": null,
+   "seller_id": "S-261",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 270.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-96769",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0153",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-258",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 84.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-68200",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0154",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-133",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3519.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-83520",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "The buyer filed a chargeback with their card issuer for INV-83520; case CB-43715 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0155",
+   "receipt": "receipts/P-0155.json",
+   "rerun_output": null,
+   "seller_id": "S-181",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 270.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-58835",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-58835: they say the seats were never delivered. Case CB-35995, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0156",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-242",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1155.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-56397",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0157",
+   "receipt": "receipts/P-0157.json",
+   "rerun_output": null,
+   "seller_id": "S-299",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1755.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-68288",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-68288; case CB-21631 is open."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Update on INV-68288: the buyer withdrew chargeback CB-21631. Case closed in the seller's favour."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0158",
+   "receipt": "receipts/P-0158.json",
+   "rerun_output": null,
+   "seller_id": "S-170",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1445.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-80310",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0159",
+   "receipt": "receipts/P-0159.json",
+   "rerun_output": null,
+   "seller_id": "S-190",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 2058.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-80516",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0160",
+   "receipt": "receipts/P-0160.json",
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 1065.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-25635",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0161",
+   "receipt": "receipts/P-0161.json",
+   "rerun_output": null,
+   "seller_id": "S-284",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 2274.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-14078",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0162",
+   "receipt": "receipts/P-0162.json",
+   "rerun_output": null,
+   "seller_id": "S-195",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 915.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-13057",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0163",
+   "receipt": "receipts/P-0163.json",
+   "rerun_output": null,
+   "seller_id": "S-297",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 2748.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-15009",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0164",
+   "receipt": "receipts/P-0164.json",
+   "rerun_output": null,
+   "seller_id": "S-145",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 252.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-96281",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "buyer",
+     "text": "I am disputing INV-96281. We cancelled before the renewal and were charged anyway. Opened case CB-93621 with my bank."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0165",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-257",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 3219.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-67036",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "finance",
+     "text": "Approved the late refund on O-164459. Approval FA-5863."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0166",
+   "receipt": "receipts/P-0166.json",
+   "rerun_output": null,
+   "seller_id": "S-166",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 8566.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-61934",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-61934: they say the seats were never delivered. Case CB-72974, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0167",
+   "receipt": "receipts/P-0167.json",
+   "rerun_output": null,
+   "seller_id": "S-236",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 252.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-93867",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0168",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-175",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 2493.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-59112",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0169",
+   "receipt": "receipts/P-0169.json",
+   "rerun_output": null,
+   "seller_id": "S-241",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 3048.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-36651",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0170",
+   "receipt": "receipts/P-0170.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 315.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-29678",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "seller",
+     "text": "Thanks for the fast payouts this month. Please send the remittance PDF to accounts."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0171",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-252",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 381.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-81069",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0172",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-186",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 2751.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-60660",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0173",
+   "receipt": "receipts/P-0173.json",
+   "rerun_output": null,
+   "seller_id": "S-117",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 5879.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-13797",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "buyer",
+     "text": "Disputing INV-13797, we never got access. Case CB-42877."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Case CB-42877 on INV-13797 is resolved: access was confirmed and the buyer closed the dispute."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0174",
+   "receipt": "receipts/P-0174.json",
+   "rerun_output": null,
+   "seller_id": "S-220",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2187.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-93784",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "finance",
+     "text": "Approved the late refund on O-786446. Approval FA-1289."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0175",
+   "receipt": "receipts/P-0175.json",
+   "rerun_output": null,
+   "seller_id": "S-253",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 9845.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-53667",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0176",
+   "receipt": "receipts/P-0176.json",
+   "rerun_output": null,
+   "seller_id": "S-194",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1713.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-48380",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "seller",
+     "text": "Can you confirm when this payout lands? Our bank details have not changed."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0177",
+   "receipt": "receipts/P-0177.json",
+   "rerun_output": null,
+   "seller_id": "S-222",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 1671.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-24598",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0178",
+   "receipt": "receipts/P-0178.json",
+   "rerun_output": null,
+   "seller_id": "S-130",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 3093.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-52494",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-52494: they say the seats were never delivered. Case CB-41730, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0179",
+   "receipt": "receipts/P-0179.json",
+   "rerun_output": null,
+   "seller_id": "S-108",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 2919.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-67506",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0180",
+   "receipt": "receipts/P-0180.json",
+   "rerun_output": null,
+   "seller_id": "S-154",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 10245.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-27568",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0182",
+   "receipt": "receipts/P-0182.json",
+   "rerun_output": null,
+   "seller_id": "S-179",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 168.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-37254",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "finance",
+     "text": "Finance here: the refund for order O-161440 is signed off, reference FA-5947."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0183",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-300",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 9545.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-59388",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0184",
+   "receipt": "receipts/P-0184.json",
+   "rerun_output": null,
+   "seller_id": "S-318",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 1203.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-76384",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "finance",
+     "text": "Finance here: the refund for order O-809518 is signed off, reference FA-9868."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0186",
+   "receipt": "receipts/P-0186.json",
+   "rerun_output": null,
+   "seller_id": "S-224",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 294.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-57908",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0187",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-245",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2535.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-65959",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "seller",
+     "text": "We cleared the O-243872 refund with your finance team last week (ref FA-8514), so this is fine."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0188",
+   "receipt": "receipts/P-0188.json",
+   "rerun_output": null,
+   "seller_id": "S-143",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 2772.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-79644",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0189",
+   "receipt": "receipts/P-0189.json",
+   "rerun_output": null,
+   "seller_id": "S-212",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 11574.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-30202",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0190",
+   "receipt": "receipts/P-0190.json",
+   "rerun_output": null,
+   "seller_id": "S-126",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 252.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-17827",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0191",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 10608.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-38475",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "seller",
+     "text": "Can you confirm when this payout lands? Our bank details have not changed."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0192",
+   "receipt": "receipts/P-0192.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 11124.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-91235",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "The buyer filed a chargeback with their card issuer for INV-91235; case CB-15404 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0193",
+   "receipt": "receipts/P-0193.json",
+   "rerun_output": null,
+   "seller_id": "S-302",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1695.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-72569",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0196",
+   "receipt": "receipts/P-0196.json",
+   "rerun_output": null,
+   "seller_id": "S-148",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 10866.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-19083",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0197",
+   "receipt": "receipts/P-0197.json",
+   "rerun_output": null,
+   "seller_id": "S-229",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 55.5,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-87031",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0198",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-244",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2487.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-70140",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "finance",
+     "text": "Following our review, refund O-541340 is approved (FA-3454). OK to pay out."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0199",
+   "receipt": "receipts/P-0199.json",
+   "rerun_output": null,
+   "seller_id": "S-281",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 126.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-39330",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0200",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 210.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-25186",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "The buyer filed a chargeback with their card issuer for INV-25186; case CB-97540 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0201",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-317",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1851.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-69047",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0202",
+   "receipt": "receipts/P-0202.json",
+   "rerun_output": null,
+   "seller_id": "S-256",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 1977.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-65623",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0203",
+   "receipt": "receipts/P-0203.json",
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 1761.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-81908",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "finance",
+     "text": "Following our review, refund O-474547 is approved (FA-3596). OK to pay out."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0204",
+   "receipt": "receipts/P-0204.json",
+   "rerun_output": null,
+   "seller_id": "S-200",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2148.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-75191",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0205",
+   "receipt": "receipts/P-0205.json",
+   "rerun_output": null,
+   "seller_id": "S-240",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 84.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-34467",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "seller",
+     "text": "Finance already approved the refund on O-486498, approval FA-3172. Please release the payout."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0206",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-196",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 1803.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-80768",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "buyer",
+     "text": "Disputing INV-80768, we never got access. Case CB-30158."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Case CB-30158 on INV-80768 is resolved: access was confirmed and the buyer closed the dispute."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0207",
+   "receipt": "receipts/P-0207.json",
+   "rerun_output": null,
+   "seller_id": "S-280",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 6534.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-27028",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0208",
+   "receipt": "receipts/P-0208.json",
+   "rerun_output": null,
+   "seller_id": "S-301",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 2880.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-26401",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "Dispute opened on invoice INV-87385 (a different payout); case CB-26262."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0209",
+   "receipt": "receipts/P-0209.json",
+   "rerun_output": null,
+   "seller_id": "S-268",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 7158.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-11173",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0210",
+   "receipt": "receipts/P-0210.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 1371.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-91654",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0211",
+   "receipt": "receipts/P-0211.json",
+   "rerun_output": null,
+   "seller_id": "S-162",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 3090.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-46608",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0212",
+   "receipt": "receipts/P-0212.json",
+   "rerun_output": null,
+   "seller_id": "S-226",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 210.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-93407",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-18174; case CB-44890 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0213",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-218",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 46.5,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-79055",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "finance",
+     "text": "Approved the late refund on O-173399. Approval FA-7572."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0214",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-234",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 279.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-38440",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0215",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 3222.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-65747",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-92989; case CB-57261 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0216",
+   "receipt": "receipts/P-0216.json",
+   "rerun_output": null,
+   "seller_id": "S-255",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 10995.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-96984",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0217",
+   "receipt": "receipts/P-0217.json",
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 105.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-34358",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "finance",
+     "text": "Finance here: refund O-884919 is signed off, reference FA-7261."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0218",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-311",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 7545.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-95849",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "buyer",
+     "text": "Disputing INV-95849, we never got access. Case CB-39575."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Case CB-39575 on INV-95849 is resolved: access was confirmed and the buyer closed the dispute."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0219",
+   "receipt": "receipts/P-0219.json",
+   "rerun_output": null,
+   "seller_id": "S-312",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 330.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-95453",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "The buyer filed a chargeback with their card issuer for INV-95453; case CB-44185 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0220",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-127",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1194.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-67656",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0221",
+   "receipt": "receipts/P-0221.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 1935.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-62331",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0222",
+   "receipt": "receipts/P-0222.json",
+   "rerun_output": null,
+   "seller_id": "S-215",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 1329.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-88737",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0223",
+   "receipt": "receipts/P-0223.json",
+   "rerun_output": null,
+   "seller_id": "S-187",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 195.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-65876",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "Seller asked to change their payout email; verified and updated."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0224",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 2058.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-91438",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0225",
+   "receipt": "receipts/P-0225.json",
+   "rerun_output": null,
+   "seller_id": "S-209",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 7287.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-17994",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "buyer",
+     "text": "I am disputing INV-17994. We cancelled before the renewal and were charged anyway. Opened case CB-17182 with my bank."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0226",
+   "receipt": "receipts/P-0226.json",
+   "rerun_output": null,
+   "seller_id": "S-204",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 9845.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-57392",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0227",
+   "receipt": "receipts/P-0227.json",
+   "rerun_output": null,
+   "seller_id": "S-182",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3456.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-67718",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0228",
+   "receipt": "receipts/P-0228.json",
+   "rerun_output": null,
+   "seller_id": "S-308",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 2895.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-68402",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0229",
+   "receipt": "receipts/P-0229.json",
+   "rerun_output": null,
+   "seller_id": "S-102",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 126.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-17068",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0230",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-249",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 1155.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-11421",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0231",
+   "receipt": "receipts/P-0231.json",
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 126.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-74460",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-74460: they say the seats were never delivered. Case CB-61894, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0232",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-208",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 252.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-48357",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-53323; case CB-23266 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0233",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-216",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3132.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-98262",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0234",
+   "receipt": "receipts/P-0234.json",
+   "rerun_output": null,
+   "seller_id": "S-184",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 954.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-85261",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0235",
+   "receipt": "receipts/P-0235.json",
+   "rerun_output": null,
+   "seller_id": "S-313",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 261.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-31493",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0236",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-205",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 210.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-67173",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0237",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-151",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 8308.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-78952",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0238",
+   "receipt": "receipts/P-0238.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 3393.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-29503",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0239",
+   "receipt": "receipts/P-0239.json",
+   "rerun_output": null,
+   "seller_id": "S-260",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 729.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-79986",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0240",
+   "receipt": "receipts/P-0240.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 1026.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-42582",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0241",
+   "receipt": "receipts/P-0241.json",
+   "rerun_output": null,
+   "seller_id": "S-173",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2100.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-44515",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0242",
+   "receipt": "receipts/P-0242.json",
+   "rerun_output": null,
+   "seller_id": "S-225",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 1674.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-23335",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0243",
+   "receipt": "receipts/P-0243.json",
+   "rerun_output": null,
+   "seller_id": "S-306",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1371.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-54875",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0244",
+   "receipt": "receipts/P-0244.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 42.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-64427",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "finance",
+     "text": "Following our review, refund O-795765 is approved (FA-1676). OK to pay out."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0245",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-137",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 135.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-96397",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0246",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-259",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 129.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-28791",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Dispute opened on invoice INV-22283 (a different payout); case CB-88065."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0247",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-167",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 294.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-89184",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0248",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-271",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 10953.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-90635",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0249",
+   "receipt": "receipts/P-0249.json",
+   "rerun_output": null,
+   "seller_id": "S-193",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 195.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-70619",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-70619; case CB-19633 is open."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Update on INV-70619: the buyer withdrew chargeback CB-19633. Case closed in the seller's favour."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0250",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-152",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 228.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-72702",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "buyer",
+     "text": "I am disputing INV-72702. We cancelled before the renewal and were charged anyway. Opened case CB-21578 with my bank."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0251",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-199",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1629.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-76188",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0252",
+   "receipt": "receipts/P-0252.json",
+   "rerun_output": null,
+   "seller_id": "S-107",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 6129.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-85931",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0253",
+   "receipt": "receipts/P-0253.json",
+   "rerun_output": null,
+   "seller_id": "S-291",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 279.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-30249",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0254",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-237",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1710.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-87270",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0255",
+   "receipt": "receipts/P-0255.json",
+   "rerun_output": null,
+   "seller_id": "S-112",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 3264.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-27711",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "buyer",
+     "text": "Disputing INV-27711, we never got access. Case CB-55350."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Case CB-55350 on INV-27711 is resolved: access was confirmed and the buyer closed the dispute."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0256",
+   "receipt": "receipts/P-0256.json",
+   "rerun_output": null,
+   "seller_id": "S-124",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 261.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-29883",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Seller asked to change their payout email; verified and updated."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0257",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-135",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 1194.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-30712",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-30712; case CB-71548 is open."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Update on INV-30712: the buyer withdrew chargeback CB-71548. Case closed in the seller's favour."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0258",
+   "receipt": "receipts/P-0258.json",
+   "rerun_output": null,
+   "seller_id": "S-103",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 11316.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-99732",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0259",
+   "receipt": "receipts/P-0259.json",
+   "rerun_output": null,
+   "seller_id": "S-288",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 2319.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-84615",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0260",
+   "receipt": "receipts/P-0260.json",
+   "rerun_output": null,
+   "seller_id": "S-192",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 306.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-47190",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "Seller asked to change their payout email; verified and updated."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0261",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-121",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 2190.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-12002",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0262",
+   "receipt": "receipts/P-0262.json",
+   "rerun_output": null,
+   "seller_id": "S-270",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 120.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-85419",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0263",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-203",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 1254.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-26255",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "buyer",
+     "text": "Disputing INV-26255, we never got access. Case CB-94034."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Case CB-94034 on INV-26255 is resolved: access was confirmed and the buyer closed the dispute."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0264",
+   "receipt": "receipts/P-0264.json",
+   "rerun_output": null,
+   "seller_id": "S-111",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 171.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-71303",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0265",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 3264.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-73215",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0266",
+   "receipt": "receipts/P-0266.json",
+   "rerun_output": null,
+   "seller_id": "S-123",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 7287.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-60426",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0268",
+   "receipt": "receipts/P-0268.json",
+   "rerun_output": null,
+   "seller_id": "S-168",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 171.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-32339",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Seller asked to change their payout email; verified and updated."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0269",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 210.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-31415",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "The buyer filed a chargeback with their card issuer for INV-31415; case CB-64017 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0270",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-161",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1926.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-31980",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "Seller asked to change their payout email; verified and updated."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0271",
+   "receipt": "receipts/P-0271.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 2319.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-50392",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0272",
+   "receipt": "receipts/P-0272.json",
+   "rerun_output": null,
+   "seller_id": "S-191",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1587.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-64571",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0273",
+   "receipt": "receipts/P-0273.json",
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 171.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-81969",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0275",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-150",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 9458.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-45418",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0276",
+   "receipt": "receipts/P-0276.json",
+   "rerun_output": null,
+   "seller_id": "S-266",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 126.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-46891",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "seller",
+     "text": "Finance already approved the refund on O-508389, approval FA-7516. Please release the payout."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0277",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-156",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 2790.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-85192",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-85192; case CB-41861 is open."
+    },
+    {
+     "date": "2026-11-08",
+     "from": "support",
+     "text": "Update on INV-85192: the buyer withdrew chargeback CB-41861. Case closed in the seller's favour."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0278",
+   "receipt": "receipts/P-0278.json",
+   "rerun_output": null,
+   "seller_id": "S-305",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 288.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-44173",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0279",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-146",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 306.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-98341",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "finance",
+     "text": "Approved the late refund on O-790581. Approval FA-8744."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0280",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-227",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 168.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-27788",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "buyer",
+     "text": "I am disputing INV-27788. We cancelled before the renewal and were charged anyway. Opened case CB-93239 with my bank."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0281",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-298",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1887.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-97507",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0282",
+   "receipt": "receipts/P-0282.json",
+   "rerun_output": null,
+   "seller_id": "S-274",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 270.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-47627",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0283",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-153",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 7458.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-39452",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0284",
+   "receipt": "receipts/P-0284.json",
+   "rerun_output": null,
+   "seller_id": "S-309",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 1452.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-99835",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0285",
+   "receipt": "receipts/P-0285.json",
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 225.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-83908",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0286",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-264",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  },
+  {
+   "amount_usd": 312.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-52796",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "seller",
+     "text": "Thanks for the fast payouts this month. Please send the remittance PDF to accounts."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0287",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-198",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 252.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-72616",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0288",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-207",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 2661.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-16854",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "Dispute opened on invoice INV-98436 (a different payout); case CB-48774."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0289",
+   "receipt": "receipts/P-0289.json",
+   "rerun_output": null,
+   "seller_id": "S-183",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 1845.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-84851",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "seller",
+     "text": "Can you confirm when this payout lands? Our bank details have not changed."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0290",
+   "receipt": "receipts/P-0290.json",
+   "rerun_output": null,
+   "seller_id": "S-160",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 42.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-74318",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0291",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-277",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 1416.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-70437",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-70437: they say the seats were never delivered. Case CB-35440, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0292",
+   "receipt": "receipts/P-0292.json",
+   "rerun_output": null,
+   "seller_id": "S-314",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 2832.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-81871",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "finance",
+     "text": "Following our review, refund O-667105 is approved (FA-5021). OK to pay out."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0293",
+   "receipt": "receipts/P-0293.json",
+   "rerun_output": null,
+   "seller_id": "S-272",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2103.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-54122",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "finance",
+     "text": "Approved the late refund on O-365732. Approval FA-8837."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0294",
+   "receipt": "receipts/P-0294.json",
+   "rerun_output": null,
+   "seller_id": "S-285",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 1500.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-15915",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   },
+   "payout_id": "P-0295",
+   "receipt": "receipts/P-0295.json",
+   "rerun_output": null,
+   "seller_id": "S-248",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "duplicate"
+   }
+  },
+  {
+   "amount_usd": 129.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-44642",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0296",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-276",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 3258.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-34383",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0297",
+   "receipt": "receipts/P-0297.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 222.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-94127",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-06",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-94127: they say the seats were never delivered. Case CB-11759, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "parse_error": true
+   },
+   "payout_id": "P-0298",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-159",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 1642.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-27717",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0299",
+   "receipt": "receipts/P-0299.json",
+   "rerun_output": null,
+   "seller_id": "S-263",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 252.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-14376",
+   "lane": "payouts-default",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Dispute opened on invoice INV-69768 (a different payout); case CB-73099."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0300",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-189",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2832.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-23354",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   },
+   "payout_id": "P-0301",
+   "receipt": "receipts/P-0301.json",
+   "rerun_output": null,
+   "seller_id": "S-114",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "seller_on_hold"
+   }
+  },
+  {
+   "amount_usd": 1281.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-24899",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "finance",
+     "text": "Approved the late refund on O-367759. Approval FA-1490."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   },
+   "payout_id": "P-0302",
+   "receipt": "receipts/P-0302.json",
+   "rerun_output": null,
+   "seller_id": "S-141",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "needs_approval"
+   }
+  },
+  {
+   "amount_usd": 2793.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-31170",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0303",
+   "receipt": "receipts/P-0303.json",
+   "rerun_output": null,
+   "seller_id": "S-239",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2403.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-59970",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0304",
+   "receipt": "receipts/P-0304.json",
+   "rerun_output": null,
+   "seller_id": "S-278",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2145.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-13234",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "Dispute opened on invoice INV-90071 (a different payout); case CB-87096."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0305",
+   "receipt": "receipts/P-0305.json",
+   "rerun_output": null,
+   "seller_id": "S-132",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 2442.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-11485",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "Dispute opened by the buyer on invoice INV-11485: they say the seats were never delivered. Case CB-21492, waiting on the seller's evidence."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   },
+   "payout_id": "P-0306",
+   "receipt": "receipts/P-0306.json",
+   "rerun_output": null,
+   "seller_id": "S-163",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "disputed"
+   }
+  },
+  {
+   "amount_usd": 8437.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-37452",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-07",
+     "from": "support",
+     "text": "Seller asked to change their payout email; verified and updated."
+    }
+   ],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0307",
+   "receipt": "receipts/P-0307.json",
+   "rerun_output": null,
+   "seller_id": "S-147",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 8308.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-55361",
+   "lane": "payouts-need-proof",
+   "notes": [
+    {
+     "date": "2026-11-05",
+     "from": "support",
+     "text": "The buyer filed a chargeback for INV-83163; case CB-67906 is open."
+    }
+   ],
+   "open_model_output": {
+    "decision": "approve",
+    "reason_code": "ok"
+   },
+   "payout_id": "P-0308",
+   "receipt": "receipts/P-0308.json",
+   "rerun_output": null,
+   "seller_id": "S-106",
+   "truth": {
+    "decision": "approve",
+    "reason_code": "ok"
+   }
+  },
+  {
+   "amount_usd": 7406.0,
+   "declared_output": null,
+   "grade": "anchored",
+   "invoice_id": "INV-61806",
+   "lane": "payouts-need-proof",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   },
+   "payout_id": "P-0309",
+   "receipt": "receipts/P-0309.json",
+   "rerun_output": null,
+   "seller_id": "S-164",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "amount_mismatch"
+   }
+  },
+  {
+   "amount_usd": 315.0,
+   "declared_output": null,
+   "grade": null,
+   "invoice_id": "INV-66732",
+   "lane": "payouts-default",
+   "notes": [],
+   "open_model_output": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   },
+   "payout_id": "P-0310",
+   "receipt": null,
+   "rerun_output": null,
+   "seller_id": "S-231",
+   "truth": {
+    "decision": "hold",
+    "reason_code": "stale_price"
+   }
+  }
+ ],
+ "report": "docs/phase1c-report.md",
+ "rerun_agreement": "stopped: the batch missed the bar (185/200 < 189), owner's rule: if compiled v2 misses, stop and report",
+ "rerun_items": [],
+ "rules": [
+  {
+   "bar": {
+    "ci_lower_gte": 0.9,
+    "metric": "accuracy_vs_ground_truth"
+   },
+   "id": "payouts-need-proof",
+   "on_no_open_model": "human_review",
+   "requires": "anchored",
+   "rerun": {
+    "always_if": {
+     "amount_usd_gt": 5000
+    },
+    "sample_min": 15,
+    "sample_rate": 0.1
+   },
+   "when": {
+    "amount_usd_gt": 500
+   },
+   "work_type": "payout_check",
+   "writes_to": "payouts"
+  },
+  {
+   "id": "payouts-default",
+   "requires": "declared",
+   "work_type": "payout_check",
+   "writes_to": "payouts"
+  }
+ ],
+ "run_date": "2026-11-09",
+ "run_id": "payouts-2026-11-11g",
+ "synthetic": true,
+ "tamper_other": {
+  "cost_usd": null,
+  "finish_tx": "5AixtbRkomsiQHfetxJtNH6g7xGU4R1q8c5jMdkJjQenB4GXHsvpvDFuySo4sdVdANSD8qM2jWmgcgDzASYLHdPd",
+  "finished_at": 1794296880,
+  "job": "7f1Br2taJ8ywANS1MtuqX9pavgb3qzgMikSYaCjxvY4q",
+  "job_definition_cid": "QmNYSM6RsUSbNSkLx9YBW8T2wSqVTmztQ9PcATaomBaeSw",
+  "listed_at": 1794296707,
+  "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+  "node": "5n72gKKfXpgf7uGAPr2FuQNh1EqQbMpdEsHE8MZ3cEWW",
+  "post_ix": "assign",
+  "post_tx": "4GGW8ucFzvUubU6StM9V7nk9KBUd8UsFoQ25PQ93ictx5o7FJj3GusPh9YQxqkJzkdQ6ozezd8MKSfb1NPH8XEK4",
+  "price_per_s": 115,
+  "result_cid": "QmXqgLZve8aGkboYsxgyAbmFD7fKbcvEABuiTc1iDBLw2W",
+  "tag": "batch"
+ },
+ "title": "Phase 1c, run g: Qwen2.5-32B-AWQ, compiled v2 (pre-registered, missed the bar)",
+ "verify_cli": {
+  "could_not_check": 0,
+  "failed": 0,
+  "verified": 139
+ }
+}

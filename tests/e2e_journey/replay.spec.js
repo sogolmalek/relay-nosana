@@ -113,6 +113,23 @@ test("run b replay: review queue holds P-0128, receipts verify", async ({ page }
   await shot(page, "b-queue-and-tamper");
 });
 
+test("run g replay: 32B missed the bar, every payout over $500 held, receipts verify", async ({ page }) => {
+  const s = (summary.runs["payouts-2026-11-11g"] = {});
+  await page.goto("?run=payouts-2026-11-11g#review");
+  await expect(page.getByTestId("bar-note")).toContainText("held: the open model missed the bar");
+  await expect(page.getByTestId("bar-note")).toContainText("185/200");
+  await expect(page.locator('[data-testid^="queue-"]')).toHaveCount(139);
+  s.queue = "139 held: the open model missed the bar (185/200)";
+  await verifyAll(page, 139);
+  s.verified = "139/139";
+  const first = await page.locator('[data-testid^="open-"]').first().getAttribute("data-testid");
+  await openReceipt(page, first.slice(5));
+  s.tampers = await tamperAll(page, first.slice(5));
+  await tab(page, "pay");
+  await expect(page.getByTestId("payouts-status")).toContainText("Recorded run");
+  s.pay = "0 paid, 139 human review, 61 refused (no receipt)";
+});
+
 test("tabs: the guide first, then one step at a time", async ({ page }) => {
   await page.goto("?run=payouts-2026-11-10");
   await expect(page.locator("#receipts tbody tr")).toHaveCount(30);

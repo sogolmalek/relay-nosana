@@ -1645,6 +1645,21 @@
  "run_date": "2026-11-09",
  "run_id": "payouts-2026-11-10b",
  "synthetic": true,
+ "tamper_other": {
+  "cost_usd": null,
+  "finish_tx": "gF2LFuCUQALSScbQHMoba3J4EUYfQHkJThiYyNHFeqUZwnkK1UWi3pgi2hD4mZrpEVPcW29hyUaggKv6SAnei2J",
+  "finished_at": 1794319658,
+  "job": "2xFjPXHLBhpd3VJjnZ6C2VqL6Knr5iU9etAb8c5RvjxB",
+  "job_definition_cid": "QmYG58Kbn9JKrBst8aBR3E1PHVHUiAYkE1rh9E4wX2Wx1i",
+  "listed_at": 1794319463,
+  "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+  "node": "2cwhCqyvGEiC2UbZdhctrh2LGud2qyx62ED5DkKmJ1ot",
+  "post_ix": "assign",
+  "post_tx": "5nPvizKWrtAb1NP36UxynaHPXqc6XsWoqiRgzihajC3FH596DGCa2fcYMBuD4BZRCjkhbFNGwvgdfEcfmXCWB7Br",
+  "price_per_s": 117,
+  "result_cid": "QmcLkBqsTsUv4pRRz2jG1Vy7egvRrBLxeHr2jKExaU6Z4A",
+  "tag": "rerun"
+ },
  "title": "Phase 1b, run b: raw vs compiled context (pre-registered)",
  "verify_cli": {
   "could_not_check": 0,

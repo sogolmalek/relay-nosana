@@ -1,0 +1,1670 @@
+[
+  {
+    "item_id": "P-0101",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "bc84a68aa39b75be43013b579a6fca6e8a4715db2a7fc5f846c09800602ed1ab",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0102",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "6963be7b89d336e5f5ea17da01c20f3fad9736887557127f8e1d89a09059cb77",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0103",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "4d68b560d4dc283ec760dede19ad78f56e157e81d13d2f5646139b55e93d0f78",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0104",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "3f6e81c683d2388758a2e37bb59c97cb4837f647bfe9c55cf341aa52ffb513fb",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0105",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "3aab4223600e5dd5fc6f6fd8f1bf7f7a5c02c7e152cf5eb5ed9f5c2ec5d43d3a",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0106",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "2609f6e53a429b80d944d922f12ea8d8210f4fcb23c0b8e6fc1b3818c4fc43d1",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0108",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "7e7269d00166fd3eec5081005a3a0fdc2b39ce63f9a0117149bf3eecc3066dbb",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0111",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a746016398954cac54f860c6b661cd325951713fa8ab14d41dc157b5a46a312c",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0113",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "660d152ac206d871a3b9f0e20aa8d4c95755c5ae9492f581386cebe3f6b01f37",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0114",
+    "output": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "c216464c37295a4ca06372360787576403654e20b2c7255aa764d2ee4b26dbf9",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0118",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "d324f6c215618c7acd508e6b199d4d1e1eaa06fd6e6888be3a91d38b762c99fc",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0119",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b5feb55576dce3d60b498255c3f1203012414b541437de954d9d280779f50ab4",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0120",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "5dce12ef93cf66bb3e0a80fe66e88e8d08e06f91dc94d856b9e5876e3c010b35",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0121",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "c9902609b7f89344c64b312e39e83d021e63d609a36ad906a83f11999d896035",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0122",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "7db1bcb9b6268bf3d2a24e9a0245f45998a4f56d203231d0202499d1afc42ed2",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0123",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b2ea92fb4261842966d6be7f331bc4d25652028abef2fb68faebca73784e42b8",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0124",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a929a106c3435751e65183b9abb92d6a9eb4071a77de41b8d113955dc71ca826",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0125",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "ec92cb29e9ad0a3b301889c35624c53d21ebf72acf7039b688cd44b9752ce6b5",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0127",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "0753084d55c52c976af13a1a027153bfa6243707067fa9bd8f9e6168b6a5e4c7",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0128",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "4289ca85ce2a1ef0b9ec44f3f31895a637e8aef23c35c7c3ebfffd96b78e453a",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0129",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "052d9f7115269ed983d4426156e7240a29722e4866acc9b7e23961c22583b1f0",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0130",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a55878fc5cabc6975e576af7ad1e15772b538d051d221390b36d58f39e3b509e",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0131",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b714e7ab992c3c5227baddf0325691ebdf106bdcd572ee70668195fbd5928abb",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0132",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "0d6a67e7bde385d732aa557ea649a07e6f14d74af9a8c71efb0750dfaf63f340",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0133",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b78c1c8be7251ed18d4c8e3cc17790b4726274c220a81799c4f339c8eb3a7efe",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0134",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "87c00dda7a80a3aab74297e5e627b046cc7793fc6a3a13c9082449e905bc06c8",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0135",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b322c82c09d4cf4bbed6e133fdcaa287cbb59cca4398d73300100824f5f370a2",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0137",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "f2d58d16a2cbfeb2f6197f5b5563fa78095b261b2c76cabc6fb6aa725bc26e19",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0139",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "cc55275be8a479bfe23d11d59676f67f728768ccc563a122ed6a9aff8b422bf9",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0140",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "09c42577096b8900817b6658c31e1cbd6e28d8f149752a08c3695dd5c0c65149",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0141",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "90f0881527abb310b95895444ea12b9f6251c982f5356c6b7cdc10e8383e597b",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0142",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "fd3844394ac4fe01ae2563eb62b3b9e60a94e50329d152b08b74ddcdaf36edd8",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0143",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "359ac152d9a966aaad0f7f9b7a104440a1e91bdd25e254053b5b02cf0d2d2f6b",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0145",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "99af42f25c56899c211aaf6b7b6cf050afc55fbf1854c6e27bb9146aba3fbff0",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0147",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "575eed3f5f4e6f940515c146db3770dedb0e38ebc8e478c87446578238e8c666",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0148",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "9ad31068d7db86010f7ac4a0d5ef40e870fced671bd1e6a4819f823a26eb2e84",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0150",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "8dbf21d8becf13205f2102bc5dc643887fddf40da3028a5c28cd0200b45d7fea",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0151",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "1aa69541dac64c7eba9977ab9bd4639330c257073bb942820d73432d5a2b3f67",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0152",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "f9321f3f9812658320be82b5abad829fd4cd7f9b293d2ae4d9063044034f4bde",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0155",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "1eafedf5ed3b6607e1f9cfe0880f51ea408f787ac973b15addb62710ab3a73e7",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0157",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "496eb29c289f06dffb00f084c17c1e1ddf38b318d409a31988d74e817014f0dd",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0158",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "68782a2df94ee4c898ce32007bf999b4ab645111f8fbda848d78ce067a4d5ec9",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0159",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "199a29139d1884411ed7968d52c8440d28d3b4b3dca2f2012731b7adb5c4aaf8",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0160",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "f603e90ce1c633335639c569f3c277483c7d7b55dc83e437eaf702574d684e16",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0161",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "7dbde6a35c85f471b50a84946c5d0ec0ab4a46b8cc2873ef7899f284f81e52d0",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0162",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "525ce215074f7b16f65ea103fb3dc561919f230272a8f2e338e3273cac045886",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0163",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "f64fe2c3d251d350d7a4590a7ffc7bd90c0b1d3a33de25013471be14b1b00a4d",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0164",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "4f729726bb1959cab80ff5d1eb3750c1fadd6ef553de651bc8d24ee270eb2cc4",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0166",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a25a14a02ac4cfa03b45e7f196a75aaf76f5f42a2b46a98bbddfefd79ae0c7c4",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0167",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "f97c7d6a396b08f2981fbe48e41321736dcaa8d6b96f6ba972b7cee293ecfaac",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0169",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "52e255d979c987ef6c36c8477b3688bc39c8eba0095817d732bdc1e4b4e473c1",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0170",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "0929d7c6dbb1f740900868ae69440a696f2146c55283ec0e3cb84b45f6840929",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0173",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "230531390b02a851a49a77d66eac20166ba3b017d04b76724ca01a58e45d7150",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0174",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "996fa569a826ccbfb6017031ee16f02757a983b5fa10793ebc75c2aa15a296fe",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0175",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "7508afc330f8b444af00219e3b98273d2342870ff19d77d271c22baee6b94fa3",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0176",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "2892d339a3ef9f8bd7bf5eec2fd225383f0ef5aad34af5ee1a8fd2cbf9a44ea9",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0177",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "e399099ac029a72fb0b3514e8379a44669273a8c11365a63ac01786d45c25971",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0178",
+    "output": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "741062d4b5178d2509810b5994adaa3e1696b3034326c57cf636882ebb6449d6",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0179",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "19efe18edb0b3d038fe36a0d81f0c388b4485814ef1b674f2c4e4d6f02205a0c",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0180",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "eaaccf403a1c6fffabc80cfebcb008a2dc05859cb89d805ed5a562805a85b2d0",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0182",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "837069b92f3686fc394540d5a7be5a5578ab38dcb8bcc30f62f04e5c88135ef3",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0184",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a935a07f40990bd3ca783bf852fc0c498353a1b6e43526caa1c343ec6b742dd4",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0186",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "cbe7b74d99b1c6433fcfd20780f0e271c4b485f5387777725b5b5c78ed2bdc53",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0188",
+    "output": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "71309b0042b19d4b537de29ca89fd2db13faf28b12118d4721be1e49de5531bb",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0189",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "4c3a87247a4f9a872de46d98f7b7171125f1f2757b885d40ba5b3c505e114a55",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0190",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a95437c607e2dfe177beb31fb74d0d88f354cdb6a8be57c0ff2524c10dad7ba4",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0192",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "7e93cb0c76454ef391ba85db8b722d0de1bf72745aba2fb5b3e2c09c00fce98a",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0193",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a3537819b65bd30f74614883ff9918616939ea2afadf188b1d2899585bd7c74a",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0196",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "d8b9456efc39b20fd759a25e852d64f2474c38a85380589ccfff53da09c42d94",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0197",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "7d8544321eee1727a2fe4b10584f4907a25375bfeb697714f45aef3c9445c9a8",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0199",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "29bd4b22a613abcf326e81117eee75b68d609a50878d5282907614da2f16bce9",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0202",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "96d66e5a0f358808030459ab9d5e78b843faf5f473b7ee4e9ccdb59a9a4ecbac",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0203",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "ccaea37606f23954817b963839bc1bf1982f7ac8d2de0ca0e38922f2f45a23f7",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0204",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "8abdf10eb982a373ee37062fd51ef4b4f39f6b3681c42c5d600ff3409b190a04",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0205",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "0ecbfa42dcb25c31121666c3dbedf80b9c646f02c00333a138fb96ab1b7ae0da",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0207",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "7a187d70a6c01302533ef9a380c3f4d202226aa55ae0f1b6d64101325fe7e745",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0208",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a7e8a94c7cba884d21c62ae061907b4d2591b4509557c4ddb39a05ddee4a099c",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0209",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "7faf3e29cd8b5d786a50b2abd85b1e928ed6c1f761dfe4e35c883eb7164cb35b",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0210",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "70e657a63860a7f658b4a13c6888783d3f9e4f6d099ae541718b10916ebf4d7b",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0211",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a1144631ea319b7e8d6e5e675ccf2d40b0152d248682b13fe1dac1c9bb9db71b",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0212",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "d9e02ba4c37d82ae956725b8f83fceb5a7ca872371e6381c8be1d82706525770",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0216",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "480b374a8a447075ce633d23b864ea12482becbc6f91fec65ed22dff85d7ae79",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0217",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "392efaf72be343387ae5c2ab7cbc8d358a81a8550e8415241234dbf1385138e5",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0219",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "17bc17e4634cc3fd1282cbd1d5a0f1256fe6a69c6a6dbce2d893f82c8278eac0",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0221",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "6ebee40bd7a2eda30abde832385a459f35f4ede8a86c48897f06262d6d7e2cc5",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0222",
+    "output": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "35fee49efd48c271c1f42f8819d545c5cbc9fbdb764de79d430bd033de33e804",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0223",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "97095faf3a9bedd16a561846d0bd5ea1301a4b7114d695e5e8d941b7eaaf2fc2",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0225",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "2739cccc80b2ba627f79566605e2a8c89c9d773231afafa0d6276813f14c22f1",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0226",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "8d84432e1db2412c95e0e6867bcece7014e28d53e09c63d449a367f734679e69",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0227",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "11f53e2da42da6a1d126511c4e5bf88140d5770b6c8d416c714524433e8dc831",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0228",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "61d78a80d71331d8c22091dd8f703ecda620a7033303766874d17f5262892cbe",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0229",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "bdc3ba7b0acf4bb773d9b60aa6a943f0bcd5fbb6702d63057542461731abeace",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0231",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "4143ec7719b873cf5a4b1f8ce3cfff489b1cb99d2bc320e37a4cf2f00d666189",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0234",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "36f1793e3e38f89cf061403fce19d91b6f2b8565ce7c2798902634fcd6295022",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0235",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "2e18fab35e5a3473848be5a4ce0cb3d5d6362946de3c80879d837460dcf5b1aa",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0238",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b791d9c16762a88ed9c8658fde18ad58124643272ae3648144ed428e942852f9",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0239",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "68fd63ca125fec3cc0cf7eb7bd98ba0a2b6dd276f03c12d88e65421ed4613215",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0240",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "9c591f8777be641d405853d9272f768e20d76d2ca6838e4ce4c15df13c000f3c",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0241",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "26905303f16f0585c79686ba254cb35f91883dc234b305cfc77c21845d3779a6",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0242",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "f68f9f0a027fe620b9e1c5163213d4f43c8d939637751162b06314724bdf6e51",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0243",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "02118c15d1a1a1d78b26676ffbc069c5e29cc877ab136a6ff98c8d26239f9e77",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0244",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "c4ad89fe976c5d2405cffbbe226a3319edf5408786d0f06fcfdf51f94cc874d6",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0249",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b6f56d2953fc1d2f34be63f475ee8b4cc72a607a626247b60e364f57978e81be",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0252",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "512e54fd3a6e65f21a04e22704ddbad39cae967194f427cfa4c367072e4d38f2",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0253",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "35239d0d72fede06fdbca8fd290bd170f333d226cb77887fac5a44cd043cccd1",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0255",
+    "output": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a743eb7ba8fe8a35e783177f4421915237a4e23303cb9972b6644702d0331a1f",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0256",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "24300621a7747ca42e7dcd91ad1d139ee59f1a753c373eaf9e441f8d2db888a3",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0258",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "5b90ec305144f3df7e91f6974a687bd73d4e29aa1990d30e0ad7fc6f2aadb81b",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0259",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b1c2342c4fda2f861ef0a2b3360ed315ebcb233a9e6ce3513ed72bb139b9c0ce",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0260",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "2250f55b1020264ec5275c3f34f3b7c8a4a90c0452cfdbda23786f49c6c72470",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0262",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "dba33edfbe1eec2deb15fde038c8a8cec01dc3ddaeca5a7914dd06dc6cf8a1b5",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0264",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "cacb8efe587459acf793dd9629b114679deeaf302ab11a027f93be5683f5cb56",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0266",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "4c58520ace91e2e5b09fe20892271047bd6ae4538c3c8adfc7217f5b957c4d4a",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0268",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "380b06bb72832a66207da4973a4dc90840ee9cce554dddd0abe25bbcb56f5348",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0271",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "1b2f48e5cc376ab72ef68a5400a6f970039c93bdc07172e3896f2b1e7726f6ea",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0272",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "f7e511a49cf90fc41bb35549bdae8e2dbc932ffe161ef27adc09d823da996c64",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0273",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b355e008a6787c246fed6e27a86ede76777fe43fd340f4ee2f274c9e862798ea",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0276",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "597347cfe754d74ff86c585dbff935d11aab661437ca8b76dfe4480afd2a1fa6",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0278",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "d06f5998ca119e5ebde9c1d821e736dbb0c3eab491551bd6be09d09999573773",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0282",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "ef554b029f70560a33537794596808231e5393d474c5c0b0a1e5f58cda95cb31",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0284",
+    "output": {
+      "decision": "hold",
+      "reason_code": "stale_price"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "77c04eaadcc4932a7ea46a2431bba82f99e0d449e979512657d28db24a3f6bf1",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0285",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "be09d159a489631d3ba96266e3eaefb32ebecc282d30321c64025586faac5d95",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0289",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "3843c7de5888bcab31816410f06a6be906f0a6296ff778a8e1c58fee1bf47aef",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0290",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "4957fb8bfbb08325f0103b3359ca66494136cefac0ed146e9e0a8631fef5dea9",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0292",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "48292b738f0706315e8c1a4b4811503af2ca3ad1f04cbf4b26c69b4dd67da488",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0293",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "b7998cce697b60851c5fa174b83c06a6a8c37fc352f87a0adb12aaed9a551910",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0294",
+    "output": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "617bbc81147ad94677657bc535507bb3f3ea8f77392dd8d7fdcd94c952874dd1",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0295",
+    "output": {
+      "decision": "hold",
+      "reason_code": "duplicate"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "18eac0c913bfc838573c91c3a543ff9edc8158299040f02125320bd40d052abd",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0297",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "4db5f184db0e84124a10f7480f5665b6af83e13e84be96c6639b5adcbcccf3bd",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0299",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "e051ac1111256bd62d5d2a708b59b01c81fba259fd9742214b64d981da97ecf5",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0301",
+    "output": {
+      "decision": "hold",
+      "reason_code": "seller_on_hold"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a6a7585ccd7435920adc4186854f327cb3f28443dbd06d7cc23ef1a0e122dad2",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0302",
+    "output": {
+      "decision": "hold",
+      "reason_code": "needs_approval"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "e224bcfb4debe7fc16ecefdcd34157f52762cd4f3b5966ff4f809a036d45b65e",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0303",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "54534513ce5334a3278506451caefc51bcf943947b499b467bf19e735944bd77",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0304",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "0c6a7301e6c53ccc6117f46fa1af74e36205e4c456f3df65d42b9128866726c8",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0305",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "24aa16de986214d0bd2a5e341d6898f57430ada9213d6c6b0832eb79ff7c1832",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0306",
+    "output": {
+      "decision": "hold",
+      "reason_code": "disputed"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "f46a2764af423c8b0592897c092476a042efd83f9d2da1ec9561eb1fa0338e43",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0307",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "a0d980a43db1c91359625be24f3505a3914f1624b8c1cf30e605c4a6fda683a2",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0308",
+    "output": {
+      "decision": "approve",
+      "reason_code": "ok"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "fdb7ed5b43e8fddc1fd3a94cf1ad9451f862a5ddcfe2a1bf95893f835eac447a",
+    "spot_check_disagreed": false
+  },
+  {
+    "item_id": "P-0309",
+    "output": {
+      "decision": "hold",
+      "reason_code": "amount_mismatch"
+    },
+    "reasons": [
+      "the open model has not cleared rule payouts-need-proof's bar (on_no_open_model: human_review)"
+    ],
+    "receipt_id": "26967b297b4bf24156ad76c9e6cd2d61cc525c7f362b8cea57a130f42fc85fb4",
+    "spot_check_disagreed": false
+  }
+]

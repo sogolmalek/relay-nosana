@@ -101,7 +101,7 @@ function renderJobs() {
       li("listed → finished", `${j.finished_at - j.listed_at} s`, j.cost_usd !== null && j.cost_usd !== undefined ? ` · cost $${j.cost_usd.toFixed(3)}` : "")))));
   const m = R.bar.measured;
   $("#jobs").append(el("div", { class: "small muted" }, `Model: ${R.model.weights} in ${short(R.model.image, 22)}. `,
-    `Re-run agreement: ${R.rerun_agreement.agreed} of ${R.rerun_agreement.n}.`));
+    typeof R.rerun_agreement === "string" ? `Re-run: ${R.rerun_agreement}.` : `Re-run agreement: ${R.rerun_agreement.agreed} of ${R.rerun_agreement.n}.`));
 }
 const li = (k, ...v) => el("li", {}, el("span", { class: "k" }, k), el("span", {}, ...v));
 
@@ -189,7 +189,7 @@ async function verifyOne() {
 
 // The tamper buttons mirror tests/parity/cases.py: the forger recomputes receipt_id (except "output only").
 function tampers(r, p) {
-  const other = S.run.jobs.find((j) => j.tag === "rerun");
+  const other = S.run.tamper_other || S.run.jobs.find((j) => j.tag === "rerun");
   const T = [];
   if (r.grade === "anchored") {
     T.push(["Change the decision", "5", (x) => {

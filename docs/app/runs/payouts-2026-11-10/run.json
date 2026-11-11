@@ -834,6 +834,21 @@
  "run_date": "2026-11-09",
  "run_id": "payouts-2026-11-10",
  "synthetic": true,
+ "tamper_other": {
+  "cost_usd": null,
+  "finish_tx": "2oU2TuJcuktVtuPja2kE9QJE4uwxqgqXB8kiUZ6xvc3RVdbdXCV5xnyvfnmzTYPTPQrsNvpDrZMrVKcf3qDoXymg",
+  "finished_at": 1794298550,
+  "job": "5XvbtVDEkAkVcP127RbQuiExjixom6cYE9QvaWuQDbay",
+  "job_definition_cid": "QmfTesYRtZUiCyfzJoFeWCEQqc79NBGQYQVfdt9g3fD2Kf",
+  "listed_at": 1794298228,
+  "market": "CA5pMpqkYFKtme7K31pNB1s62X2SdhEv1nN9RdxKCpuQ",
+  "node": "Bvy32h8QMfcqRLw59NZNX8pnXFc9Fb7FCkrbjN5VtPst",
+  "post_ix": "assign",
+  "post_tx": "YZLaCZrK8t3NxfEt2zxk37byfaLMbVvvLPsHDZAYRVYXMdNMzE6NXD5Hns1ZmC4fNCBFMuVu7FGnWWi5i39buwq",
+  "price_per_s": 115,
+  "result_cid": "Qmb9QFtsaSvFoSnSusVaLUn3m9KpcHTnyaMk1BeCPpgAmH",
+  "tag": "rerun"
+ },
  "title": "Phase 1: one real payout run",
  "verify_cli": {
   "could_not_check": 0,

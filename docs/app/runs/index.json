@@ -12,5 +12,12 @@
   "date": "2026-11-10",
   "payouts": 60,
   "receipts": 42
+ },
+ {
+  "run_id": "payouts-2026-11-11g",
+  "title": "Phase 1c, run g: Qwen2.5-32B-AWQ, compiled v2 (pre-registered, missed the bar)",
+  "date": "2026-11-11",
+  "payouts": 200,
+  "receipts": 139
  }
 ]
