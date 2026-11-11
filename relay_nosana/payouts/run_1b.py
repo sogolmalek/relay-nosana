@@ -58,7 +58,10 @@ MODELS = {  # pinned by commit; a run's model is fixed in its pre-registration
 }
 MARKET_A6000 = "EjryZ6XEthz3z7nnLfjXBYafyn7VyHgChfbfM47LfAao"  # NVIDIA A6000 PREMIUM, vLLM v0.10.2 cached
 MARKET_A40_COMMUNITY = "8kGjraXnXirSQcgjxTbFBK7QTBVz9fm9ufSRVr3DqBTV"  # NVIDIA A40 Community (48 GB), v0.10.2 cached
-MARKET_USD_PER_HOUR = {jd_mod.MARKET_3090: 0.1745, MARKET_A6000: 0.3636, MARKET_A40_COMMUNITY: 0.27273}  # Phase 0 discover; a post reserves 1 h
+MARKET_A100_40 = "F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB"  # NVIDIA A100 40GB PREMIUM
+MARKET_A100_80 = "GLJHzqRN9fKGBsvsFzmGnaQGknUtLN1dqaFR8n3YdM22"  # NVIDIA A100 80GB PREMIUM
+MARKET_USD_PER_HOUR = {jd_mod.MARKET_3090: 0.1745, MARKET_A6000: 0.3636, MARKET_A40_COMMUNITY: 0.27273,
+                       MARKET_A100_40: 0.5545, MARKET_A100_80: 0.8181}  # credit jobs: premium markets only  # Phase 0 discover; a post reserves 1 h
 
 
 def _model(state: dict) -> tuple[str, str]:

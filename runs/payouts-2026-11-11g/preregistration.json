@@ -10,6 +10,18 @@
       "unchanged": "items, prompts, inputs (sha256 ae8582f4...), job definition CIDs (the market is a post parameter), model, deadline, bar",
       "why": "Nosana: 'Credit-based jobs are only allowed on premium markets. Community and other market types are not supported for credit payments.' Premium 48 GB markets re-checked 2026-11-11: A6000 PREMIUM 1 idle node, A40 PREMIUM 0; A100 40GB PREMIUM 1 (fallback). A6000 PREMIUM ($0.3636/h, vLLM v0.10.2 cached)",
       "written_at": "2026-11-11T04:05:44Z"
+    },
+    {
+      "before_any_result": "A6000 PREMIUM batch1 attempt 5ZeYEydJ... posted 04:06:20Z, never picked up in 13 min, stopped 04:19:38Z (delisted: never ran)",
+      "by": "owner, 2026-11-11: if batch 1 is not picked up, stop it and move to the A100 40GB premium market, then A100 80GB if that has no idle node either; same model, same items, $2 cap",
+      "fits": "32B AWQ (~19 GB weights) with max_model_len 4096 fits one 40 GB A100",
+      "idle_check": "2026-11-11: A100 40GB PREMIUM 1 idle node (AqgRKNKg), A100 80GB PREMIUM 1 (91ktZjzp)",
+      "market": {
+        "from": "EjryZ6XEthz3z7nnLfjXBYafyn7VyHgChfbfM47LfAao",
+        "to": "F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB"
+      },
+      "unchanged": "items, prompts, inputs (sha256 ae8582f4...), job definition CIDs, model, 45-min deadline, bar, cap",
+      "written_at": "2026-11-11T04:20:11Z"
     }
   ],
   "arms": {
@@ -29,9 +41,9 @@
   "cap_usd": 2.0,
   "compiler": "v2",
   "cost_estimate_usd": {
-    "bad_node": "a download that hits the 45-min deadline ~$0.29",
-    "basis": "market EjryZ6XEthz3z7nnLfjXBYafyn7VyHgChfbfM47LfAao at $0.3636/hour; each post reserves 1 hour. 32B AWQ is ~19 GB to download; no 32B job has run on Nosana before, so the time is not measured yet",
-    "expected": "0.27-0.49 (15-27 min per job)",
+    "bad_node": "a download that hits the 45-min deadline ~$0.44",
+    "basis": "market F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB at $0.5545/hour; each post reserves 1 hour. 32B AWQ is ~19 GB to download; no 32B job has run on Nosana before",
+    "expected": "0.42-0.75 (15-27 min per job)",
     "frontier": "deferred: the owner's Claude Code limit resets Nov 14; no API key",
     "jobs": "batch1 (200 lines), batch2 (200 lines), re-run (35 lines): 3 Nosana jobs, each downloads the model",
     "worst_case": "bounded by the cap: Budget.check refuses any post that could pass $2.00"
@@ -78,7 +90,7 @@
     "what": "free-text support notes (from finance, support, sellers or buyers) and two policies, D-106 (which notes count as refund approval) and D-107 (open vs withdrawn disputes). The model must read who wrote a note, which order or invoice it names, and whether a dispute is still open"
   },
   "label_inputs": "data.truth_1e: seller_id vs seller-hold decisions; invoice_id vs the seller's paid invoices; amount vs the sum of line totals; each sale line's sku, sale_date and unit price vs the price-change decisions; each refund line's order_date (> 30 days before the payout date) and approval_id; the rule priority; and each support note's hidden intent (never shown to the model). Amount thresholds ($500, $5,000) set the lane and the re-run, never the label",
-  "market": "EjryZ6XEthz3z7nnLfjXBYafyn7VyHgChfbfM47LfAao",
+  "market": "F3aGGSMb73XHbJbDXVbcXo7iYM9fyevvAZGQfwgrnWtB",
   "market_choice": "48 GB class, checked for idle nodes on 2026-11-11: A6000 PREMIUM 1, A40 Community 3, A40 PREMIUM 0, A100 40GB Community 47 (fallback). A40 Community is the only 48 GB market with two or more idle nodes, which the batch + second-node re-run need. Amended: community markets refuse credit jobs; A6000 PREMIUM",
   "model": "Qwen/Qwen2.5-32B-Instruct-AWQ@5c7cb76a268fc6cfbb9c4777eb24ba6e27f9ee6c",
   "nodes": "known-good node list per market from measured outcomes (relay_nosana/nosana/nodes.py), open market as fallback; in-container deadline 45 min",
